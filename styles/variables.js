@@ -37,6 +37,8 @@ const variables = css`
         --cf-label: #6E7191;
         --cf-main: #4E4B66;
 
+        --card-border: #F0EEEE;
+
         --off-black: #14142B;
 
         --form-input: #14142B;
@@ -44,12 +46,13 @@ const variables = css`
         /********** PROPERTIES *********/
 
         --nav-height: 96px;
-        --sidenav-width: 108px;
+        --sidenav-width: 96px;
 
         /********** OTHER *********/
 
         --border-radius: 10px;
-        --transition: cubic-bezier(0, 0.55, 0.45, 1);
+        --transition: all 0.6s cubic-bezier(0, 0.55, 0.45, 1);
+        --quick-transition: all 0.3s cubic-bezier(0, 0.55, 0.45, 1);
 
     }
 

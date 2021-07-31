@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useRouter } from "next/router";
 import { IconFeed, IconGrid } from "../assets/images";
 import Link from 'next/link';
+import ReactTooltip from "react-tooltip";
 
 
 const StyledSideBar = styled.div`
@@ -33,7 +34,7 @@ const StyledSideBar = styled.div`
     }
 
     .logo {
-        margin-bottom: 30px;
+        margin-bottom: 40px;
     }
 
     a{
@@ -63,31 +64,36 @@ const SideBar = () => {
     }, []);
 
     return (
-        <StyledSideBar>
-            <div className="logo">
-                <Image src={FakeLogo} height="48" width="48" />
-            </div>
-            <Link href="/app" className="nextLink">
-                <a className=
-                    {
-                        (pathname === '/app') 
-                        || (pathname === '/app/')
-                        ? 'colorActive' : 'colorNot'
-                    }>
-                    <IconGrid />
-                </a>
-            </Link>
-            <Link href="/app/task" className="nextLink">
-                <a className=
-                    {
-                        (pathname === '/app/task') 
-                        || (pathname === '/app/task')
-                        ? 'colorActive' : 'colorNot'
-                    }>
-                    <IconFeed />
-                </a>
-            </Link>
-        </StyledSideBar>
+        <div id="sidebar">
+                {isMounted ? (
+                    <StyledSideBar>
+                        <div className="logo">
+                            <Image src={FakeLogo} height="48" width="48" />
+                        </div>
+                        <Link href="/app" className="nextLink">
+                            <a className=
+                                {
+                                    (pathname === '/app')
+                                        || (pathname === '/app/')
+                                        ? 'colorActive' : 'colorNot'
+                                } data-tip="Overview of all your tasks">
+                                <IconGrid />
+                            </a>
+                        </Link>
+                        <Link href="/app/task" className="nextLink">
+                            <a className=
+                                {
+                                    (pathname === '/app/task')
+                                        || (pathname === '/app/task')
+                                        ? 'colorActive' : 'colorNot'
+                                } data-tip="Details about individual tasks">
+                                <IconFeed />
+                            </a>
+                        </Link>
+                        <ReactTooltip delayShow={400} place="top" type="dark" effect="solid" />
+                    </StyledSideBar>
+                ) : ''}
+        </div>
     )
 };
 

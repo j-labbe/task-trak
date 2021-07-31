@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { GlobalStyle } from '../../styles';
 import NavBar from '../../components/navbar';
 import SideBar from '../../components/sidebar';
-import MyTasks from '../../components/myTasks';
+import TaskView from '../../components/taskview';
 
 const StyledHome = styled.div`
     overflow: hidden;
@@ -19,7 +19,7 @@ const Home = () => {
             </Head>
             <NavBar />
             <SideBar />
-            <MyTasks />
+            <TaskView />
         </StyledHome>
     )
 }

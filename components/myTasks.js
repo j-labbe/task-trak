@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { mixins } from "../styles";
 import { tasks, settings } from "../demo/data";
 import moment from "moment";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
+import { AppContext } from "../contexts/AppContext";
 
 const StyledMyTasks = styled.div`
     position: absolute;
@@ -86,6 +87,8 @@ const StyledMyTasks = styled.div`
 const MyTasks = () => {
     const [isMounted, setIsMounted] = useState(false);
 
+    const { changeSelectedTask } = useContext(AppContext);
+
     const userTasks = tasks;
 
     useEffect(() => {
@@ -110,7 +113,7 @@ const MyTasks = () => {
                                                 settings.displayTime ?
                                                     " at "
                                                     + moment(task.properties.startDate).format("h:mm a")
-                                                : ""
+                                                    : ""
                                             )
                                         }
                                     </p>
@@ -118,13 +121,14 @@ const MyTasks = () => {
                                         {
                                             " " + moment(task.properties.endDate).format("MM-DD-YYYY")
                                             + (
-                                                settings.displayTime ? 
+                                                settings.displayTime ?
                                                     " at "
-                                                    + moment(task.properties.endDate).format("h:mm a") 
-                                                : ""
+                                                    + moment(task.properties.endDate).format("h:mm a")
+                                                    : ""
                                             )
                                         }
                                     </p>
+                                    <button key={i} id={"btn-" + i} onClick={() => changeSelectedTask(i)}>Click to View Details</button>
                                 </div>
                             </CSSTransition>
                         )) : ''}

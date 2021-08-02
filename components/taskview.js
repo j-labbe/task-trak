@@ -1,5 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
+import { AppContext } from "../contexts/AppContext";
 import { mixins } from "../styles";
 
 const StyledTaskView = styled.div`
@@ -26,7 +27,7 @@ const StyledTaskView = styled.div`
 
             .task {
                 ${mixins.flexCenter}
-                align-items: flex-start;
+                flex-direction: column;
                 background-color: var(--default-bg);
                 width: 100%;
                 max-height: 400px;
@@ -34,6 +35,16 @@ const StyledTaskView = styled.div`
                 border: 2px solid var(--card-border);
                 box-shadow: var(--sm-box-shadow);
                 overflow-y: auto;
+
+                .meta {
+                    ${mixins.flexCenter}
+                    align-items: flex-start;
+
+                    h3{
+                        font-weight: 400;
+                        font-size: var(--f-md);
+                    }
+                }
             }
 
         }
@@ -45,6 +56,13 @@ const StyledTaskView = styled.div`
 // build out individual task views here
 
 const TaskView = () => {
+
+    const { changeSelectedTask, 
+        resetSelectedTask, 
+        selectedTask } = useContext(AppContext);
+
+        // display selectedTask only
+
     return (
         <StyledTaskView>
             <div className="container">
@@ -52,6 +70,13 @@ const TaskView = () => {
                 <div className="task-container">
                     <div className="task">
                         <h1>Test Task</h1>
+                        <div className="line"></div>
+                        <div className="meta">
+                            <h3>Started: </h3>
+                            <h3>Ends: </h3>
+                            <h3>Days Remaining: </h3>
+
+                        </div>
                     </div>
                 </div>
             </div>

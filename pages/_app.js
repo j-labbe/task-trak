@@ -1,6 +1,7 @@
 import React from 'react';
 import Router from 'next/router';
 import nProgress from 'nprogress';
+import AppContextProvider, { AppContext } from '../contexts/AppContext';
 
 // nProgress.configure({ showSpinner: true });
 
@@ -21,7 +22,9 @@ Router.onRouteChangeError = () => {
 
 function MyApp({ Component, pageProps }) {
     return (
-        <Component {...pageProps} />
+        <AppContextProvider>
+            <Component {...pageProps} />
+        </AppContextProvider>
     )
 }
 

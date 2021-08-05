@@ -5,6 +5,7 @@ import { tasks, settings } from "../demo/data";
 import moment from "moment";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { AppContext } from "../contexts/AppContext";
+import Router from 'next/router';
 
 const StyledMyTasks = styled.div`
     position: absolute;
@@ -48,7 +49,7 @@ const StyledMyTasks = styled.div`
                 flex-direction: column;
                 width: 100%;
                 max-width: 500px;
-                height: 175px;
+                height: 250px;
                 padding: 20px;
                 border: 2px solid var(--card-border);
                 background-color: var(--default-bg);
@@ -76,7 +77,24 @@ const StyledMyTasks = styled.div`
                     font-size: var(--f-sm);
                     color: var(--cf-meta);
                 }
+                
+                .btn {
+                    font-family: var(--font-default);
+                    margin-top: 10px;
+                    padding: 9px 22px;
+                    outline: none;
+                    border: none;
+                    border-radius: 12px;
+                    background-color: var(--primary-accent);
+                    color: var(--cf-white);
+                    cursor: pointer;
+                    transition: var(--transition);
 
+                    &:hover{
+                        background-color: var(--primary-accent-hover);
+                        transition: var(--transition);
+                    }
+                }
             }
         }
 
@@ -88,6 +106,11 @@ const MyTasks = () => {
     const [isMounted, setIsMounted] = useState(false);
 
     const { changeSelectedTask } = useContext(AppContext);
+
+    const navToPage = (id) => {
+        changeSelectedTask(id);
+        Router.push(`/app/task/${id}`, undefined, {shallow: true});
+    }
 
     const userTasks = tasks;
 
@@ -128,7 +151,7 @@ const MyTasks = () => {
                                             )
                                         }
                                     </p>
-                                    <button key={i} id={"btn-" + i} onClick={() => changeSelectedTask(i)}>Click to View Details</button>
+                                    <button className="btn" key={i} id={"btn-" + i} onClick={() => navToPage(i)}>Click to View Details</button>
                                 </div>
                             </CSSTransition>
                         )) : ''}

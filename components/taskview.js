@@ -2,6 +2,8 @@ import { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import { AppContext } from "../contexts/AppContext";
 import { mixins } from "../styles";
+import { tasks } from "../demo/data";
+import Router from "next/router";
 
 const StyledTaskView = styled.div`
     position:absolute;
@@ -55,13 +57,15 @@ const StyledTaskView = styled.div`
 
 // build out individual task views here
 
-const TaskView = () => {
+const TaskView = ({ displayTask }) => {
 
     const { changeSelectedTask, 
         resetSelectedTask, 
         selectedTask } = useContext(AppContext);
 
         // display selectedTask only
+
+    
 
     return (
         <StyledTaskView>

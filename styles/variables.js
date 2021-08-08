@@ -27,6 +27,9 @@ const variables = css`
         --primary-accent: #610BEF;
         --primary-accent-hover: #4700AB;
 
+        --primary-green: #AFEB91;
+        --another-green: #00e3aa;
+
         --select-icon: #610BEF;
         --deselect-icon: #6E7191;
 

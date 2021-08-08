@@ -7,6 +7,7 @@ const StyledHome = styled.div`
 `;
 
 const Home = () => {
+    let test = process.env.TEST_ENV_VAR ? process.env.TEST_ENV_VAR : 'failed';
     return (
         <>
             <GlobalStyle />
@@ -15,6 +16,7 @@ const Home = () => {
             </Head>
             <NavBar />
             <h1>Home</h1>
+            <h3>Test: {test}</h3>
         </>
     )
 }

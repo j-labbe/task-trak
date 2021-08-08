@@ -1,5 +1,6 @@
 // tasks eventually will be stored with the user login object
 module.exports = {
+    uid: 1,
     settings: {
         displayTime: true
     },
@@ -34,5 +35,11 @@ module.exports = {
                 timeZone: 'America/New_York'
             }
         }
-    ]
+    ],
+    userInfo: {
+        username: 'demo',
+        firstName: 'User',
+        password: 'demopass',
+        lastLogin: 0
+    }
 }

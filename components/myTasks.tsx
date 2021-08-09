@@ -114,13 +114,13 @@ const MyTasks = () => {
 
     useEffect(() => {
         nProgress.start();
-        refreshTasks().then(() => {
+        refreshTasks().then((res: object[]) => {
             setIsMounted(true);
             nProgress.done();
         }).catch((e) => {
             console.error(e);
             nProgress.done();
-        })
+        });
     }, []);
 
     return (

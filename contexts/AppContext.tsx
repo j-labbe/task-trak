@@ -1,16 +1,31 @@
 import * as React from 'react';
 import * as API from 'utils/api';
 
-interface AppContextInterface {
-    tasks: Array<object>,
+type ContextProps = {
+    tasks: any[],
     refreshTasks: any,
     addTask: any
 }
+const defaultProps = {
+    tasks: [],
+    refreshTasks: () => {},
+    addTask: () => {}
+}
+const setTasks = (data: object) => {
+    Object.keys(data).map(i => {
+        defaultProps.tasks[i] = data[i];
+    });
+    return defaultProps.tasks;
+}
 
-export const AppContext = React.createContext<AppContextInterface | null>(null);
+export const AppContext = React.createContext<ContextProps | null>(defaultProps);
+
+// export const AppContext = React.createContext<AppContextInterface>(AppContextInitial);
 
 export default function AppContextProvider(props: React.PropsWithChildren<{}>) {
-    const [tasks, setTasks] = React.useState([]);
+    //const [tasks, setTasks] = React.useState([]);
+
+    const { tasks } = React.useContext(AppContext);
 
     /**
      * Returns the tasks for the logged in user.
@@ -21,16 +36,15 @@ export default function AppContextProvider(props: React.PropsWithChildren<{}>) {
         try {
             API.Request({
                 endpoint: "getAllTasks",
-                method: 'GET'
-            }).then((res: object) => {
-                Object.keys(res).map(i => setTasks(res[i]));
-                console.log(tasks);
+                method: "GET"
+            }).then((res) => {
+                return setTasks(res);
             }).catch((e) => new Error(e));
-            return tasks;
         } catch (e) {
             console.error(e);
             return [];
         }
+        return tasks;
     };
 
     /**
@@ -54,10 +68,9 @@ export default function AppContextProvider(props: React.PropsWithChildren<{}>) {
             return [];
         }
     };
-    console.log(tasks);
     return (
         <AppContext.Provider value={{
-            ...tasks,
+            tasks: [...tasks],
             refreshTasks: refreshTasks,
             addTask: addTask
         }} {...props} />

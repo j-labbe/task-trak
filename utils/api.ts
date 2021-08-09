@@ -15,40 +15,37 @@ export declare type apiRequestMethod = typeof apiRequestMethods[number];
 export async function Request(config: { endpoint: apiRequestEndpoint; method?: apiRequestMethod; data?: object }): Promise<object> {
     switch (config.method) {
         case "GET":
-            axios
+            return axios
                 .get(API_URL + config.endpoint)
-                .then((res) => res.data)
+                .then((res) => {
+                    return res.data;
+                })
                 .catch((err) => {
                     Promise.reject(err);
                 });
-            break;
         case "POST":
             switch (config.endpoint) {
                 case "createTask":
-                    axios
+                    return axios
                         .post(API_URL + config.endpoint, JSON.stringify(config.data))
                         .then((res) => res.data)
                         .catch((err) => {
                             Promise.reject(err);
                         });
-                    break;
                 default:
-                    axios
+                    return axios
                         .post(API_URL + config.endpoint, config.data)
                         .then((res) => res.data)
                         .catch((err) => {
                             Promise.reject(err);
                         });
-                    break;
             }
-            break;
         default:
-            axios
+            return axios
                 .get(API_URL + config.endpoint)
                 .then((res) => res.data)
                 .catch((err) => {
                     Promise.reject(err);
                 });
     }
-    return {};
 }

@@ -1,11 +1,13 @@
 import { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { mixins } from "../styles";
-import { tasks, settings } from "../demo/data";
+import { settings } from "../demo";
 import moment from "moment";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { AppContext } from "../contexts/AppContext";
 import Router from 'next/router';
+import * as API from 'utils/api';
+import nProgress from "nprogress";
 
 const StyledMyTasks = styled.div`
     position: absolute;
@@ -103,19 +105,22 @@ const StyledMyTasks = styled.div`
 `;
 
 const MyTasks = () => {
+    const { tasks, refreshTasks } = useContext(AppContext);
     const [isMounted, setIsMounted] = useState(false);
 
-    const { changeSelectedTask } = useContext(AppContext);
-
-    const navToPage = (id) => {
-        changeSelectedTask(id);
-        Router.push(`/app/task/${id}`, undefined, {shallow: true});
-    }
-
-    const userTasks = tasks;
+    const navToPage = (id: string) => {
+        Router.push(`/app/task/${id}`, undefined, { shallow: true });
+    };
 
     useEffect(() => {
-        setIsMounted(true);
+        nProgress.start();
+        refreshTasks().then(() => {
+            setIsMounted(true);
+            nProgress.done();
+        }).catch((e) => {
+            console.error(e);
+            nProgress.done();
+        })
     }, []);
 
     return (
@@ -124,37 +129,46 @@ const MyTasks = () => {
                 <h1>My Tasks</h1>
                 <div className="taskList">
                     <TransitionGroup component={null}>
-                        {isMounted ? userTasks && userTasks.map((task, i) => (
-                            <CSSTransition key={i} classNames="fastfadeup" timeout={2000}>
-                                <div className="task" style={{ transitionDelay: `${i + 2}00ms` }}>
-                                    <h1>{task.name}</h1>
-                                    <p className="desc">{task.description}</p>
-                                    <p className="date">Started
-                                        {
-                                            " " + moment(task.properties.startDate).format("MM-DD-YYYY")
-                                            + (
-                                                settings.displayTime ?
-                                                    " at "
-                                                    + moment(task.properties.startDate).format("h:mm a")
-                                                    : ""
-                                            )
-                                        }
-                                    </p>
-                                    <p className="date">Ending
-                                        {
-                                            " " + moment(task.properties.endDate).format("MM-DD-YYYY")
-                                            + (
-                                                settings.displayTime ?
-                                                    " at "
-                                                    + moment(task.properties.endDate).format("h:mm a")
-                                                    : ""
-                                            )
-                                        }
-                                    </p>
-                                    <button className="btn" key={i} id={"btn-" + i} onClick={() => navToPage(i)}>Click to View Details</button>
-                                </div>
-                            </CSSTransition>
-                        )) : ''}
+
+                        {isMounted ? tasks && tasks.map((task: {
+                                name: string,
+                                description: string,
+                                properties: {
+                                    startDate: string,
+                                    endDate: string
+                                }
+                            }, i: number) => (
+                                <CSSTransition key={i} classNames="fastfadeup" timeout={2000}>
+                                    <div className="task" style={{ transitionDelay: `${i + 2}00ms` }}>
+                                        <h1>{task?.name || 'Untitled'}</h1>
+                                        <p className="desc">{task?.description || 'No description available.'}</p>
+                                        <p className="date">Started
+                                            {
+                                                " " + moment(task.properties.startDate).format("MM-DD-YYYY")
+                                                + (
+                                                    settings.displayTime ?
+                                                        " at "
+                                                        + moment(task.properties.startDate).format("h:mm a")
+                                                        : ""
+                                                )
+                                            }
+                                        </p>
+                                        <p className="date">Ending
+                                            {
+                                                " " + moment(task.properties.endDate).format("MM-DD-YYYY")
+                                                + (
+                                                    settings.displayTime ?
+                                                        " at "
+                                                        + moment(task.properties.endDate).format("h:mm a")
+                                                        : ""
+                                                )
+                                            }
+                                        </p>
+                                        <button className="btn" key={i} id={"btn-" + i} onClick={() => navToPage(i.toString())}>Click to View Details</button>
+                                    </div>
+                                </CSSTransition>
+                            ))
+                        : 'Loading...'}
                     </TransitionGroup>
                 </div>
             </div>

@@ -2,7 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import { AppContext } from "../contexts/AppContext";
 import { mixins } from "../styles";
-import { tasks } from "../demo/data";
+import { tasks } from "../demo";
 import Router from "next/router";
 
 const StyledTaskView = styled.div`

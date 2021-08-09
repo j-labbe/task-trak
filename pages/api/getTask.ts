@@ -1,4 +1,4 @@
-import { tasks } from "../../demo/data";
+import { tasks } from "../../demo";
 
 /*
 

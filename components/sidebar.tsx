@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { mixins } from "../styles";
-import FakeLogo from "../assets/images/fakelogo.svg";
-import Image from 'next/image';
 import { useRouter } from "next/router";
 import { IconFeed, IconGrid } from "../assets/images";
 import Link from 'next/link';
 import ReactTooltip from "react-tooltip";
-
+import TaskTrakLogo from "assets/images/logo";
 
 const StyledSideBar = styled.div`
     position: absolute;
@@ -68,9 +66,9 @@ const SideBar = () => {
                 {isMounted ? (
                     <StyledSideBar>
                         <div className="logo">
-                            <Image src={FakeLogo} height="48" width="48" />
+                            <TaskTrakLogo />
                         </div>
-                        <Link href="/app" className="nextLink">
+                        <Link href="/app">
                             <a className=
                                 {
                                     (pathname === '/app')
@@ -80,7 +78,7 @@ const SideBar = () => {
                                 <IconGrid />
                             </a>
                         </Link>
-                        <Link href="/app/task" className="nextLink">
+                        <Link href="/app/task">
                             <a className=
                                 {
                                     (pathname === '/app/task')

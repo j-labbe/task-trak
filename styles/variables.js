@@ -54,6 +54,7 @@ const variables = css`
 
         /********** OTHER *********/
 
+        --overlay: rgba(0,0,0,0.25);
         --border-radius: 10px;
         --transition: all 0.6s cubic-bezier(0, 0.55, 0.45, 1);
         --quick-transition: all 0.3s cubic-bezier(0, 0.55, 0.45, 1);

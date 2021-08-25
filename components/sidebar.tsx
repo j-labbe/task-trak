@@ -63,7 +63,7 @@ const SideBar = () => {
 
     return (
         <div id="sidebar">
-                {isMounted ? (
+            {isMounted ? (
                     <StyledSideBar>
                         <div className="logo">
                             <TaskTrakLogo />
@@ -74,15 +74,14 @@ const SideBar = () => {
                                     (pathname === '/app')
                                         || (pathname === '/app/')
                                         ? 'colorActive' : 'colorNot'
-                                } data-tip="Overview of all your tasks">
+                                } data-tip="All your tasks in a tile view">
                                 <IconGrid />
                             </a>
                         </Link>
                         <Link href="/app/task">
                             <a className=
                                 {
-                                    (pathname === '/app/task')
-                                        || (pathname === '/app/task')
+                                    (pathname.match(/^(\/app\/task\/?)([0-9]+)?$/gi)?true:false)
                                         ? 'colorActive' : 'colorNot'
                                 } data-tip="Details about individual tasks">
                                 <IconFeed />
@@ -90,8 +89,9 @@ const SideBar = () => {
                         </Link>
                         <ReactTooltip delayShow={400} place="top" type="dark" effect="solid" />
                     </StyledSideBar>
-                ) : ''}
-        </div>
+    ) : ''
+}
+        </div >
     )
 };
 

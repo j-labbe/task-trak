@@ -116,6 +116,19 @@ FAST TRANSITIONS
     transition: opacity 500ms cubic-bezier(0, 0.55, 0.45, 1), transform 500ms cubic-bezier(0, 0.55, 0.45, 1);
 }
 
+/* Fade in & scale up */
+
+.fadein-scale-enter {
+    opacity: 0.01;
+    transform: scale(0);
+    transition: opacity 500ms cubic-bezier(0, 0.55, 0.45, 1), transform 500ms cubic-bezier(0, 0.55, 0.45, 1);
+}
+.fadein-scale-enter-active {
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 500ms cubic-bezier(0, 0.55, 0.45, 1), transform 500ms cubic-bezier(0, 0.55, 0.45, 1);
+}
+
 /**** nProgress ****/
 
 #nprogress {

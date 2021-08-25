@@ -17,7 +17,7 @@ Router.events.on('routeChangeError', () => {
     nProgress.done();
 });
 
-function MyApp({ Component, pageProps }) {
+function App({ Component, pageProps }) {
     return (
         <AppContextProvider>
             <Component {...pageProps} />
@@ -25,4 +25,4 @@ function MyApp({ Component, pageProps }) {
     )
 }
 
-export default MyApp
+export default App;

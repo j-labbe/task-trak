@@ -2,8 +2,9 @@ import { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import { AppContext } from "../contexts/AppContext";
 import { mixins } from "../styles";
-import { tasks } from "../demo";
-import Router from "next/router";
+import { useRouter } from "next/router";
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import moment from "moment";
 
 const StyledTaskView = styled.div`
     position:absolute;
@@ -31,20 +32,32 @@ const StyledTaskView = styled.div`
                 ${mixins.flexCenter}
                 flex-direction: column;
                 background-color: var(--default-bg);
-                width: 100%;
+                width: 60%;
                 max-height: 400px;
                 border-radius: var(--border-radius);
                 border: 2px solid var(--card-border);
                 box-shadow: var(--sm-box-shadow);
                 overflow-y: auto;
+                padding: 0 30px 10px 30px;
+
+                @media(max-width: 768px){
+                    width: 80%;
+                }
+                @media(max-width: 650px){
+                    width: 90%;
+                }
 
                 .meta {
                     ${mixins.flexCenter}
                     align-items: flex-start;
+                    flex-direction: row;
+                    
 
                     h3{
                         font-weight: 400;
-                        font-size: var(--f-md);
+                        font-size: var(--f-sm);
+                        color: var(--cf-meta);
+                        margin-right: 10px;
                     }
                 }
             }
@@ -59,31 +72,51 @@ const StyledTaskView = styled.div`
 
 const TaskView = ({ displayTask }) => {
 
-    const { changeSelectedTask, 
-        resetSelectedTask, 
-        selectedTask } = useContext(AppContext);
+    const Router = useRouter();
+    const { tasks } = useContext(AppContext);
+    const [isMounted, setIsMounted] = useState(false);
+    const taskId: number = displayTask;
 
-        // display selectedTask only
+    useEffect(() => {
+        const testTasks = async () => {
+            if (!tasks[taskId]) {
+                return Router.push('/app/');
+            }
+            setIsMounted(true);
+        };
+        testTasks();
+    }, []);
 
-    
+    // display selectedTask only
+
+    const thisTask = tasks[taskId];
 
     return (
         <StyledTaskView>
-            <div className="container">
-                <h1>Task View</h1>
-                <div className="task-container">
-                    <div className="task">
-                        <h1>Test Task</h1>
-                        <div className="line"></div>
-                        <div className="meta">
-                            <h3>Started: </h3>
-                            <h3>Ends: </h3>
-                            <h3>Days Remaining: </h3>
+            {isMounted ?
+                <div className="container">
+                    <h1>Task View</h1>
+                    <TransitionGroup component={null}>
+                        <CSSTransition classNames="fastfadeup" timeout={2000}>
+                            <div className="task-container">
+                                <div className="task">
+                                    <h1>{thisTask.name}</h1>
+                                    <p>{thisTask.description}</p>
+                                    <div className="line"></div>
+                                    <div className="meta">
+                                        <h3><strong>Started:</strong> {thisTask.properties.startDate}</h3>
+                                        <h3><strong>Ends:</strong> {thisTask.properties.endDate}</h3>
+                                        <h3><strong>Days Remaining:</strong> {
+                                            moment(Date.now(),"DD/MM/YYYY").diff(moment(thisTask.properties.endDate, "DD/MM/YYYY"))
+                                        }</h3>
 
-                        </div>
-                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </CSSTransition>
+                    </TransitionGroup>
                 </div>
-            </div>
+                : ''}
         </StyledTaskView>
     )
 };

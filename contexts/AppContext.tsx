@@ -6,26 +6,19 @@ type ContextProps = {
     refreshTasks: any,
     addTask: any
 }
+
 const defaultProps = {
     tasks: [],
     refreshTasks: () => {},
     addTask: () => {}
 }
-const setTasks = (data: object) => {
-    Object.keys(data).map(i => {
-        defaultProps.tasks[i] = data[i];
-    });
-    return defaultProps.tasks;
-}
 
 export const AppContext = React.createContext<ContextProps | null>(defaultProps);
-
-// export const AppContext = React.createContext<AppContextInterface>(AppContextInitial);
 
 export default function AppContextProvider(props: React.PropsWithChildren<{}>) {
     //const [tasks, setTasks] = React.useState([]);
 
-    const { tasks } = React.useContext(AppContext);
+    const [tasks, setTasks] = React.useState([]);
 
     /**
      * Returns the tasks for the logged in user.
@@ -33,12 +26,17 @@ export default function AppContextProvider(props: React.PropsWithChildren<{}>) {
      * @returns Array - List of tasks
      */
     const refreshTasks = async (): Promise<any[]> => {
+        let rValue: object[];
         try {
             API.Request({
                 endpoint: "getAllTasks",
                 method: "GET"
             }).then((res) => {
-                return setTasks(res);
+                let temp = [];
+                Object.keys(res).map(i => {
+                    temp[i] = res[i];
+                });
+                setTasks(temp);
             }).catch((e) => new Error(e));
         } catch (e) {
             console.error(e);

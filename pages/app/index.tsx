@@ -31,7 +31,7 @@ const Home = () => {
                 <StyledHome>
                     <GlobalStyle />
                     <Head>
-                        <title>Home</title>
+                        <title>Home - TaskTrak</title>
                     </Head>
                     <NavBar />
                     <SideBar />

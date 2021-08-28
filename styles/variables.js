@@ -8,6 +8,7 @@ const variables = css`
         
         --font-default: 'Poppins', 'Inter', 'San Francisco', 'SF Pro Text', -apple-system, system-ui, sans-serif;
 
+        --f-xxxs: 8px;
         --f-xxs: 10px;
         --f-xs: 12px;
         --f-sm: 14px;
@@ -40,6 +41,7 @@ const variables = css`
         --cf-meta: #A0A3BD;
         --cf-label: #6E7191;
         --cf-main: #4E4B66;
+        --cf-ash: #262338;
 
         --card-border: #F0EEEE;
 

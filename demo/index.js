@@ -1,4 +1,5 @@
 // tasks eventually will be stored with the user login object
+// Progress: 0 = not started, 1 = in progress, 2 = completed
 module.exports = {
     uid: 1,
     settings: {
@@ -12,8 +13,19 @@ module.exports = {
             properties: {
                 startDate: 'Friday, July 30, 2021',
                 endDate: 'Monday, August 2, 2021',
-                timeZone: 'America/New_York'
-            }
+                timeZone: 'America/New_York',
+                tags: [
+                    {
+                        urgent: true,
+                        name: "Needs review"
+                    },
+                    {
+                        urgent: false,
+                        name: "Expedited"
+                    }
+                ]
+            },
+            progress: 0
         },
         {
             id: 2,
@@ -22,8 +34,19 @@ module.exports = {
             properties: {
                 startDate: 'Friday, July 30, 2021',
                 endDate: 'Monday, August 2, 2021',
-                timeZone: 'America/New_York'
-            }
+                timeZone: 'America/New_York',
+                tags: [
+                    {
+                        urgent: true,
+                        name: "Needs review"
+                    },
+                    {
+                        urgent: false,
+                        name: "Expedited"
+                    }
+                ]
+            },
+            progress: 1
         },
         {
             id: 3,
@@ -32,8 +55,19 @@ module.exports = {
             properties: {
                 startDate: 'Friday, July 30, 2021',
                 endDate: 'Monday, August 2, 2021',
-                timeZone: 'America/New_York'
-            }
+                timeZone: 'America/New_York',
+                tags: [
+                    {
+                        urgent: true,
+                        name: "Needs review"
+                    },
+                    {
+                        urgent: false,
+                        name: "Expedited"
+                    }
+                ]
+            },
+            progress: 2
         }
     ],
     userInfo: {

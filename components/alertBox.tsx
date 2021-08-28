@@ -17,11 +17,15 @@ const StyledAlertBox = styled.div<AlertBoxProps>`
     background-color: ${props => (props.isVisible ? `var(--overlay)` : `transparent`)};
     ${props => (props.isVisible ? `` : `opacity: 0;`)}
     z-index: ${props => (props.isVisible ? `10` : `-1`)};
-    -webkit-backdrop-filter: blur(30px);
-    backdrop-filter: blur(30px);
     width: 100%;
     height: 100%;
     transition: var(--transition);
+
+    @supports ((--webkit-backdrop-filter: none) or (backdrop-filter: none)){
+        ${'' /* Add support for different styled based on browser support (check modal) */}
+        -webkit-backdrop-filter: blur(30px);
+        backdrop-filter: blur(30px);
+    }
 
     .alert-box {
         ${mixins.flexCenter}

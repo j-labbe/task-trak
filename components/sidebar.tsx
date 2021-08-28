@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { mixins } from "../styles";
 import { useRouter } from "next/router";
-import { IconFeed, IconGrid } from "../assets/images";
+import { IconAlignLeft, IconFeed, IconGrid } from "../assets/images";
 import Link from 'next/link';
 import ReactTooltip from "react-tooltip";
 import TaskTrakLogo from "assets/images/logo";
@@ -11,7 +11,7 @@ const StyledSideBar = styled.div`
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 1;
+    z-index: 3;
     ${mixins.flexCenter}
     justify-content: start;
     flex-direction: column;
@@ -70,11 +70,20 @@ const SideBar = () => {
                         </div>
                         <Link href="/app">
                             <a className=
+                            {
+                                (pathname === '/app' || pathname === '/app/')
+                                ? 'colorActive' : 'colorNot'
+                            } data-tip="View your task progression">
+                                <IconAlignLeft />
+                            </a>
+                        </Link>
+                        <Link href="/app/overview">
+                            <a className=
                                 {
-                                    (pathname === '/app')
-                                        || (pathname === '/app/')
+                                    (pathname === '/app/overview')
+                                        || (pathname === '/app/overview/')
                                         ? 'colorActive' : 'colorNot'
-                                } data-tip="All your tasks in a tile view">
+                                } data-tip="Overview of your tasks in a grid">
                                 <IconGrid />
                             </a>
                         </Link>

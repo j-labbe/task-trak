@@ -1,4 +1,5 @@
 import { tasks } from "../../demo";
+import type { NextApiRequest, NextApiResponse } from 'next';
 
 /*
 
@@ -8,7 +9,7 @@ TODO: User login authetntication
 
 
 // POST request
-const getTask = (req, res) => {
+const getTask = (req: NextApiRequest, res: NextApiResponse) => {
     if (!req.body) {
         return res.status(400).json({
             messageType: 'error',

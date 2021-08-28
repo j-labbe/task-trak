@@ -1,4 +1,4 @@
-import { uid, userInfo } from "@demo";
+import { uid, userInfo } from "demo";
 
 // Demo data is acting as the database. Eventually, a real db will be in place
 

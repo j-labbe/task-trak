@@ -54,7 +54,7 @@ const Home = () => {
             <div className="main">
                 <h1>Coming Soon</h1>
                 <div className="line"></div>
-                <h3>Check back soon to try out <strong>Task Trak</strong> when it's live!</h3>
+                <h3>Check back soon to try out <strong>Task Trak</strong> when it\'s live!</h3>
             </div>
         </StyledHome>
     )

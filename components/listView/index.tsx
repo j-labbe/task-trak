@@ -72,6 +72,7 @@ const ListView = () => {
     useEffect(() => {
         nProgress.start();
 
+
         refreshTasks().then(async (res: TaskTypes) => {
             res.forEach((task) => {
                 if(task.progress === 0){

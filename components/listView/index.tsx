@@ -4,13 +4,18 @@ import { mixins } from "../../styles";
 import { settings } from "../../demo";
 import moment from "moment";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import { AppContext, TaskTypes, UserDataTypes } from "../../contexts/AppContext";
+import { AppContext, IndividualTaskTypes, TaskTypes, UserDataTypes } from "../../contexts/AppContext";
 import Router from 'next/router';
 import nProgress from "nprogress";
 import Head from "next/head";
 import AlertBox, { ANIM } from '../alertBox';
 import TaskBtn from './taskBtn';
 import TaskList from './taskList';
+
+type GroupType = Array<{
+    title: string,
+    children: TaskTypes
+}>;
 
 const StyledMyTasks = styled.div`
     position: absolute;
@@ -61,43 +66,46 @@ const StyledMyTasks = styled.div`
 `;
 
 const ListView = () => {
-    const { refreshTasks, userData, getUserData } = useContext(AppContext);
+    const { tasks, refreshTasks, userData, getUserData } = useContext(AppContext);
     const [isMounted, setIsMounted] = useState(false);
+    const [sortedData, setSortedData] = useState([]);
 
-    let groups = [];
+    let groups: GroupType = [];
     groups[0] = { title: "Not Started", children: [] };
     groups[1] = { title: "In Progress", children: [] };
     groups[2] = { title: "Completed", children: [] };
 
+    const refreshAndSort = async () => {
+        const data: TaskTypes = await refreshTasks();
+        data.map((task: IndividualTaskTypes) => {
+            if (task.progress === 0) {
+                groups[0].children.push(task);
+            } else if (task.progress === 1) {
+                groups[1].children.push(task);
+            } else {
+                groups[2].children.push(task);
+            }
+        });
+        setSortedData(groups);
+        console.log(groups);
+        return true;
+    };
+
     useEffect(() => {
         nProgress.start();
-
-
-        refreshTasks().then(async (res: TaskTypes) => {
-            res.forEach((task) => {
-                if(task.progress === 0){
-                    groups[0].children.push(task);
-                }else if(task.progress === 1){
-                    groups[1].children.push(task);
-                }else groups[2].children.push(task);
-            });
-            getUserData().then(async (res: UserDataTypes) => {
-                setIsMounted(true);
-                nProgress.done();
-                console.log(groups);
-                console.log(userData);
-            }).catch((e) => {
-                nProgress.done();
-                console.error(e);
-            });
-        }).catch((e) => {
-            nProgress.done();
-            console.error(e);
-        });
-
-        return () => {
-            nProgress.done();
-        }
+        const init = async () => {
+            const taskData = await refreshAndSort();
+            if (taskData) {
+                nProgress.set(0.5);
+                const ud = await getUserData();
+                if(ud){
+                    nProgress.done();
+                    console.log(groups);
+                    setIsMounted(true);
+                }
+            }
+        };
+        init();
     }, []);
 
     return (
@@ -114,12 +122,18 @@ const ListView = () => {
                         </div>
                         <div className="listgroup">
                             <TaskList title="Not Started">
-                                <TaskBtn title="Title" tags={
-                                    [{ urgent: true, name: "Needs help" }, { urgent: false, name: "Reviewed" }]
-                                } />
-                                <TaskBtn title="Title 2" tags={
-                                    [{ urgent: false, name: "Needs help" }, { urgent: true, name: "Reviewed" }]
-                                } />
+                                {
+                                    groups[0].children.map((task, i: number) => (
+                                        <TaskBtn title={task.name} tags={
+                                            task.properties.tags ? (
+                                                task.properties.tags.map((tag, i) => {
+                                                    console.log(tag, i);
+                                                    return { urgent: tag.urgent, name: tag.name }
+                                                })
+                                            ) : ''
+                                        } />
+                                    ))
+                                }
                             </TaskList>
                             <TaskList title="In Progress">
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as API from 'utils/api';
 
-interface IndividualTaskTypes {
+export interface IndividualTaskTypes {
     id: number,
     name: string,
     description: string,
@@ -28,29 +28,26 @@ interface ContextProps {
     refreshTasks: () => Promise<any[]>,
     addTask: any,
     userData: any,
-    getUserData: any
+    getUserData: () => Promise<object | Error>
 }
 
 const defaultProps = {
     tasks: [],
-    refreshTasks: async function (): Promise<any[]> {
-        let result: any;
-        try {
-            result = await API.Request({
-                endpoint: "getAllTasks",
-                method: "GET"
-            }).then((res: TaskTypes) => {
-                let temp = [];
-                Object.keys(res).map(i => {
-                    temp[i] = res[i];
-                });
-                return temp;
-            }).catch((e) => new Error(e));
-        } catch (e) {
-            new Error(e);
+    refreshTasks: async function (): Promise<TaskTypes> {
+        const data = await API.Request({
+            endpoint: "getAllTasks",
+            method: "GET"
+        }).then((res) => {
+            let temp = [];
+            Object.keys(res).map(i => {
+                temp[i] = res[i];
+            });
+            return temp;
+        }).catch((e) => {
+            console.error(e);
             return [];
-        }
-        return result;
+        });
+        return data;
     },
     addTask: () => { },
     userData: {
@@ -60,11 +57,12 @@ const defaultProps = {
         lastLogin: 0
     },
     getUserData: async function(): Promise<object> {
+        let result: any;
         try {
-            API.Request({
+            result = await API.Request({
                 endpoint: "getUserData",
                 method: "GET"
-            }).then((res: JSON) => {
+            }).then((res: JSON | object) => {
                 let data: object;
                 if (typeof res !== "object") {
                     data = JSON.parse(res);
@@ -77,6 +75,7 @@ const defaultProps = {
             new Error(e);
             return {};
         }
+        return result;
     }
 }
 
@@ -86,15 +85,26 @@ export default function AppContextProvider(props: React.PropsWithChildren<{}>) {
 
     const [tasks, setTasks] = React.useState([]);
     const [userData, setUserData] = React.useState({});
-
+    /**
+     * @returns Array - Contains all of the user's tasks
+     */
+    const refreshTasks = async (): Promise<TaskTypes> => {
+        // define a separate function within hook to set the context state
+        let result: any;
+        result = await defaultProps.refreshTasks();
+        setTasks(result);
+        return result;
+    };
     /**
      * Get the current user's data.
      * @returns Object - Contains user data
      */
     const getUserData = async (): Promise<any> => {
-        
+        return defaultProps.getUserData().then((res) => {
+            setUserData(res);
+            return userData;
+        }).catch((e) => new Error(e));
     };
-
     /**
      * Adds a new task for the logged in user
      * @function addTask
@@ -112,14 +122,14 @@ export default function AppContextProvider(props: React.PropsWithChildren<{}>) {
             }).catch((e) => new Error(e));
             return tasks;
         } catch (e) {
-            console.error(e);
+            new Error(e);
             return [];
         }
     };
     return (
         <AppContext.Provider value={{
-            tasks: [...tasks],
-            refreshTasks: defaultProps.refreshTasks,
+            tasks: tasks,
+            refreshTasks: refreshTasks,
             addTask: addTask,
             userData: userData,
             getUserData: getUserData

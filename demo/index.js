@@ -41,7 +41,7 @@ module.exports = {
                         name: "Needs review"
                     },
                     {
-                        urgent: false,
+                        urgent: true,
                         name: "Expedited"
                     }
                 ]
@@ -58,7 +58,7 @@ module.exports = {
                 timeZone: 'America/New_York',
                 tags: [
                     {
-                        urgent: true,
+                        urgent: false,
                         name: "Needs review"
                     },
                     {

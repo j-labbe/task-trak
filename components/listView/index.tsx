@@ -67,6 +67,7 @@ const StyledMyTasks = styled.div`
 
 const ListView = () => {
     const { tasks, refreshTasks, userData, getUserData } = useContext(AppContext);
+    const [isLoaded, setIsLoaded] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
     const [sortedData, setSortedData] = useState([]);
 
@@ -75,7 +76,7 @@ const ListView = () => {
     groups[1] = { title: "In Progress", children: [] };
     groups[2] = { title: "Completed", children: [] };
 
-    const refreshAndSort = async () => {
+    const refreshAndSort = async (config: { callback: () => void }) => {
         const data: TaskTypes = await refreshTasks();
         data.map((task: IndividualTaskTypes) => {
             if (task.progress === 0) {
@@ -87,33 +88,39 @@ const ListView = () => {
             }
         });
         setSortedData(groups);
-        console.log(groups);
-        return true;
+        config.callback();
     };
 
     useEffect(() => {
+        console.log("Status:",isLoaded," ",isMounted," Data:",sortedData);
         nProgress.start();
-        const init = async () => {
-            const taskData = await refreshAndSort();
-            if (taskData) {
+        if (!isLoaded && !isMounted) {
+            getUserData().then(() => {
                 nProgress.set(0.5);
-                const ud = await getUserData();
-                if(ud){
-                    nProgress.done();
-                    console.log(groups);
-                    setIsMounted(true);
-                }
+                console.log("Set progress");
+                refreshAndSort({
+                    callback: () => {
+                        setIsLoaded(true);
+                        console.log("Set loaded");
+                    }
+                });
+            });
+        } else {
+            if (isLoaded && !isMounted) {
+                console.log("Set mount");
+                nProgress.done();
+                setIsMounted(true);
+                console.log("Done");
             }
-        };
-        init();
-    }, []);
+        }
+    }, [isLoaded]);
 
     return (
         <div>
             <Head>
                 <title>Home - Task Trak</title>
             </Head>
-            {isMounted ? (
+            {(isMounted && typeof sortedData[0].children !== "undefined") ? (
                 <StyledMyTasks>
                     <div className="container">
                         <div className="sticky-title-container">
@@ -123,23 +130,48 @@ const ListView = () => {
                         <div className="listgroup">
                             <TaskList title="Not Started">
                                 {
-                                    groups[0].children.map((task, i: number) => (
-                                        <TaskBtn title={task.name} tags={
-                                            task.properties.tags ? (
-                                                task.properties.tags.map((tag, i) => {
-                                                    console.log(tag, i);
-                                                    return { urgent: tag.urgent, name: tag.name }
-                                                })
-                                            ) : ''
-                                        } />
+                                    sortedData[0].children.map((child, i: number) => (
+                                        <TaskBtn 
+                                            key={i} 
+                                            title={child.name} 
+                                            tags={child.properties.tags.map((tag, o: number) => {
+                                                return {
+                                                    urgent: tag.urgent,
+                                                    name: tag.name
+                                                }
+                                            })} />
                                     ))
                                 }
                             </TaskList>
                             <TaskList title="In Progress">
-
+                            {
+                                    sortedData[1].children.map((child, i: number) => (
+                                        <TaskBtn 
+                                            key={i} 
+                                            title={child.name} 
+                                            tags={child.properties.tags.map((tag, o: number) => {
+                                                return {
+                                                    urgent: tag.urgent,
+                                                    name: tag.name
+                                                }
+                                            })} />
+                                    ))
+                                }
                             </TaskList>
                             <TaskList title="Completed">
-
+                            {
+                                    sortedData[2].children.map((child, i: number) => (
+                                        <TaskBtn 
+                                            key={i} 
+                                            title={child.name} 
+                                            tags={child.properties.tags.map((tag, o: number) => {
+                                                return {
+                                                    urgent: tag.urgent,
+                                                    name: tag.name
+                                                }
+                                            })} />
+                                    ))
+                                }
                             </TaskList>
                         </div>
                     </div>

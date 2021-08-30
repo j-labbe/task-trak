@@ -160,7 +160,7 @@ const StyledBar = styled.div<BarProps>`
     }
 `;
 
-const TaskBtn = ({ title, tags }) => {
+const TaskBtn = ({ title, tags, style = undefined }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const handleToggleOpen = () => {
@@ -169,7 +169,7 @@ const TaskBtn = ({ title, tags }) => {
 
     return (
         <StyledBar isOpen={isOpen}>
-            <button className={"bar" + (isOpen ? "" : " collapsed")} id="2" onClick={() => handleToggleOpen()}>
+            <button {...style ? (style = { style }) : ''} className={"bar" + (isOpen ? "" : " collapsed")} id="2" onClick={() => handleToggleOpen()}>
                 <div className="heading">
                     <div className="statusIcon">
                         <div className="icon-check"></div>

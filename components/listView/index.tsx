@@ -124,26 +124,29 @@ const ListView = () => {
                         </div>
                         <div className="listgroup">
                             <TaskList title="Not Started">
-                                {
-                                    sortedData[0].children.map((child, i: number) => (
-                                        <TaskBtn 
-                                            key={i} 
-                                            title={child.name} 
-                                            tags={child.properties.tags.map((tag, o: number) => {
-                                                return {
-                                                    urgent: tag.urgent,
-                                                    name: tag.name
-                                                }
-                                            })} />
-                                    ))
-                                }
+                                <TransitionGroup component={null}>
+                                    {
+                                        sortedData[0].children.map((child, i: number) => (
+                                            <CSSTransition key={i} classNames="fadeUp" timeout={1000}>
+                                                <TaskBtn
+                                                    title={child.name}
+                                                    tags={child.properties.tags.map((tag, o: number) => {
+                                                        return {
+                                                            urgent: tag.urgent,
+                                                            name: tag.name
+                                                        }
+                                                    })} style={{ transitionDelay: `${(i = 0 ? 1 : i) * 100}ms` }} />
+                                            </CSSTransition>
+                                        ))
+                                    }
+                                </TransitionGroup>
                             </TaskList>
                             <TaskList title="In Progress">
-                            {
+                                {
                                     sortedData[1].children.map((child, i: number) => (
-                                        <TaskBtn 
-                                            key={i} 
-                                            title={child.name} 
+                                        <TaskBtn
+                                            key={i}
+                                            title={child.name}
                                             tags={child.properties.tags.map((tag, o: number) => {
                                                 return {
                                                     urgent: tag.urgent,
@@ -154,11 +157,11 @@ const ListView = () => {
                                 }
                             </TaskList>
                             <TaskList title="Completed">
-                            {
+                                {
                                     sortedData[2].children.map((child, i: number) => (
-                                        <TaskBtn 
-                                            key={i} 
-                                            title={child.name} 
+                                        <TaskBtn
+                                            key={i}
+                                            title={child.name}
                                             tags={child.properties.tags.map((tag, o: number) => {
                                                 return {
                                                     urgent: tag.urgent,

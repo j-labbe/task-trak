@@ -92,25 +92,20 @@ const ListView = () => {
     };
 
     useEffect(() => {
-        console.log("Status:",isLoaded," ",isMounted," Data:",sortedData);
         nProgress.start();
         if (!isLoaded && !isMounted) {
             getUserData().then(() => {
                 nProgress.set(0.5);
-                console.log("Set progress");
                 refreshAndSort({
                     callback: () => {
                         setIsLoaded(true);
-                        console.log("Set loaded");
                     }
                 });
             });
         } else {
             if (isLoaded && !isMounted) {
-                console.log("Set mount");
                 nProgress.done();
                 setIsMounted(true);
-                console.log("Done");
             }
         }
     }, [isLoaded]);

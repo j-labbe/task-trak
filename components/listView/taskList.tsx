@@ -18,7 +18,6 @@ const StyledList = styled.div`
     border: 2px solid var(--card-border);
     border-radius: var(--border-radius);
     height: auto;
-    // min-height: 200px;
     padding-bottom: 20px;
 
     @media(max-width: 1176px){

@@ -12,7 +12,7 @@ const StyledList = styled.div`
     ${mixins.flexCenter}
     flex-direction: column;
     justify-content: flex-start;
-    margin: 0 50px;
+    margin: 0 30px;
     width: 300px;
     background-color: var(--default-bg);
     border: 2px solid var(--card-border);
@@ -29,24 +29,27 @@ const StyledList = styled.div`
         margin: 0 10px;
     }
     @media(max-width: 768px) {
-        margin: 20px 0;
+        margin: 10px 0;
         width: 300px;
     }
 `;
 
 type Props = {
     title: string,
-    children: React.ReactNode
+    children: React.ReactNode,
+    style?: object
 }
 
-const TaskList = ({title, children}: Props) => {
+const TaskList = ({ title, children, style }: Props) => {
     return (
-        <StyledListGroup>
-            <StyledList>
-                <h3>{title}</h3>
-                {children}
-            </StyledList>
-        </StyledListGroup>
+        <div {...style?(style={style}):''}>
+            <StyledListGroup>
+                <StyledList>
+                    <h3>{title}</h3>
+                    {children}
+                </StyledList>
+            </StyledListGroup>
+        </div>
     );
 };
 

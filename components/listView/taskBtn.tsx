@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { mixins } from "../../styles";
 import { IconArrowDown } from "../../assets/images";
+import { CSSTransition } from "react-transition-group";
 
 export interface BarProps {
     isOpen: boolean
@@ -9,6 +10,7 @@ export interface BarProps {
 
 const StyledBar = styled.div<BarProps>`
     ${mixins.flexCenter}
+    font-family: var(--font-default) !important;
     width: 100%;
     .bar {
         ${mixins.flexCenter}
@@ -47,6 +49,7 @@ const StyledBar = styled.div<BarProps>`
             }
 
             h1 {
+                font-family: var(--font-default) !important;
                 font-size: var(--f-sm);
                 margin: 0;
                 padding: 0;
@@ -56,6 +59,7 @@ const StyledBar = styled.div<BarProps>`
                 justify-content: flex-end !important;
                 width: auto;
                 .tag {
+                    font-family: var(--font-default) !important;
                     content: "";
                     height: 15px !important;
                     width: 10px !!important;
@@ -77,6 +81,7 @@ const StyledBar = styled.div<BarProps>`
                     }
                 }
                 .tag-name {
+                    font-family: var(--font-default) !important;
                     display: none !important;
                 }
             }
@@ -96,9 +101,11 @@ const StyledBar = styled.div<BarProps>`
         }
 
         h1 {
+            font-family: var(--font-default) !important;
             font-size: var(--f-md);
             margin: 5px !important;
             padding: 0;
+            transition: transform 0.5s cubic-bezier(0, 0.55, 0.45, 1);
         }
         .tags {
             ${mixins.flexCenter}
@@ -117,6 +124,7 @@ const StyledBar = styled.div<BarProps>`
                 border-radius: 10px;
                 padding: 1px 8px;
                 transition: var(--transition);
+                font-family: var(--font-default) !important;
 
                 &.nonUrgent {
                     background-color: #3BBAF1;
@@ -138,6 +146,7 @@ const StyledBar = styled.div<BarProps>`
                 }
 
                 .tag-name {
+                    font-family: var(--font-default) !important;
                     font-size: var(--f-xxs);
                     ${mixins.flexCenter}
                     margin: 0;
@@ -160,7 +169,7 @@ const StyledBar = styled.div<BarProps>`
     }
 `;
 
-const TaskBtn = ({ title, tags, style = undefined }) => {
+const TaskBtn = ({ title, tags, style = undefined, showAnim = true, pos = 0 }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const handleToggleOpen = () => {
@@ -168,28 +177,59 @@ const TaskBtn = ({ title, tags, style = undefined }) => {
     }
 
     return (
-        <StyledBar isOpen={isOpen}>
-            <button {...style ? (style = { style }) : ''} className={"bar" + (isOpen ? "" : " collapsed")} id="2" onClick={() => handleToggleOpen()}>
-                <div className="heading">
-                    <div className="statusIcon">
-                        <div className="icon-check"></div>
-                    </div>
-                    <h1>{title}</h1>
-                    <div className="controls">
-                        <div className="expand">
-                            <IconArrowDown />
-                        </div>
-                    </div>
-                </div>
-                <div className="tags">
-                    {tags.map((tag: any, i: number) => (
-                        <div className={"tag" + (tag.urgent ? " urgent" : " nonUrgent")} key={i}>
-                            <p className="tag-name">{tag.name}</p>
-                        </div>
-                    ))}
-                </div>
-            </button>
-        </StyledBar>
+        <div className="fullwidth" style={style ? style : undefined} >
+            {
+                showAnim ? (
+                    <CSSTransition classNames="fastfadeup" timeout={2000+(pos*100)}>
+                        <StyledBar isOpen={isOpen}>
+                            <button className={"bar" + (isOpen ? "" : " collapsed")} id="2" onClick={() => handleToggleOpen()}>
+                                <div className="heading">
+                                    <div className="statusIcon">
+                                        <div className="icon-check"></div>
+                                    </div>
+                                    <h1>{title}</h1>
+                                    <div className="controls">
+                                        <div className="expand">
+                                            <IconArrowDown />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="tags">
+                                    {tags.map((tag: any, i: number) => (
+                                        <div className={"tag" + (tag.urgent ? " urgent" : " nonUrgent")} key={i}>
+                                            <p className="tag-name">{tag.name}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </button>
+                        </StyledBar>
+                    </CSSTransition>
+                ) : (
+                    <StyledBar isOpen={isOpen}>
+                        <button className={"bar" + (isOpen ? "" : " collapsed")} id="2" onClick={() => handleToggleOpen()}>
+                            <div className="heading">
+                                <div className="statusIcon">
+                                    <div className="icon-check"></div>
+                                </div>
+                                <h1>{title}</h1>
+                                <div className="controls">
+                                    <div className="expand">
+                                        <IconArrowDown />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="tags">
+                                {tags.map((tag: any, i: number) => (
+                                    <div className={"tag" + (tag.urgent ? " urgent" : " nonUrgent")} key={i}>
+                                        <p className="tag-name">{tag.name}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </button>
+                    </StyledBar>
+                )
+            }
+        </div>
     );
 }
 

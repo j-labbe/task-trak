@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { mixins } from "../../styles";
-import { settings } from "../../demo";
 import moment from "moment";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { AppContext, IndividualTaskTypes, TaskTypes, UserDataTypes } from "../../contexts/AppContext";
@@ -61,12 +60,17 @@ const StyledMyTasks = styled.div`
             @media (min-width: 1177px) {
                 flex-direction: row;
             }
+            @media(max-width: 1176px) {
+                justify-content: flex-start;
+                align-items: center;
+                margin-top: 20px;
+            }
         }
     }
 `;
 
 const ListView = () => {
-    const { tasks, refreshTasks, userData, getUserData } = useContext(AppContext);
+    const { refreshTasks, userData, getUserData } = useContext(AppContext);
     const [isLoaded, setIsLoaded] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
     const [sortedData, setSortedData] = useState([]);
@@ -92,20 +96,20 @@ const ListView = () => {
     };
 
     useEffect(() => {
-        nProgress.start();
         if (!isLoaded && !isMounted) {
+            nProgress.start();
             getUserData().then(() => {
                 nProgress.set(0.5);
                 refreshAndSort({
-                    callback: () => {
-                        setIsLoaded(true);
-                    }
+                    callback: () => setIsLoaded(true)
                 });
             });
         } else {
             if (isLoaded && !isMounted) {
                 nProgress.done();
                 setIsMounted(true);
+            } else {
+                nProgress.done();
             }
         }
     }, [isLoaded]);
@@ -115,66 +119,46 @@ const ListView = () => {
             <Head>
                 <title>Home - Task Trak</title>
             </Head>
-            {(isMounted && typeof sortedData[0].children !== "undefined") ? (
-                <StyledMyTasks>
-                    <div className="container">
-                        <div className="sticky-title-container">
-                            <div className="sticky-title"></div>
-                            <h1 className="title">Welcome, {userData.firstName}</h1>
-                        </div>
-                        <div className="listgroup">
-                            <TaskList title="Not Started">
-                                <TransitionGroup component={null}>
-                                    {
-                                        sortedData[0].children.map((child, i: number) => (
-                                            <CSSTransition key={i} classNames="fadeUp" timeout={1000}>
-                                                <TaskBtn
-                                                    title={child.name}
-                                                    tags={child.properties.tags.map((tag, o: number) => {
-                                                        return {
-                                                            urgent: tag.urgent,
-                                                            name: tag.name
-                                                        }
-                                                    })} style={{ transitionDelay: `${(i = 0 ? 1 : i) * 100}ms` }} />
-                                            </CSSTransition>
-                                        ))
-                                    }
-                                </TransitionGroup>
-                            </TaskList>
-                            <TaskList title="In Progress">
-                                {
-                                    sortedData[1].children.map((child, i: number) => (
-                                        <TaskBtn
-                                            key={i}
-                                            title={child.name}
-                                            tags={child.properties.tags.map((tag, o: number) => {
-                                                return {
-                                                    urgent: tag.urgent,
-                                                    name: tag.name
-                                                }
-                                            })} />
-                                    ))
-                                }
-                            </TaskList>
-                            <TaskList title="Completed">
-                                {
-                                    sortedData[2].children.map((child, i: number) => (
-                                        <TaskBtn
-                                            key={i}
-                                            title={child.name}
-                                            tags={child.properties.tags.map((tag, o: number) => {
-                                                return {
-                                                    urgent: tag.urgent,
-                                                    name: tag.name
-                                                }
-                                            })} />
-                                    ))
-                                }
-                            </TaskList>
-                        </div>
+            <StyledMyTasks>
+                <div className="container">
+                    <div className="sticky-title-container">
+                        <div className="sticky-title"></div>
+                        {isMounted ? (
+                            <CSSTransition classNames={"fadedown"} timeout={4000}>
+                                <h1 className="title">Welcome, {userData.firstName}</h1>
+                            </CSSTransition>
+                        ) : ''}
                     </div>
-                </StyledMyTasks>
-            ) : ''}
+                    <div className="listgroup">
+                        <TransitionGroup component={null}>
+                            {isMounted ?
+                                sortedData.map((group, i) => (
+                                    <CSSTransition key={i} classNames={"fastfadeup"} timeout={2000 + (i * 100)}>
+                                        <TaskList title={group.title} key={i} style={{transitionDelay: `${i*75}ms`}}>
+                                            <TransitionGroup component={null}>
+                                                {
+                                                    sortedData[i].children.map((child, o: number) => (
+                                                        <TaskBtn
+                                                            title={child.name}
+                                                            tags={child.properties.tags.map((tag, k) => ({
+                                                                urgent: tag.urgent,
+                                                                name: tag.name
+                                                            }))}
+                                                            style={{ transitionDelay: `${o * 1000}ms` }}
+                                                            pos={o}
+                                                            key={o}
+                                                        />
+                                                    ))
+                                                }
+                                            </TransitionGroup>
+                                        </TaskList>
+                                    </CSSTransition>
+                                ))
+                                : ''}
+                        </TransitionGroup>
+                    </div>
+                </div>
+            </StyledMyTasks>
         </div>
     )
 };

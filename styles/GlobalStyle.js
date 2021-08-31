@@ -206,6 +206,12 @@ FAST TRANSITIONS
   100% { transform: rotate(360deg); }
 }
 
+/* MISC */
+
+.fullwidth {
+    width: 100%;
+}
+
 `;
 
 export default GlobalStyle;

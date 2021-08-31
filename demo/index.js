@@ -68,6 +68,69 @@ module.exports = {
                 ]
             },
             progress: 2
+        },
+        {
+            id: 4,
+            name: 'Demo Task 4',
+            description: 'Demo Task 4 description',
+            properties: {
+                startDate: 'Friday, July 30, 2021',
+                endDate: 'Monday, August 2, 2021',
+                timeZone: 'America/New_York',
+                tags: [
+                    {
+                        urgent: true,
+                        name: "Needs review"
+                    },
+                    {
+                        urgent: false,
+                        name: "Expedited"
+                    }
+                ]
+            },
+            progress: 0
+        },
+        {
+            id: 5,
+            name: 'Demo Task 5',
+            description: 'Demo Task 5 description',
+            properties: {
+                startDate: 'Friday, July 30, 2021',
+                endDate: 'Monday, August 2, 2021',
+                timeZone: 'America/New_York',
+                tags: [
+                    {
+                        urgent: false,
+                        name: "Needs review"
+                    },
+                    {
+                        urgent: false,
+                        name: "Expedited"
+                    }
+                ]
+            },
+            progress: 1
+        },
+        {
+            id: 6,
+            name: 'Demo Task 6',
+            description: 'Demo Task 6 description',
+            properties: {
+                startDate: 'Friday, July 30, 2021',
+                endDate: 'Monday, August 2, 2021',
+                timeZone: 'America/New_York',
+                tags: [
+                    {
+                        urgent: true,
+                        name: "Needs review"
+                    },
+                    {
+                        urgent: true,
+                        name: "Expedited"
+                    }
+                ]
+            },
+            progress: 2
         }
     ],
     userInfo: {

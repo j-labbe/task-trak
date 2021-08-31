@@ -211,7 +211,10 @@ FAST TRANSITIONS
 .fullwidth {
     width: 100%;
 }
-
+.draggable-item {
+    cursor: move;
+    background: transparent;
+}
 `;
 
 export default GlobalStyle;

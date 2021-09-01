@@ -1,4 +1,7 @@
-# Task Trak
+<div align="center">
+  <h1>Task Trak</h1>
+  <h3>Simplify your to-do list.</h3>
+</div>
 
 This is the repo for the first release of Task Track, an All-In-One tracker for to-do lists.
 

@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { Children, useEffect, useState } from 'react';
 import styled from "styled-components";
 import { mixins } from "../../styles";
-import {HTML5toTouch} from 'rdndmb-html5-to-touch';
-import {DndProvider} from 'react-dnd-multi-backend';
+import DynamicDndProvider from '../DynamicDndProvider';
 
 const StyledListGroup = styled.div`
     ${mixins.flexCenter}
@@ -47,9 +46,9 @@ const TaskList = ({ title, children, style }: Props) => {
             <StyledListGroup>
                 <StyledList>
                     <h3>{title}</h3>
-                    <DndProvider options={HTML5toTouch}>
+                    <DynamicDndProvider>
                         {children}
-                    </DndProvider>
+                    </DynamicDndProvider>
                 </StyledList>
             </StyledListGroup>
         </div>

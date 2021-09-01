@@ -16,7 +16,7 @@ const StyledAlertBox = styled.div<AlertBoxProps>`
     position: absolute;
     background-color: ${props => (props.isVisible ? `var(--overlay)` : `transparent`)};
     ${props => (props.isVisible ? `` : `opacity: 0;`)}
-    z-index: ${props => (props.isVisible ? `10` : `-1`)};
+    z-index: ${props => (props.isVisible ? `50` : `-1`)};
     width: 100%;
     height: 100%;
     transition: var(--transition);

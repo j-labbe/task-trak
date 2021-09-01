@@ -37,6 +37,7 @@ const StyledMyTasks = styled.div`
             margin: -20px 0 0 0;
             border-bottom: 2px solid var(--card-border);
             background-color: rgba(247, 247, 252, 0.8);
+            z-index:20;
 
             @supports ((--webkit-backdrop-filter: none) or (backdrop-filter: none)){
                 background-color: rgba(247, 247, 252, 0.5);
@@ -46,7 +47,7 @@ const StyledMyTasks = styled.div`
         }
         .title {
             position: fixed;
-            z-index: 2;
+            z-index: 21;
             opacity: 2 !important;
             margin-top: 10px;
             padding-left: 30px;

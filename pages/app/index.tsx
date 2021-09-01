@@ -4,13 +4,20 @@ import Sidebar from 'components/sidebar';
 import styled from 'styled-components';
 import { GlobalStyle } from 'styles';
 import ListView from 'components/listView';
+import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
 
 const StyledPage = styled.div`
     overflow: hidden;
     width: 100% !important;
 `;
 
-export default function ListPage() {
+function ListPage() {
+
+    const { user, isLoading } = useUser();
+
+    React.useEffect(() => {
+        
+    })
 
     return (
         <StyledPage>
@@ -21,3 +28,8 @@ export default function ListPage() {
         </StyledPage>
     )
 }
+
+export default withPageAuthRequired(ListPage, {
+    onRedirecting: () => (<h1>Loading...</h1>),
+    onError: () => (<h1>Error Occurred</h1>)
+});

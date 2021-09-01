@@ -27,6 +27,7 @@ interface ContextProps {
     tasks: any[],
     refreshTasks: () => Promise<any[]>,
     addTask: any,
+    updateTask: any,
     userData: any,
     getUserData: () => Promise<object | Error>
 }
@@ -50,6 +51,9 @@ const defaultProps = {
         return data;
     },
     addTask: () => { },
+    updateTask: async function(): Promise<any> {
+        let result: any;
+    },
     userData: {
         username: "",
         firstName: "",
@@ -132,7 +136,8 @@ export default function AppContextProvider(props: React.PropsWithChildren<{}>) {
             refreshTasks: refreshTasks,
             addTask: addTask,
             userData: userData,
-            getUserData: getUserData
+            getUserData: getUserData,
+            updateTask: () => {}
         }} {...props} />
     )
 }

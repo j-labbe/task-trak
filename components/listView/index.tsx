@@ -148,6 +148,7 @@ const ListView = () => {
                                                             style={{ transitionDelay: `${o * 1000}ms` }}
                                                             pos={o}
                                                             key={o}
+                                                            taskId={child.id}
                                                         />
                                                     ))
                                                 }

@@ -170,7 +170,7 @@ const StyledBar = styled.div<BarProps>`
     }
 `;
 
-const TaskBtn = ({ title, tags, style = undefined, showAnim = true, pos = 0 }) => {
+const TaskBtn = ({ title, tags, style = undefined, showAnim = true, pos = 0, taskId }) => {
 
     const [{ isDragging }, drag] = useDrag(() => ({
         type: "bar",
@@ -184,13 +184,13 @@ const TaskBtn = ({ title, tags, style = undefined, showAnim = true, pos = 0 }) =
     }
 
     return (
-        <div className="fullwidth draggable-item" style={isDragging ? { opacity: 0.5 } : { opacity: 1 }} ref={drag}>
+        <div className="fullwidth draggable-item">
             <div className="fullwidth" style={style ? style : undefined} >
                 {
                     showAnim ? (
                         <CSSTransition classNames="fastfadeup" timeout={2000 + (pos * 100)}>
                             <StyledBar isOpen={isOpen}>
-                                <button className={"bar" + (isOpen ? "" : " collapsed")} id="2" onClick={() => handleToggleOpen()}>
+                                <button className={"bar" + (isOpen ? "" : " collapsed")} id="2" onClick={() => handleToggleOpen()} style={isDragging ? { opacity: 0.5 } : { opacity: 1 }} ref={drag}>
                                     <div className="heading">
                                         <div className="statusIcon">
                                             <div className="icon-check"></div>

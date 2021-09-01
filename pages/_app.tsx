@@ -2,6 +2,7 @@ import React from 'react';
 import Router from 'next/router';
 import nProgress from 'nprogress';
 import AppContextProvider from '../contexts/AppContext';
+import { UserProvider } from '@auth0/nextjs-auth0';
 
 // nProgress.configure({ showSpinner: true });
 
@@ -19,9 +20,11 @@ Router.events.on('routeChangeError', () => {
 
 function App({ Component, pageProps }) {
     return (
-        <AppContextProvider>
-            <Component {...pageProps} />
-        </AppContextProvider>
+        <UserProvider>
+            <AppContextProvider>
+                <Component {...pageProps} />
+            </AppContextProvider>
+        </UserProvider>
     )
 }
 

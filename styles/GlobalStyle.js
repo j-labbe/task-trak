@@ -212,7 +212,6 @@ FAST TRANSITIONS
     width: 100%;
 }
 .draggable-item {
-    cursor: move;
     background: transparent;
 }
 `;

@@ -4,8 +4,10 @@ import { mixins } from "../../styles";
 import { IconArrowDown } from "../../assets/images";
 import { CSSTransition } from "react-transition-group";
 import { useDrag } from "react-dnd";
+import { TaskBtnProps } from '../../types';
 
-export interface BarProps {
+// Not moving to types.ts since it's local
+interface BarProps {
     isOpen: boolean
 }
 
@@ -170,10 +172,12 @@ const StyledBar = styled.div<BarProps>`
     }
 `;
 
-const TaskBtn = ({ title, tags, style = undefined, showAnim = true, pos = 0, taskId }) => {
-
+const TaskBtn = (config: TaskBtnProps) => {
+    
+    const {title, tags, style, showAnim, pos, taskId, progress} = config;
     const [{ isDragging }, drag] = useDrag(() => ({
         type: "bar",
+        item: { id: taskId },
         collect: (monitor) => ({
             isDragging: !!monitor.isDragging()
         })

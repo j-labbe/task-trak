@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { GlobalStyle } from 'styles';
 import ListView from 'components/listView';
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import Loading from 'components/loading';
 
 const StyledPage = styled.div`
     overflow: hidden;
@@ -13,13 +14,9 @@ const StyledPage = styled.div`
 
 function ListPage() {
 
-    const { user, isLoading } = useUser();
+    const { user } = useUser();
 
-    React.useEffect(() => {
-        
-    })
-
-    return (
+    return user && (
         <StyledPage>
             <GlobalStyle />
             <NavBar />
@@ -30,6 +27,6 @@ function ListPage() {
 }
 
 export default withPageAuthRequired(ListPage, {
-    onRedirecting: () => (<h1>Loading...</h1>),
+    onRedirecting: () => (<Loading />),
     onError: () => (<h1>Error Occurred</h1>)
 });

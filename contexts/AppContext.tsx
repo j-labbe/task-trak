@@ -1,40 +1,10 @@
 import * as React from 'react';
 import * as API from 'utils/api';
-
-export interface IndividualTaskTypes {
-    id: number,
-    name: string,
-    description: string,
-    properties: {
-        startDate: string,
-        endDate: string,
-        timeZone: string,
-        tags: Array<{ urgent: boolean, name: string }>
-    },
-    progress: number
-};
-
-export type TaskTypes = Array<IndividualTaskTypes>;
-
-export interface UserDataTypes {
-    username: string,
-    firstName: string,
-    password: string, // IMPORTANT! This will be removed. Only for demo purposes
-    lastLogin: number
-}
-
-interface ContextProps {
-    tasks: any[],
-    refreshTasks: () => Promise<any[]>,
-    addTask: any,
-    updateTask: any,
-    userData: any,
-    getUserData: () => Promise<object | Error>
-}
+import {ArrayOfTasks, ContextProps } from '../types';
 
 const defaultProps = {
     tasks: [],
-    refreshTasks: async function (): Promise<TaskTypes> {
+    refreshTasks: async function (): Promise<ArrayOfTasks> {
         const data = await API.Request({
             endpoint: "getAllTasks",
             method: "GET"
@@ -92,7 +62,7 @@ export default function AppContextProvider(props: React.PropsWithChildren<{}>) {
     /**
      * @returns Array - Contains all of the user's tasks
      */
-    const refreshTasks = async (): Promise<TaskTypes> => {
+    const refreshTasks = async (): Promise<ArrayOfTasks> => {
         // define a separate function within hook to set the context state
         let result: any;
         result = await defaultProps.refreshTasks();
@@ -130,6 +100,15 @@ export default function AppContextProvider(props: React.PropsWithChildren<{}>) {
             return [];
         }
     };
+
+    /**
+     * 
+     * 
+     */
+    const updateTask = async () => {
+
+    }
+
     return (
         <AppContext.Provider value={{
             tasks: tasks,

@@ -1,7 +1,8 @@
-import React, { Children, useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import styled from "styled-components";
 import { mixins } from "../../styles";
 import DynamicDndProvider from '../DynamicDndProvider';
+import { useDrop } from 'react-dnd';
 
 const StyledListGroup = styled.div`
     ${mixins.flexCenter}
@@ -34,20 +35,63 @@ const StyledList = styled.div`
     }
 `;
 
-type Props = {
+type TaskListProps = {
     title: string,
-    children: React.ReactNode,
+    listId: number, // to double check the task progress
+    children: any,
     style?: object
-}
+};
 
-const TaskList = ({ title, children, style }: Props) => {
+type ItemType = { // comes from taskbtn dnd
+    id: number
+};
+
+const TaskList = ({ title, listId, children, style }: TaskListProps) => {
+
+
+
+    const [list, setList] = useState([]);
+    let tempList = [];
+
+    const [{ isOver }, drop] = useDrop(() => ({
+        accept: "bar",
+        drop: (item: ItemType) => addToList(item.id)
+    }))
+
+    const addToList = (taskId: number) => {
+
+        // setList([...list, taskChild]);
+    };
+
+    const listContents = () => {
+        if (list.length > 0) setList([]);
+        if (tempList.length > 0) tempList = [];
+        React.Children.forEach(children, element => {
+            React.Children.forEach(element.props.children, (elem: React.ReactNode) => {
+                console.log(elem);
+                if (!React.isValidElement(elem)) return;
+                const { progress, taskId } = elem.props;
+                if (progress === listId) {
+                    tempList.push(elem); // spread
+                    setList(tempList);
+                }
+            })
+        });
+    }
+
+    useEffect(() => {
+        listContents();
+    }, [children]);
+
     return (
         <div {...style ? (style = { style }) : ''}>
             <StyledListGroup>
                 <StyledList>
                     <h3>{title}</h3>
                     <DynamicDndProvider>
-                        {children}
+                        <div id="list" ref={drop}>
+                            {list}
+                        </div>
                     </DynamicDndProvider>
                 </StyledList>
             </StyledListGroup>

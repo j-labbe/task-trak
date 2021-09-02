@@ -1,20 +1,15 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { mixins } from "../../styles";
-import moment from "moment";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import { AppContext, IndividualTaskTypes, TaskTypes, UserDataTypes } from "../../contexts/AppContext";
+import { AppContext } from "contexts/AppContext";
 import Router from 'next/router';
 import nProgress from "nprogress";
 import Head from "next/head";
 import AlertBox, { ANIM } from '../alertBox';
 import TaskBtn from './taskBtn';
 import TaskList from './taskList';
-
-type GroupType = Array<{
-    title: string,
-    children: TaskTypes
-}>;
+import { GroupType, Task, ArrayOfTasks } from '../../types';
 
 const StyledMyTasks = styled.div`
     position: absolute;
@@ -82,8 +77,8 @@ const ListView = () => {
     groups[2] = { title: "Completed", children: [] };
 
     const refreshAndSort = async (config: { callback: () => void }) => {
-        const data: TaskTypes = await refreshTasks();
-        data.map((task: IndividualTaskTypes) => {
+        const data: ArrayOfTasks = await refreshTasks();
+        data.map((task: Task) => {
             if (task.progress === 0) {
                 groups[0].children.push(task);
             } else if (task.progress === 1) {
@@ -135,7 +130,7 @@ const ListView = () => {
                             {isMounted ?
                                 sortedData.map((group, i) => (
                                     <CSSTransition key={i} classNames={"fastfadeup"} timeout={2000 + (i * 100)}>
-                                        <TaskList title={group.title} key={i} style={{transitionDelay: `${i*75}ms`}}>
+                                        <TaskList title={group.title} listId={i} key={i} style={{ transitionDelay: `${i * 75}ms` }}>
                                             <TransitionGroup component={null}>
                                                 {
                                                     sortedData[i].children.map((child, o: number) => (
@@ -149,6 +144,7 @@ const ListView = () => {
                                                             pos={o}
                                                             key={o}
                                                             taskId={child.id}
+                                                            progress={child.progress}
                                                         />
                                                     ))
                                                 }

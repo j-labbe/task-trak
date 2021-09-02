@@ -7,6 +7,8 @@ const variables = css`
         /********** FONTS *********/
         
         --font-default: 'Poppins', 'Inter', 'San Francisco', 'SF Pro Text', -apple-system, system-ui, sans-serif;
+        --font-serif: 'Source Serif Pro', Cambria, "Hoefler Text", Utopia, "Liberation Serif", "Nimbus Roman No9 L Regular", Times, "Times New Roman", serif;
+
 
         --f-xxxs: 8px;
         --f-xxs: 10px;

@@ -2,14 +2,16 @@
  * Each Task record has this data structure
  */
 export interface Task {
-    id: string;
+    id: string | number;
+    dbId?: string | number; // airtable-specific
+    userId?: string | number;
     name: string;
     description: string;
     properties: {
-        startDate: string;
-        endDate: string;
-        timeZone: string;
-        tags: Array<{ urgent: boolean; name: string }>;
+        startDate?: string;
+        endDate?: string;
+        timeZone?: string;
+        tags?: Array<{ urgent: boolean; name: string }>;
     };
     progress: number;
 }
@@ -20,14 +22,15 @@ export interface Task {
 export type ArrayOfTasks = Array<Task>;
 
 /**
- * @deprecated User Data Object
- * Used for demo data set. Not used with real authentication
+ * User Data returned from getUserData api route
  */
 export interface UserDataTypes {
-    username: string;
-    firstName: string;
-    password: string; // IMPORTANT! This will be removed. Only for demo purposes
-    lastLogin: number;
+    msg: {
+        firstName: string;
+        email: string;
+        locale: string;
+        loginMethod: string;
+    };
 }
 
 /**
@@ -93,4 +96,16 @@ export interface TaskBtnProps {
 export interface NewTaskConfig {
     userId: string;
     newRecord: Task;
+}
+
+/**
+ * Types for the "fields" object that's returned from Airtable
+ */
+export interface CreatedTask {
+    dbId: string | number;
+    data: {
+        taskId: string;
+        userId: string | number;
+        data: string;
+    };
 }

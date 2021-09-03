@@ -3,6 +3,7 @@ import Router from 'next/router';
 import nProgress from 'nprogress';
 import AppContextProvider from '../contexts/AppContext';
 import { UserProvider } from '@auth0/nextjs-auth0';
+import DynamicDndProvider from 'components/DynamicDndProvider';
 
 // nProgress.configure({ showSpinner: true });
 
@@ -22,7 +23,9 @@ function App({ Component, pageProps }) {
     return (
         <UserProvider>
             <AppContextProvider>
-                <Component {...pageProps} />
+                <DynamicDndProvider>
+                    <Component {...pageProps} />
+                </DynamicDndProvider>
             </AppContextProvider>
         </UserProvider>
     )

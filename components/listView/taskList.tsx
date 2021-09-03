@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import styled from "styled-components";
 import { mixins } from "../../styles";
-import DynamicDndProvider from '../DynamicDndProvider';
 import { useDrop } from 'react-dnd';
 
 const StyledListGroup = styled.div`
@@ -88,11 +87,9 @@ const TaskList = ({ title, listId, children, style }: TaskListProps) => {
             <StyledListGroup>
                 <StyledList>
                     <h3>{title}</h3>
-                    <DynamicDndProvider>
-                        <div id="list" ref={drop}>
-                            {list}
-                        </div>
-                    </DynamicDndProvider>
+                    <div id="list" ref={drop}>
+                        {list}
+                    </div>
                 </StyledList>
             </StyledListGroup>
         </div>

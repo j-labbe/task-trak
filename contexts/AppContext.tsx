@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as API from 'utils/api';
-import {ArrayOfTasks, ContextProps } from '../types';
+import {ArrayOfTasks, ContextProps, UserDataTypes } from '../types';
 
 const defaultProps = {
     tasks: [],
@@ -36,19 +36,21 @@ const defaultProps = {
             result = await API.Request({
                 endpoint: "getUserData",
                 method: "GET"
-            }).then((res: JSON | object) => {
-                let data: object;
+            }).then((res: UserDataTypes | JSON) => {
+                let data: UserDataTypes;
                 if (typeof res !== "object") {
                     data = JSON.parse(res);
                 } else {
+                    // @ts-ignore
                     data = res;
                 }
-                return data;
+                return data.msg;
             }).catch((e) => new Error(e));
         } catch (e) {
             new Error(e);
             return {};
         }
+        console.log(result);
         return result;
     }
 }

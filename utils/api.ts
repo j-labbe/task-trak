@@ -28,7 +28,7 @@ export async function Request(config: { endpoint: apiRequestEndpoint; method?: a
                         .catch((err) => Promise.reject(err));
                 default:
                     return axios
-                        .post(API_URL + config.endpoint, config.data)
+                        .post(API_URL + config.endpoint, JSON.stringify(config.data))
                         .then((res) => res.data)
                         .catch((err) => Promise.reject(err));
             }

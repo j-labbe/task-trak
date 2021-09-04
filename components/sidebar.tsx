@@ -11,7 +11,7 @@ const StyledSideBar = styled.div`
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 3;
+    z-index: 22;
     ${mixins.flexCenter}
     justify-content: start;
     flex-direction: column;
@@ -33,6 +33,12 @@ const StyledSideBar = styled.div`
 
     .logo {
         margin-bottom: 40px;
+        width: 50px;
+        transition: var(--transition);
+        &:hover {
+            opacity: 0.5;
+            transition: var(--transition);
+        }
     }
 
     a{

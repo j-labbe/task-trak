@@ -10,6 +10,8 @@ import AlertBox, { ANIM } from '../alertBox';
 import TaskBtn from './taskBtn';
 import TaskList from './taskList';
 import { GroupType, Task, ArrayOfTasks } from '../../types';
+import TagInput from '../TagInput';
+import CreateTask from '../CreateTask';
 
 const StyledMyTasks = styled.div`
     position: absolute;
@@ -24,6 +26,13 @@ const StyledMyTasks = styled.div`
         padding-right: 25px;
         width: 100%;
         height: calc(100% - var(--nav-height));
+        
+        .sticky-title-container{
+            position: fixed;
+            z-index: 19;
+            display: flex;
+            flex-direction: row;
+        }
         
         .sticky-title {
             position: fixed;
@@ -41,11 +50,35 @@ const StyledMyTasks = styled.div`
             }
         }
         .title {
-            position: fixed;
+            position: relative;
             z-index: 21;
             opacity: 2 !important;
             margin-top: 10px;
             padding-left: 30px;
+        }
+        .add-task {
+            position: relative;
+            z-index: 21;
+            margin-top: 10px;
+            padding-left: 30px;
+            left: 30px;
+
+            button{
+                font-family: var(--font-default);
+                border: none;
+                background-color: var(--primary-accent);
+                color: var(--cf-white);
+                padding: 10px;
+                border-radius: var(--border-radius);
+                opacity: 1;
+                transition: var(--transition);
+
+                &:hover {
+                    opacity: 0.8;
+                    transition: var(--transition);
+                    cursor: pointer;
+                }
+            }
         }
         .listgroup {
             ${mixins.flexCenter}
@@ -70,6 +103,7 @@ const ListView = () => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
     const [sortedData, setSortedData] = useState([]);
+    const [isCreateTask, setIsCreateTask] = useState(false);
 
     let groups: GroupType = [];
     groups[0] = { title: "Not Started", children: [] };
@@ -90,6 +124,9 @@ const ListView = () => {
         setSortedData(groups);
         config.callback();
     };
+    const showCreateTask = () => {
+        setIsCreateTask(true);
+    }
 
     useEffect(() => {
         if (!isLoaded && !isMounted) {
@@ -116,13 +153,29 @@ const ListView = () => {
                 <title>Home - Task Trak</title>
             </Head>
             <StyledMyTasks>
+                {
+                    isCreateTask ? (
+                        <CreateTask 
+                            show={true} 
+                            onSuccess={(res) => console.log("Result: ",res)} 
+                            onCancel={() => console.log("Cancelled")}
+                        />
+                    ) : ''
+                }
                 <div className="container">
                     <div className="sticky-title-container">
                         <div className="sticky-title"></div>
                         {isMounted ? (
-                            <CSSTransition classNames={"fadedown"} timeout={4000}>
-                                <h1 className="title">Welcome, {userData.firstName}</h1>
-                            </CSSTransition>
+                            <>
+                                <CSSTransition classNames={"fadedown"} timeout={4000}>
+                                    <h1 className="title">Welcome, {userData.firstName}</h1>
+                                </CSSTransition>
+                                <CSSTransition classNames="fadedown" timeout={2000}>
+                                    <div className="add-task">
+                                        <button onClick={() => showCreateTask()}>Add Task</button>
+                                    </div>
+                                </CSSTransition>
+                            </>
                         ) : ''}
                     </div>
                     <div className="listgroup">
@@ -155,6 +208,7 @@ const ListView = () => {
                                 : ''}
                         </TransitionGroup>
                     </div>
+                    <TagInput isSubmitting={false} onSubmit={() => {}} />
                 </div>
             </StyledMyTasks>
         </div>

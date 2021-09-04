@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as API from 'utils/api';
-import {ArrayOfTasks, ContextProps, UserDataTypes } from '../types';
+import { APINewTaskReturned, ArrayOfTasks, ContextProps, UserDataTypes, ContextCreateTask } from '../types';
 
 const defaultProps = {
     tasks: [],
@@ -21,7 +21,7 @@ const defaultProps = {
         return data;
     },
     addTask: () => { },
-    updateTask: async function(): Promise<any> {
+    updateTask: async function (): Promise<any> {
         let result: any;
     },
     userData: {
@@ -30,7 +30,7 @@ const defaultProps = {
         password: "",
         lastLogin: 0
     },
-    getUserData: async function(): Promise<object> {
+    getUserData: async function (): Promise<object> {
         let result: any;
         try {
             result = await API.Request({
@@ -50,8 +50,22 @@ const defaultProps = {
             new Error(e);
             return {};
         }
-        console.log(result);
         return result;
+    },
+    createTask: async function (config: ContextCreateTask): Promise<object> {
+        let result: any;
+        try {
+            result = await API.Request({
+                endpoint: "createTask",
+                method: "POST"
+            }).then((res: APINewTaskReturned) => {
+                return res.msg;
+            }).catch((e) => new Error(e));
+            return result;
+        } catch (e) {
+            new Error(e);
+            return {};
+        }
     }
 }
 
@@ -87,20 +101,11 @@ export default function AppContextProvider(props: React.PropsWithChildren<{}>) {
      * @param newTask Object - New tasks's properties object
      * @returns Array - All tasks
      */
-    const addTask = async (newTask: object): Promise<any[]> => {
-        try {
-            API.Request({
-                endpoint: "createTask",
-                method: 'POST',
-                data: newTask
-            }).then((res: object) => {
-                Object.keys(res).map(i => setTasks(res[i]));
-            }).catch((e) => new Error(e));
-            return tasks;
-        } catch (e) {
-            new Error(e);
-            return [];
-        }
+    const addTask = async (newTask: ContextCreateTask): Promise<any[]> => {
+        let result: any;
+        result = await defaultProps.createTask(newTask);
+        console.log(result);
+        return []; 
     };
 
     /**
@@ -118,7 +123,7 @@ export default function AppContextProvider(props: React.PropsWithChildren<{}>) {
             addTask: addTask,
             userData: userData,
             getUserData: getUserData,
-            updateTask: () => {}
+            updateTask: () => { },
         }} {...props} />
     )
 }

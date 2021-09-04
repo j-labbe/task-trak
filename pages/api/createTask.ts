@@ -6,6 +6,8 @@ import { uuid } from "uuidv4";
 
 export default withApiAuthRequired(async function ProtectedRoute(req: NextApiRequest, res: NextApiResponse) {
     const session = getSession(req, res);
+    console.log(req.body);
+    /*
     try {
         const userId = await getUserId(session);
         if (!session) return res.status(400).json({ msg: "Not logged in." });
@@ -16,7 +18,7 @@ export default withApiAuthRequired(async function ProtectedRoute(req: NextApiReq
                 name: req.body.name || "Untitled",
                 description: req.body.description || "",
                 properties: {
-                    tags: [],
+                    tags: req.body.properties.tags || [],
                 },
                 progress: 0, // default to "Not Started", maybe have this user-configurable later?
             },
@@ -41,5 +43,5 @@ export default withApiAuthRequired(async function ProtectedRoute(req: NextApiReq
         });
     } catch (err) {
         res.status(500).json({msg: 'Error'});
-    }
+    }*/
 });

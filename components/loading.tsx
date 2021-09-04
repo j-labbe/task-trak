@@ -73,7 +73,6 @@ const Loading = () => {
             <StyledLoader isMounted={isMounted}>
                 <div className="container">
                     <div className="loader"></div>
-                    <h2>Loading...</h2>
                 </div>
             </StyledLoader>
         </div>

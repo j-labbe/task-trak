@@ -1,4 +1,8 @@
 /**
+ * Tags within an array.
+ */
+export type Tags = Array<{ urgent: boolean; name: string }>;
+/**
  * Each Task record has this data structure
  */
 export interface Task {
@@ -11,7 +15,7 @@ export interface Task {
         startDate?: string;
         endDate?: string;
         timeZone?: string;
-        tags?: Array<{ urgent: boolean; name: string }>;
+        tags?: Tags;
     };
     progress: number;
 }
@@ -108,4 +112,42 @@ export interface CreatedTask {
         userId: string | number;
         data: string;
     };
+}
+
+/**
+ * What the API returns when a new task is created.
+ */
+export interface APINewTaskReturned {
+    msg: {
+        dbId: string | number;
+        userId: string;
+        id: string | number;
+        name: string;
+        description: string;
+        properties: {
+            startDate: string;
+            endDate: string;
+            timeZone: string;
+            tags: Tags | any[];
+        };
+        progress: number;
+    };
+}
+
+/**
+ * Used when sending the new task to the API server
+ * 
+ * Contains optional properties that have defaults on
+ * the server.
+ */
+export interface ContextCreateTask {
+    id: string | number,
+    name: string,
+    description: string,
+    properties: {
+        tags?: Tags,
+        startDate?: string,
+        endDate?: string,
+        timeZone?: string
+    }
 }

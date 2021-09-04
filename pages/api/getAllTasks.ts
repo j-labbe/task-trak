@@ -6,7 +6,6 @@ export default withApiAuthRequired(async function ProtectedRoute(req: NextApiReq
     const session = getSession(req, res);
     try {
         const tasks = await getAllTasks(session);
-        console.log(tasks);
         return res.status(200).json({ msg: tasks });
     } catch (err) {
         console.error(err);

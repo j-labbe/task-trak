@@ -14,7 +14,7 @@ const StyledNavBar = styled.div`
     height: var(--nav-height);
     background-color: var(--default-bg);
     overflow: hidden;
-    z-index: 2;
+    z-index: 21;
 
     .col1 {
         width: 60%;

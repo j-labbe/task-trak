@@ -1,18 +1,16 @@
 import { table } from "utils/airtable";
-import { uuid } from "uuidv4";
+import { v4 } from "uuid";
 import { CreatedTask, NewTaskConfig } from "types";
 import { Session } from "@auth0/nextjs-auth0";
 
 export default async function (session: Session, config: NewTaskConfig): Promise<CreatedTask> {
     if(!session) return Promise.reject('Invalid session.'); // may be redundant ¯\_(ツ)_/¯
-    const assignedTaskId = uuid();
-    config.newRecord.id = assignedTaskId;
     try {
         const newTask = await table.create([
             {
                 fields: {
-                    taskId: config.newRecord.id, // non-airtable specific identifier
-                    userId: config.userId, // user's userId from auth0 metadata (or equiv. authentication)
+                    taskId: config.newRecord.id.toString(), // non-airtable specific identifier
+                    userId: config.userId.toString(), // user's userId from auth0 metadata (or equiv. authentication)
                     data: JSON.stringify(config.newRecord) // contains all the task data, taskId will be redundant (fine)
                 }
             }

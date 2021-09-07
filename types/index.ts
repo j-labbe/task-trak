@@ -1,7 +1,15 @@
 /**
+ * Single Tag
+ */
+export interface Tag {
+    urgent: string;
+    name: string;
+    id: number;
+}
+/**
  * Tags within an array.
  */
-export type Tags = Array<{ urgent: boolean; name: string }>;
+export type Tags = Array<Tag>;
 /**
  * Each Task record has this data structure
  */
@@ -136,18 +144,18 @@ export interface APINewTaskReturned {
 
 /**
  * Used when sending the new task to the API server
- * 
+ *
  * Contains optional properties that have defaults on
  * the server.
  */
 export interface ContextCreateTask {
-    id: string | number,
-    name: string,
-    description: string,
+    id: string | number;
+    name: string;
+    description: string;
     properties: {
-        tags?: Tags,
-        startDate?: string,
-        endDate?: string,
-        timeZone?: string
-    }
+        tags?: Tags;
+        startDate?: string;
+        endDate?: string;
+        timeZone?: string;
+    };
 }

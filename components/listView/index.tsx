@@ -12,6 +12,7 @@ import TaskList from './taskList';
 import { GroupType, Task, ArrayOfTasks } from '../../types';
 import TagInput from '../TagInput';
 import CreateTask from '../CreateTask';
+import * as API from 'utils/api';
 
 const StyledMyTasks = styled.div`
     position: absolute;
@@ -126,6 +127,17 @@ const ListView = () => {
     };
     const showCreateTask = () => {
         setIsCreateTask(true);
+    };
+    const handleCreateTaskSuccess = async (res) => {
+        console.warn(res);
+        const req = await API.Request({
+            endpoint: "createTask",
+            method: "POST",
+            data: { data: res }
+        })
+            .then((res) => res)
+            .catch((err) => console.error(err));
+        setIsCreateTask(false)
     }
 
     useEffect(() => {
@@ -155,10 +167,10 @@ const ListView = () => {
             <StyledMyTasks>
                 {
                     isCreateTask ? (
-                        <CreateTask 
-                            show={true} 
-                            onSuccess={(res) => console.log("Result: ",res)} 
-                            onCancel={() => console.log("Cancelled")}
+                        <CreateTask
+                            show={true}
+                            onSuccess={handleCreateTaskSuccess}
+                            onCancel={() => setIsCreateTask(false)}
                         />
                     ) : ''
                 }
@@ -208,7 +220,6 @@ const ListView = () => {
                                 : ''}
                         </TransitionGroup>
                     </div>
-                    <TagInput isSubmitting={false} onSubmit={() => {}} />
                 </div>
             </StyledMyTasks>
         </div>

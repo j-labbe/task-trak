@@ -8,9 +8,7 @@ const base = Airtable.base(process.env.AIRTABLE_BASE_ID);
 const table = base(process.env.AIRTABLE_TABLE_NAME);
 
 const getMinifiedRecord = (rec) => {
-    console.log(rec);
-    !!rec.fields.completed;
-    return rec.fields;
+    return JSON.parse(rec.fields.data);
 };
 
 const minifyRecords = (recs) => (recs.map((rec) => getMinifiedRecord(rec)));

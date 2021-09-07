@@ -2,23 +2,22 @@ import createTask from "./dao/tasks/createTask";
 import getUserId from "./dao/user/getUserId";
 import { withApiAuthRequired, getSession } from "@auth0/nextjs-auth0";
 import { NextApiRequest, NextApiResponse } from "next";
-import { uuid } from "uuidv4";
+import { v4 } from "uuid";
 
 export default withApiAuthRequired(async function ProtectedRoute(req: NextApiRequest, res: NextApiResponse) {
     const session = getSession(req, res);
-    console.log(req.body);
-    /*
     try {
         const userId = await getUserId(session);
         if (!session) return res.status(400).json({ msg: "Not logged in." });
+        const receivedData = req.body.data;
         const result = await createTask(session, {
             userId: userId,
             newRecord: {
-                id: req.body.id || uuid(),
-                name: req.body.name || "Untitled",
-                description: req.body.description || "",
+                id: receivedData.id ? receivedData.id : v4(),
+                name: receivedData.name ? receivedData.name : "Untitled",
+                description: receivedData.description ? receivedData.description : "",
                 properties: {
-                    tags: req.body.properties.tags || [],
+                    tags: receivedData.tags ? receivedData.tags : [],
                 },
                 progress: 0, // default to "Not Started", maybe have this user-configurable later?
             },
@@ -33,15 +32,16 @@ export default withApiAuthRequired(async function ProtectedRoute(req: NextApiReq
                 name: parse.name,
                 description: parse.description,
                 properties: {
-                    startDate: parse.startDate || "",
-                    endDate: parse.endDate || "",
-                    timeZone: parse.timeZone || "",
-                    tags: parse.tags || [],
+                    startDate: parse.properties.startDate || "",
+                    endDate: parse.properties.endDate || "",
+                    timeZone: parse.properties.timeZone || "",
+                    tags: parse.properties.tags || [],
                 },
                 progress: parse.progress,
             },
         });
     } catch (err) {
-        res.status(500).json({msg: 'Error'});
-    }*/
+        console.error(err);
+        res.status(500).json({ msg: "Error" });
+    }
 });

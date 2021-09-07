@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import AlertBox, { ANIM } from './alertBox';
 import styled from 'styled-components';
 import { mixins } from 'styles';
 import TagInput from './TagInput';
-import { ContextCreateTask, NewTaskConfig } from '../types';
-import { uuid } from 'uuidv4';
+import { ContextCreateTask, NewTaskConfig, Tag, Tags } from '../types';
+import { v4 } from 'uuid';
+import { AppContext } from '../contexts/AppContext';
+import _ from 'lodash';
 
 export interface CreateTaskProps {
     onSuccess?: (prop: ContextCreateTask) => void,
@@ -13,9 +15,11 @@ export interface CreateTaskProps {
 }
 
 const StyledCreateTaskProps = styled.div`
+    width: 100%;
     .create-task {
         ${mixins.flexCenter}
         flex-direction: column;
+        width: 65%;
 
         input {
             margin: 10px 0 10px 0;
@@ -37,69 +41,140 @@ const StyledCreateTaskProps = styled.div`
                 transition: var(--transition);
             }
         }
-    }
-`;
+        .header{
+            ${mixins.flexBetween}
+            margin-top: 10px;
+            padding: 3px 10px 3px 10px;
+            width: 100%;
+            background-color: #EFF0F6;
+            border-top-left-radius: var(--border-radius);
+            border-top-right-radius: var(--border-radius);
+            border-top: 2px solid #D9DBE9;
+            border-left: 2px solid #D9DBE9;
+            border-right: 2px solid #D9DBE9;
 
-
-const CreateTask = (config: CreateTaskProps) => {
-    /****************************************************************
-     * Boilerplate for AlertBox
-     ****************************************************************/
-    const [alertShown, setAlertShow] = useState(false);
-    const [tagComponents, setTagComponents] = useState([]);
-    const [tagResults, setTagResults] = useState([]);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [newTaskName, setNewTaskName] = useState("");
-    const [newTaskDesc, setNewTaskDesc] = useState("");
-
-    const tagProp = (<TagInput key={tagComponents.length > 0 ? tagComponents.length + 1 : 1} isSubmitting={isSubmitting} onSubmit={() => handleTagSubmit} />);
-
-    const handleTagSubmit = (tag) => {
-        setTagResults([...tagResults, tag]);
-    };
-
-    const showAlert = () => {
-        setTagComponents([tagProp]);
-        setAlertShow(true);
-    };
-    const hideAlert = () => {
-        // if no delay then the exit animation does not work
-        setTimeout(() => {
-            setAlertShow(false);
-        }, ANIM);
-    };
-    const handleSuccess = (onSuccess: any) => {
-        setIsSubmitting(true); // tell tag components we're done
-        const checkTags = () => {
-            if (tagResults.length < tagComponents.length) {
-                setTimeout(checkTags, 100); // check every 100ms for tags to be done
-            } else {
-                // tags are done
+            h2 {
+                font-size: var(--f-sm);
+                margin: 0;
+                padding: 0;
+            }
+            .del-btn {
+                position: relative;
+                z-index: 20;
+                border: none;
+                outline: none;
+                background-color: none;
+                color: var(--cf-meta);
+                font-family: var(--font-default);
+                margin: 0;
+    
+                &:hover {
+                    cursor: pointer;
+                }
             }
         }
     }
-    const handleCancel = (cancelFunc?: () => void) => {
-        hideAlert();
-        cancelFunc && cancelFunc();
+`;
+
+const pushToArray = async (array: Tags, object: Tag): Promise<Tags> => {
+    array.forEach((e: Tag, i: number) => {
+        if (e.id === object.id) {
+            array[i] = object;
+        } else if (array.length === i) {
+            array.push(object);
+        }
+    });
+    return array;
+};
+
+const CreateTask = (config: CreateTaskProps) => {
+
+    // Functional
+    const [alertShown, setAlertShown] = useState(false);
+    // Task Properties
+    const [newTaskName, setNewTaskName] = useState("");
+    const [newTaskDesc, setNewTaskDesc] = useState("");
+    // Tags
+    const [tagState, setTagState] = useState([]);
+    const [tagComponents, setTagComponents] = useState([]);
+
+    // update the tags storage until saved
+    const handleTagChange = async (details: Tag) => {
+        let tagArray: Tags = [...tagState];
+        const { id, name, urgent } = details;
+        const i = tagArray.findIndex(tag => tag.id === id);
+        if(i !== -1){
+            tagArray[i].name = name;
+            tagArray[i].urgent = urgent;
+        }else{
+            tagArray = [...tagArray, details];
+        }
+        setTagState(tagArray);
+    };
+
+    const TagProp = (<TagInput
+        key={tagComponents.length + 1}
+        id={tagComponents.length + 1} // first tag is ID 1, array pos 0
+        setTagDetails={handleTagChange}
+        tagState={tagState}
+    />);
+
+    const handleTaskNameChange = (e) => setNewTaskName(e.target.value);
+    const handleTaskDescChange = (e) => setNewTaskDesc(e.target.value);
+    const handleAddTag = () => {
+        if (tagComponents.length >= 5) return;
+        setTagComponents([...tagComponents, TagProp]);
     }
+    const handleRemoveTag = (id: number) => {
+        const i = tagComponents.findIndex(tag => tag.props.id === id);
+        if (i !== -1) {
+            const u = [...tagComponents];
+            const updateArr = (a, v) => a.filter((e) => e.props.id !== v);
+            const update = updateArr(u, id);
+            setTagComponents(update);
+        }
+    };
+    const handleSuccess = (callback) => {
+        callback({
+            id: v4(),
+            name: newTaskName,
+            description: newTaskDesc,
+            properties: {
+                tags: tagState
+            }
+        });
+        setAlertShown(false);
+    };
+    const handleCancel = (callback) => {
+        callback();
+        setAlertShown(false);
+    }
+    const showAlert = () => setAlertShown(true);
+    const hideAlert = () => setAlertShown(false);
+
+
     const defaultCreateTaskProps = (
         <div className="create-task">
-            <input type="text" name="task-name" placeholder="Name" value="" onChange={(e) => {
-                setNewTaskName(e.target.value);
-            }} />
-            <input type="text" name="task-description" placeholder="Description" value="" onChange={(e) => {
-                setNewTaskDesc(e.target.value);
-            }} />
+            <input type="text" autoComplete="off" name="task-name" placeholder="Name" value={newTaskName} onChange={(e) => handleTaskNameChange(e)} />
+            <input type="text" autoComplete="off" name="task-description" placeholder="Description" value={newTaskDesc} onChange={(e) => handleTaskDescChange(e)} />
             {'' /* todo: add date picker for timezone, start & end date */}
             <div className="taglist">
                 {
-                    tagComponents && tagComponents.map((tagComponent, i) => (
-                        <div className="tag" key={i}>
-                            {tagComponent}
-                        </div>
-                    ))
+                    tagComponents.map((tagComponent, i) => {
+                        return (
+                            <div className="tag" key={i}>
+                                <div className="header">
+                                    <h2>Tag {tagComponent.props.id}</h2>
+                                    {/* first tag is id 1, array pos 0 */}
+                                    <button className="del-btn" onClick={() => handleRemoveTag(tagComponent.props.id)}>x</button>
+                                </div>
+                                {tagComponent}
+                            </div>
+                        )
+                    })
                 }
             </div>
+            <button onClick={handleAddTag}>Add Tag</button>
         </div>
     );
     let alertBoxConfig = {

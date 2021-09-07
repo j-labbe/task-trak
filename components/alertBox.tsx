@@ -33,7 +33,7 @@ const StyledAlertBox = styled.div<AlertBoxProps>`
         flex-direction: column;
         max-height: 600px;
         width: 500px;
-        padding: 40px;
+        padding: 40px 40px 20px 40px;
         background-color: var(--secondary-bg);
         -webkit-box-shadow: 0px 0px 40px 14px rgba(0,0,0,0.21); 
         box-shadow: 0px 0px 40px 14px rgba(0,0,0,0.21);
@@ -55,6 +55,16 @@ const StyledAlertBox = styled.div<AlertBoxProps>`
             max-height: 300px;
             overflow: scroll;
             text-align: center;
+            width: 100%;
+
+            background:
+                linear-gradient(var(--secondary-bg) 30%, hsla(0,0%,100%, 0)),
+                linear-gradient(hsla(0,0%,100%,0) 10px, var(--secondary-bg) 70%) bottom,
+                radial-gradient(at top, rgba(0,0,0,0.2), transparent 70%), 
+                radial-gradient(at bottom, rgba(0,0,0,0.2), transparent 70%) bottom;
+            background-repeat: no-repeat;
+            background-size: 100% 20px, 100% 20px, 100% 10px, 100% 10px;
+            background-attachment: local, local, scroll, scroll;
 
             h1 {
                 font-size: var(--f-xl);
@@ -63,6 +73,7 @@ const StyledAlertBox = styled.div<AlertBoxProps>`
 
         .buttons {
             ${mixins.flexCenter}
+            padding-top: 20px;
 
             .btn-cancel {
                 font-family: var(--font-default);
@@ -86,9 +97,9 @@ const StyledAlertBox = styled.div<AlertBoxProps>`
             .btn-success {
                 font-family: var(--font-default);
                 font-size: var(--f-sm);
-                width: 75px;
+                width: auto;
                 margin: 10px;
-                padding: 9px 22px;
+                padding: 9px 22px !important;
                 outline: none;
                 border: none;
                 border-radius: 12px;
@@ -134,7 +145,7 @@ const StyledAlertBox = styled.div<AlertBoxProps>`
  */
 
 export default function AlertBox(config: { title?: string, description?: string, successBtnLabel?: string, cancelBtnLabel?: string, onSuccess?: () => void; onCancel?: () => void, props: any, onClickOutside: () => void }) {
-    const ref = useRef();
+    let ref = useRef();
     const [isMounted, setIsMounted] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
     useEffect(() => {
@@ -142,6 +153,11 @@ export default function AlertBox(config: { title?: string, description?: string,
         setTimeout(() => {
             setIsVisible(true);
         }, ANIM);
+        return () => {
+            setIsVisible(false);
+            setIsMounted(false);
+            ref = undefined;
+        }
     }, []);
     useOnClickOutside(ref, () => {
         setIsVisible(false);
@@ -151,7 +167,6 @@ export default function AlertBox(config: { title?: string, description?: string,
         }, ANIM);
     });
     const callBack = (success?: boolean) => {
-        setIsVisible(false);
         if (success) {
             if (config.onSuccess) {
                 config.onSuccess();
@@ -159,6 +174,7 @@ export default function AlertBox(config: { title?: string, description?: string,
         } else {
             config.onCancel();
         }
+        setIsVisible(false);
         setTimeout(() => {
             setIsMounted(false);
         }, ANIM);

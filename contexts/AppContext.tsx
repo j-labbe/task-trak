@@ -10,6 +10,8 @@ const defaultProps = {
             method: "GET"
         }).then((res) => {
             let temp = [];
+            //@ts-ignore
+            res = res.msg;
             Object.keys(res).map(i => {
                 temp[i] = res[i];
             });
@@ -105,7 +107,7 @@ export default function AppContextProvider(props: React.PropsWithChildren<{}>) {
         let result: any;
         result = await defaultProps.createTask(newTask);
         console.log(result);
-        return []; 
+        return [];
     };
 
     /**
@@ -123,7 +125,7 @@ export default function AppContextProvider(props: React.PropsWithChildren<{}>) {
             addTask: addTask,
             userData: userData,
             getUserData: getUserData,
-            updateTask: () => { },
+            updateTask: () => { }
         }} {...props} />
     )
 }

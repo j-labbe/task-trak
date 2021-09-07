@@ -11,7 +11,6 @@ export default async function (session: Session): Promise<any> {
             })
             .firstPage();
         const formattedRecords = minifyRecords(records);
-        console.log(formattedRecords);
         return formattedRecords;
     } catch (e) {
         return Promise.reject(e);

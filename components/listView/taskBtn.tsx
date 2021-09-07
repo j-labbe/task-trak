@@ -19,7 +19,7 @@ const StyledBar = styled.div<BarProps>`
         ${mixins.flexCenter}
         flex-direction: column;
         max-height: 100px;
-        width: 80%;
+        width: 80% !important;
         height: 80px;
         border: 2px solid var(--card-border);
         overflow: hidden;
@@ -108,6 +108,8 @@ const StyledBar = styled.div<BarProps>`
             font-size: var(--f-md);
             margin: 5px !important;
             padding: 0;
+            max-width: 250px;
+            overflow: hidden;
             transition: transform 0.5s cubic-bezier(0, 0.55, 0.45, 1);
         }
         .tags {

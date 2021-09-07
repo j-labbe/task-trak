@@ -32,6 +32,9 @@ const StyledList = styled.div`
         margin: 10px 0;
         width: 300px;
     }
+    .style-list {
+        width: 100%;
+    }
 `;
 
 type TaskListProps = {
@@ -87,7 +90,7 @@ const TaskList = ({ title, listId, children, style }: TaskListProps) => {
             <StyledListGroup>
                 <StyledList>
                     <h3>{title}</h3>
-                    <div id="list" ref={drop}>
+                    <div id="list" className="style-list" ref={drop}>
                         {list}
                     </div>
                 </StyledList>

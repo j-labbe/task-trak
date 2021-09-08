@@ -35,11 +35,16 @@ This is the repo for the first release of Task Track, an All-In-One tracker for 
       </ul>
     </li>
     <li><a href="#-todo">To Do</a></li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#usage">Usage</a></li>
-    
-    
+    <li>
+      <a href="#-getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#">Prerequisites</a></li>
+        <li><a href="#-installation">Installation</a></li>
+        <li><a href="#-run-development-version">Run Development Version</a></li>
+        <li><a href="#">Build Production Version</a></li>
+      </ul>
+    </li>
+    <!--
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
@@ -52,7 +57,7 @@ This is the repo for the first release of Task Track, an All-In-One tracker for 
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgements">Acknowledgements</a></li>
+    <li><a href="#acknowledgements">Acknowledgements</a></li>-->
   </ol>
 </details>
 
@@ -60,12 +65,12 @@ This is the repo for the first release of Task Track, an All-In-One tracker for 
 Initially this project was going to be something I may adapt to my personal website in the future (give clients a way to track the progress of their service), but I decided to break it out into it's own service. At a very basic level, it's a glorified To-Do / reminders app. At a more complex level, it is a showcase of my compoetency with some of the latest and greatest technologies there are as of writing this.
 
 ### 🛠 Built With
-* (Next.js)[https://nextjs.org/]
-* (Auth0)[https://auth0.com/]
-* (Airtable)[https://airtable.com]
-* (React-DnD)[https://github.com/react-dnd/react-dnd/]
-* (styled-components)[https://styled-components.com/]
-* (React Transition Group)[https://github.com/reactjs/react-transition-group]
+* Next.js [https://nextjs.org/]
+* Auth0 [https://auth0.com/]
+* Airtable [https://airtable.com]
+* React-DnD [https://github.com/react-dnd/react-dnd/]
+* styled-components [https://styled-components.com/]
+* React Transition Group [https://github.com/reactjs/react-transition-group]
 * And many other libraries!
 
 ## 🤔 Why TypeScript?

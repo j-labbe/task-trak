@@ -19,11 +19,27 @@ This is the repo for the first release of Task Track, an All-In-One tracker for 
   <summary><h2 style="display: inline-block">📋 Table of Contents</h2></summary>
   <ol>
     <li>
-      <a href="#why-this-project">Why This Project?</a>
+      <a href="#-why-this-project">Why This Project?</a>
       <ul>
-        <li><a href="#built-with">Built With</a></li>
+        <li><a href="#-built-with">Built With</a></li>
       </ul>
     </li>
+    <li><a href="#-why-typescript">Why TypeScript?</a></li>
+    <li><a href="#%EF%B8%8F-challenges-faced">Challenges Faced</a></li>
+    <li><a href="#-how-i-tackled-those-challenges">Usage</a></li>
+    <li><a href="https://github.com/j-labbe/task-trak/tree/feature-list-dnd#-things-that-can-be-improved">Things That Can Be Improved</a></li>
+    <li>
+      <a href="#-api-documentation">API Documentation</a>
+      <ul>
+        <li><a href="#-why-the-additional-userid-code-in-the-api">Why the additional userId?</a></li>
+      </ul>
+    </li>
+    <li><a href="#-todo">To Do</a></li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#usage">Usage</a></li>
+    
+    
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
@@ -63,7 +79,7 @@ Additionally, I had never used the Airtable or Auth0 API. As with any new API, e
 ## ✅ How I Tackled Those Challenges
 I alluded to this in the previous section, but to expand, extensive reading and trial-and-error were just two of the many methods I used to tackle the many challenges I faced and currently am facing with this project. One thing remains constant, however, and that is my mindset. I describe myself as someone who understands learning never stops. I believe that is a fundamental mindset to have because it prevents you from blinding yourself by thinking "you know everything". I never stop trying to learn and I always do my best to make sure features work how they're supposed to (and are written well).
 
-## 📈 Things That can be Improved
+## 📈 Things That Can Be Improved
 For starters, I am always looking to refactor and restructure code to be more efficient and logical. Sometimes I implement new features, only to re-write them because I know they aren't efficient or robust. My running list of things that need to be worked on can be found in the **Issues** tab.
 
 ## 🌐 API Documentation
@@ -81,6 +97,8 @@ There are specific server-side tasks that were setup on auth0's servers. See `/e
 4. Tests
 5. Merge with master (auto-deploy)
 6. Work on new features and improvements
+
+## 😎 Getting Started
 
 ### 💻 Installation
 1. Clone the repo

@@ -127,6 +127,12 @@ npm run dev
 yarn run build
 ```
 
+## Contact
+
+Jack Labbe - [Email](mailto:mail@jacklabbe.com) [Website](https://jacklabbe.com)
+
+Project Link: [https://github.com/j-labbe/task-trak](https://github.com/j-labbe/task-trak)
+
 <!--
 *** To avoid retyping too much info. Do a search and replace for the following:
 *** github_username, repo_name, twitter_handle, email, project_title, project_description

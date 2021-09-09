@@ -32,7 +32,7 @@
     <li><a href="#-why-typescript">Why TypeScript?</a></li>
     <li><a href="#%EF%B8%8F-challenges-faced">Challenges Faced</a></li>
     <li><a href="#-how-i-tackled-those-challenges">Usage</a></li>
-    <li><a href="https://github.com/j-labbe/task-trak/tree/feature-list-dnd#-things-that-can-be-improved">Things That Can Be Improved</a></li>
+    <li><a href="#-things-that-can-be-improved">Things That Can Be Improved</a></li>
     <li>
       <a href="#-api-documentation">API Documentation</a>
       <ul>
@@ -49,20 +49,10 @@
         <li><a href="#-build-production-version">Build Production Version</a></li>
       </ul>
     </li>
-    <!--
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#contributing">Making Contributions</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgements">Acknowledgements</a></li>-->
   </ol>
 </details>
 
@@ -163,17 +153,3 @@ Distributed under the GPLv3 License. See `LICENSE` for more information.
 Jack Labbe - [Email](mailto:mail@jacklabbe.com) [Website](https://jacklabbe.com)
 
 Project Link: [https://github.com/j-labbe/task-trak](https://github.com/j-labbe/task-trak)
-
-<!-- MARKDOWN LINKS & IMAGES 
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links 
-[contributors-shield]: https://img.shields.io/github/contributors/github_username/repo.svg?style=for-the-badge
-[contributors-url]: https://github.com/github_username/repo_name/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/github_username/repo.svg?style=for-the-badge
-[forks-url]: https://github.com/github_username/repo_name/network/members
-[stars-shield]: https://img.shields.io/github/stars/github_username/repo.svg?style=for-the-badge
-[stars-url]: https://github.com/github_username/repo_name/stargazers
-[issues-shield]: https://img.shields.io/github/issues/github_username/repo.svg?style=for-the-badge
-[issues-url]: https://github.com/github_username/repo_name/issues
--->
-[license-shield]: https://img.shields.io/github/license/j-labbe/task-trak.svg
-[license-url]: https://github.com/j-labbe/task-trak/blob/feature-list-dnd/LICENSE

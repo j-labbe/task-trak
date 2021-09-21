@@ -3,21 +3,20 @@ import { getSession } from "@auth0/nextjs-auth0";
 import getUserId from "../dao/user/getUserId";
 import { NextApiRequest, NextApiResponse } from "next";
 
-export default (handler) => async (req: NextApiRequest, res: NextApiResponse) => {
+export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     const session = getSession(req, res);
-    const userId = getUserId(session);
+    const userId = await getUserId(session);
     if (!session || !userId) return res.status(401).json({ msg: "Invalid session." });
     const { dbId } = req.body;
     try {
         const existingRecord = await table.find(dbId);
-        if (!existingRecord || userId !== existingRecord[0].fields.userId) {
-            return res.status(404).json({ msg: "Record not found" });
+        if (!existingRecord || userId !== existingRecord.fields.userId) {
+            return Promise.reject("Record not found");
         }
         // @ts-ignore
         req.record = existingRecord;
-        return handler(req, res);
+        Promise.resolve();
     } catch (err) {
-        console.error(err);
-        return res.status(500).json({ msg: "Error" });
+        return Promise.reject(err);
     }
 };

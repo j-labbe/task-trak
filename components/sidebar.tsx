@@ -55,6 +55,10 @@ const StyledSideBar = styled.div`
         opacity: 0.7;
         transition: var(--transition);
     }
+
+    .up-to-top {
+        z-index: 100 !important;
+    }
 `;
 
 const SideBar = () => {
@@ -102,7 +106,7 @@ const SideBar = () => {
                                 <IconFeed />
                             </a>
                         </Link>
-                        <ReactTooltip delayShow={400} place="top" type="dark" effect="solid" />
+                        <ReactTooltip delayShow={400} place="top" type="dark" effect="solid" className="up-to-top" />
                     </StyledSideBar>
     ) : ''
 }

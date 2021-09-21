@@ -9,6 +9,6 @@ export default withApiAuthRequired(async function ProtectedRoute(req: NextApiReq
         return res.status(200).json({ msg: tasks });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ msg: err });
+        res.status(500).json({ msg: "Error" });
     }
 });

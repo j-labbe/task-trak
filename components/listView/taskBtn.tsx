@@ -175,10 +175,10 @@ const StyledBar = styled.div<BarProps>`
 `;
 
 const TaskBtn = (config: TaskBtnProps) => {
-    
-    const {title, tags, style, showAnim, pos, taskId, progress} = config;
+
+    const { title, tags, taskId } = config;
     const [{ isDragging }, drag] = useDrag(() => ({
-        type: "bar",
+        type: "bar", // enum for later?
         item: { id: taskId },
         collect: (monitor) => ({
             isDragging: !!monitor.isDragging()
@@ -190,62 +190,58 @@ const TaskBtn = (config: TaskBtnProps) => {
     }
 
     return (
-        <div className="fullwidth draggable-item">
-            <div className="fullwidth" style={style ? style : undefined} >
-                {
-                    showAnim ? (
-                        <CSSTransition classNames="fastfadeup" timeout={2000 + (pos * 100)}>
-                            <StyledBar isOpen={isOpen}>
-                                <button className={"bar" + (isOpen ? "" : " collapsed")} id="2" onClick={() => handleToggleOpen()} style={isDragging ? { opacity: 0.5 } : { opacity: 1 }} ref={drag}>
-                                    <div className="heading">
-                                        <div className="statusIcon">
-                                            <div className="icon-check"></div>
-                                        </div>
-                                        <h1>{title}</h1>
-                                        <div className="controls">
-                                            <div className="expand">
-                                                <IconArrowDown />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="tags">
-                                        {tags.map((tag: any, i: number) => (
-                                            <div className={"tag" + (tag.urgent ? " urgent" : " nonUrgent")} key={i}>
-                                                <p className="tag-name">{tag.name}</p>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </button>
-                            </StyledBar>
-                        </CSSTransition>
-                    ) : (
-                        <StyledBar isOpen={isOpen}>
-                            <button className={"bar" + (isOpen ? "" : " collapsed")} id="2" onClick={() => handleToggleOpen()}>
-                                <div className="heading">
-                                    <div className="statusIcon">
-                                        <div className="icon-check"></div>
-                                    </div>
-                                    <h1>{title}</h1>
-                                    <div className="controls">
-                                        <div className="expand">
-                                            <IconArrowDown />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="tags">
-                                    {tags.map((tag: any, i: number) => (
-                                        <div className={"tag" + (tag.urgent ? " urgent" : " nonUrgent")} key={i}>
-                                            <p className="tag-name">{tag.name}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </button>
-                        </StyledBar>
-                    )
-                }
-            </div>
-        </div>
+        <StyledBar isOpen={isOpen}>
+            <button className={"bar" + (isOpen ? "" : " collapsed")} id="2" onClick={() => handleToggleOpen()} style={isDragging ? { opacity: 0.5, border: "1px solid var(--primary-accent)", transition: "none" } : { opacity: 1, border: "none" }} ref={drag}>
+                <div className="heading">
+                    <div className="statusIcon">
+                        <div className="icon-check"></div>
+                    </div>
+                    <h1>{title}</h1>
+                    <div className="controls">
+                        <div className="expand">
+                            <IconArrowDown />
+                        </div>
+                    </div>
+                </div>
+                <div className="tags">
+                    {tags.map((tag: any, i: number) => (
+                        <div className={"tag" + (tag.urgent === "urgent" ? " urgent" : " nonUrgent")} key={i}>
+                            <p className="tag-name">{tag.name}</p>
+                        </div>
+                    ))}
+                </div>
+            </button>
+        </StyledBar>
     );
+
+    // return (
+    //     <div className="fullwidth draggable-item">
+    //         <div className="fullwidth" style={style ? style : undefined} >
+    //             <StyledBar isOpen={isOpen}>
+    //                 <button className={"bar" + (isOpen ? "" : " collapsed")} id="2" onClick={() => handleToggleOpen()} style={isDragging ? { opacity: 0.5, border: "1px solid var(--primary-accent)", transition: "none" } : { opacity: 1, border: "none" }} ref={drag}>
+    //                     <div className="heading">
+    //                         <div className="statusIcon">
+    //                             <div className="icon-check"></div>
+    //                         </div>
+    //                         <h1>{title}</h1>
+    //                         <div className="controls">
+    //                             <div className="expand">
+    //                                 <IconArrowDown />
+    //                             </div>
+    //                         </div>
+    //                     </div>
+    //                     <div className="tags">
+    //                         {tags.map((tag: any, i: number) => (
+    //                             <div className={"tag" + (tag.urgent ? " urgent" : " nonUrgent")} key={i}>
+    //                                 <p className="tag-name">{tag.name}</p>
+    //                             </div>
+    //                         ))}
+    //                     </div>
+    //                 </button>
+    //             </StyledBar>
+    //         </div>
+    //     </div>
+    // );
 }
 
 export default TaskBtn;

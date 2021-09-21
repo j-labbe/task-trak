@@ -13,6 +13,7 @@ import { GroupType, Task, ArrayOfTasks } from '../../types';
 import TagInput from '../TagInput';
 import CreateTask from '../CreateTask';
 import * as API from 'utils/api';
+import Loading from "components/loading";
 
 const StyledMyTasks = styled.div`
     position: absolute;
@@ -100,31 +101,12 @@ const StyledMyTasks = styled.div`
 `;
 
 const ListView = () => {
-    const { refreshTasks, userData, getUserData } = useContext(AppContext);
+    const { refreshTasks, userData, getUserData, appIsLoading, setAppIsLoading } = useContext(AppContext);
     const [isLoaded, setIsLoaded] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
-    const [sortedData, setSortedData] = useState([]);
+    const [sortedData, setSortedData] = useState([{ title: "Not Started" }, { title: "In Progress" }, { title: "Completed" }]);
     const [isCreateTask, setIsCreateTask] = useState(false);
 
-    let groups: GroupType = [];
-    groups[0] = { title: "Not Started", children: [] };
-    groups[1] = { title: "In Progress", children: [] };
-    groups[2] = { title: "Completed", children: [] };
-
-    const refreshAndSort = async (config: { callback: () => void }) => {
-        const data: ArrayOfTasks = await refreshTasks();
-        data.map((task: Task) => {
-            if (task.progress === 0) {
-                groups[0].children.push(task);
-            } else if (task.progress === 1) {
-                groups[1].children.push(task);
-            } else {
-                groups[2].children.push(task);
-            }
-        });
-        setSortedData(groups);
-        config.callback();
-    };
     const showCreateTask = () => {
         setIsCreateTask(true);
     };
@@ -135,19 +117,22 @@ const ListView = () => {
             method: "POST",
             data: { data: res }
         })
-            .then((res) => res)
+            .then((res) => {
+                refreshTasks();
+                return res;
+            })
             .catch((err) => console.error(err));
-        setIsCreateTask(false)
+        setIsCreateTask(false);
+        return req;
     }
 
     useEffect(() => {
         if (!isLoaded && !isMounted) {
             nProgress.start();
-            getUserData().then(() => {
+            getUserData().then(async () => {
                 nProgress.set(0.5);
-                refreshAndSort({
-                    callback: () => setIsLoaded(true)
-                });
+                await refreshTasks();
+                setIsLoaded(true);
             });
         } else {
             if (isLoaded && !isMounted) {
@@ -159,7 +144,7 @@ const ListView = () => {
         }
     }, [isLoaded]);
 
-    return (
+    return(
         <div>
             <Head>
                 <title>Home - Task Trak</title>
@@ -178,16 +163,16 @@ const ListView = () => {
                     <div className="sticky-title-container">
                         <div className="sticky-title"></div>
                         {isMounted ? (
-                            <>
-                                <CSSTransition classNames={"fadedown"} timeout={4000}>
+                            <TransitionGroup component={null}>
+                                <CSSTransition classNames={"fastfadeup"} timeout={4000}>
                                     <h1 className="title">Welcome, {userData.firstName}</h1>
                                 </CSSTransition>
-                                <CSSTransition classNames="fadedown" timeout={2000}>
+                                <CSSTransition classNames="fastfadeup" timeout={2000}>
                                     <div className="add-task">
                                         <button onClick={() => showCreateTask()}>Add Task</button>
                                     </div>
                                 </CSSTransition>
-                            </>
+                            </TransitionGroup>
                         ) : ''}
                     </div>
                     <div className="listgroup">
@@ -195,26 +180,7 @@ const ListView = () => {
                             {isMounted ?
                                 sortedData.map((group, i) => (
                                     <CSSTransition key={i} classNames={"fastfadeup"} timeout={2000 + (i * 100)}>
-                                        <TaskList title={group.title} listId={i} key={i} style={{ transitionDelay: `${i * 75}ms` }}>
-                                            <TransitionGroup component={null}>
-                                                {
-                                                    sortedData[i].children.map((child, o: number) => (
-                                                        <TaskBtn
-                                                            title={child.name}
-                                                            tags={child.properties.tags.map((tag, k) => ({
-                                                                urgent: tag.urgent,
-                                                                name: tag.name
-                                                            }))}
-                                                            style={{ transitionDelay: `${o * 1000}ms` }}
-                                                            pos={o}
-                                                            key={o}
-                                                            taskId={child.id}
-                                                            progress={child.progress}
-                                                        />
-                                                    ))
-                                                }
-                                            </TransitionGroup>
-                                        </TaskList>
+                                        <TaskList title={group.title} listId={i} key={i} style={{ transitionDelay: `${i * 75}ms` }} />
                                     </CSSTransition>
                                 ))
                                 : ''}

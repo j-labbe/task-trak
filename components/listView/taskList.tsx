@@ -1,7 +1,16 @@
 import React, { useEffect, useState, useContext } from 'react';
 import styled from "styled-components";
 import { mixins } from "../../styles";
-import { useDrop } from 'react-dnd';
+import { useDragDropManager, useDrop } from 'react-dnd';
+import { AppContext } from 'contexts/AppContext';
+import { APIReturnedTask, APIReturnedTasks, Tag } from 'types';
+import TaskBtn from 'components/listView/taskBtn';
+import useRender from './utils/render';
+import { TransitionGroup } from 'react-transition-group';
+
+type StyledProps = {
+    isOver: boolean
+};
 
 const StyledListGroup = styled.div`
     ${mixins.flexCenter}
@@ -9,14 +18,14 @@ const StyledListGroup = styled.div`
     padding: 20px 0;
     flex-direction: column;
 `;
-const StyledList = styled.div`
+const StyledList = styled.div<StyledProps>`
     ${mixins.flexCenter}
     flex-direction: column;
     justify-content: flex-start;
     margin: 0 30px;
     width: 300px;
     background-color: var(--default-bg);
-    border: 2px solid var(--card-border);
+    border: ${props => props.isOver ? `2px dashed var(--primary-accent)` : `2px solid var(--card-border);`};
     border-radius: var(--border-radius);
     height: auto;
     padding-bottom: 20px;
@@ -34,64 +43,53 @@ const StyledList = styled.div`
     }
     .style-list {
         width: 100%;
+        min-height: 50px;
     }
 `;
 
-type TaskListProps = {
-    title: string,
-    listId: number, // to double check the task progress
-    children: any,
-    style?: object
-};
+const TaskList = ({ title, listId, style }: { title: string, listId: number, style?: object }) => {
 
-type ItemType = { // comes from taskbtn dnd
-    id: number
-};
-
-const TaskList = ({ title, listId, children, style }: TaskListProps) => {
-
-
-
-    const [list, setList] = useState([]);
-    let tempList = [];
-
+    const { tasks, appIsLoading, setAppIsLoading } = useContext(AppContext);
+    const { renderedItems, render, fetchNew, progressTask, regressTask } = useRender(listId);
+    const [isLoaded, setIsLoaded] = useState(false);
+    const manager = useDragDropManager();
     const [{ isOver }, drop] = useDrop(() => ({
         accept: "bar",
-        drop: (item: ItemType) => addToList(item.id)
-    }))
+        drop: (item: { id: string }, monitor) => {
+            modifyList(item.id);
+            render();
+        },
+        collect: (monitor) => ({
+            isOver: !!monitor.isOver()
+        })
+    }));
 
-    const addToList = (taskId: number) => {
-
-        // setList([...list, taskChild]);
+    const modifyList = async (taskId: string): Promise<void> => {
+        const tObj = tasks.find(t => t.id === taskId);
+        if (!tObj) return Promise.reject("Task does not exist");
+        if (tObj.progress < listId) {
+            progressTask(tObj).then(() => render());
+        } else if (tObj.progress > listId) {
+            regressTask(tObj).then(() => render());
+        } else render();
     };
 
-    const listContents = () => {
-        if (list.length > 0) setList([]);
-        if (tempList.length > 0) tempList = [];
-        React.Children.forEach(children, element => {
-            React.Children.forEach(element.props.children, (elem: React.ReactNode) => {
-                console.log(elem);
-                if (!React.isValidElement(elem)) return;
-                const { progress, taskId } = elem.props;
-                if (progress === listId) {
-                    tempList.push(elem); // spread
-                    setList(tempList);
-                }
-            })
-        });
-    }
-
     useEffect(() => {
-        listContents();
-    }, [children]);
+        if (!isLoaded) {
+            render().then(() => {
+                setIsLoaded(true);
+            });
+        }
+    }, [isLoaded]);
+
 
     return (
         <div {...style ? (style = { style }) : ''}>
             <StyledListGroup>
-                <StyledList>
+                <StyledList isOver={isOver}>
                     <h3>{title}</h3>
                     <div id="list" className="style-list" ref={drop}>
-                        {list}
+                        {renderedItems.map(r => r)}
                     </div>
                 </StyledList>
             </StyledListGroup>

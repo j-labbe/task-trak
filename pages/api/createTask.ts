@@ -17,7 +17,7 @@ export default withApiAuthRequired(async function ProtectedRoute(req: NextApiReq
                 name: receivedData.name ? receivedData.name : "Untitled",
                 description: receivedData.description ? receivedData.description : "",
                 properties: {
-                    tags: receivedData.tags ? receivedData.tags : [],
+                    tags: receivedData.properties.tags ? receivedData.properties.tags : [],
                 },
                 progress: 0, // default to "Not Started", maybe have this user-configurable later?
             },

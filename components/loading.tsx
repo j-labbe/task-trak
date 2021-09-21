@@ -37,7 +37,7 @@ const StyledLoader = styled.div<LoaderProps>`
           
           @-webkit-keyframes spin {
             to {
-              border-top-color: #ec407a;
+              border-top-color: #42a5f5;
               -webkit-transform: rotate(360deg);
                       transform: rotate(360deg);
             }
@@ -45,7 +45,7 @@ const StyledLoader = styled.div<LoaderProps>`
           
           @keyframes spin {
             to {
-              border-top-color: #ec407a;
+              border-top-color: #42a5f5;
               -webkit-transform: rotate(360deg);
                       transform: rotate(360deg);
             }

@@ -14,7 +14,7 @@ export type Tags = Array<Tag>;
  * Each Task record has this data structure
  */
 export interface Task {
-    id: string | number;
+    id: string;
     dbId?: string | number; // airtable-specific
     userId?: string | number;
     name: string;
@@ -50,6 +50,7 @@ export interface UserDataTypes {
  * quickly in a React Context.
  *
  * Both first and last are optional, as we can call useUser() at any time
+ * @deprecated
  */
 export interface UserProfile {
     name: {
@@ -62,12 +63,16 @@ export interface UserProfile {
  * Props used in AppContext
  */
 export interface ContextProps {
-    tasks: any[];
+    tasks: ArrayOfTasks;
     refreshTasks: () => Promise<any[]>;
     addTask: any;
     updateTask: any;
+    deleteTask: any;
     userData: any;
     getUserData: () => Promise<object | Error>;
+    updateTaskList: any;
+    appIsLoading: boolean;
+    setAppIsLoading: any;
 }
 
 /**
@@ -76,7 +81,6 @@ export interface ContextProps {
  */
 export type GroupType = Array<{
     title: string;
-    children: ArrayOfTasks;
 }>;
 
 /**
@@ -98,8 +102,7 @@ export interface TaskBtnProps {
     style?: any;
     showAnim?: boolean;
     pos?: number;
-    taskId: number;
-    progress?: number;
+    taskId: string;
 }
 
 /**
@@ -141,6 +144,24 @@ export interface APINewTaskReturned {
         progress: number;
     };
 }
+export interface APIReturnedTask {
+    dbId: string | number;
+    userId: string;
+    id: string | number;
+    name: string;
+    description: string;
+    properties: {
+        startDate: string;
+        endDate: string;
+        timeZone: string;
+        tags: Tags | any[];
+    };
+    progress: number;
+}
+/**
+ * Used for storage in context
+ */
+export type APIReturnedTasks = APIReturnedTask[];
 
 /**
  * Used when sending the new task to the API server

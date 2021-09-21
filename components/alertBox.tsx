@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { mixins } from 'styles';
 import "react-datepicker/dist/react-datepicker.css";
 import useOnClickOutside from 'utils/useOnClickOutside';
+import ReactTooltip from 'react-tooltip';
 
 export const ANIM = 500;
 
@@ -149,6 +150,7 @@ export default function AlertBox(config: { title?: string, description?: string,
     const [isMounted, setIsMounted] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
     useEffect(() => {
+        ReactTooltip.rebuild();
         setIsMounted(true);
         setTimeout(() => {
             setIsVisible(true);

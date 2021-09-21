@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as API from 'utils/api';
-import { APINewTaskReturned, ArrayOfTasks, ContextProps, UserDataTypes, ContextCreateTask } from '../types';
+import { APINewTaskReturned, ArrayOfTasks, ContextProps, UserDataTypes, ContextCreateTask, Task } from '../types';
 
 const defaultProps = {
     tasks: [],
@@ -23,8 +23,23 @@ const defaultProps = {
         return data;
     },
     addTask: () => { },
-    updateTask: async function (): Promise<any> {
-        let result: any;
+    updateTask: async function (updatedTask: Task): Promise<any> {
+        try {
+            await API.Request({
+                endpoint: "updateTask",
+                method: "POST",
+                data: updatedTask
+            }).then((res) => {
+                //@ts-ignore
+                return res.msg;
+            }).catch((e) => {
+                console.error(e);
+                return;
+            });
+        } catch (e) {
+            console.error(e);
+            return;
+        }
     },
     userData: {
         username: "",
@@ -59,7 +74,13 @@ const defaultProps = {
         try {
             result = await API.Request({
                 endpoint: "createTask",
-                method: "POST"
+                method: "POST",
+                data: {
+                    id: config.id,
+                    name: config.name,
+                    description: config.description,
+                    properties: config.properties
+                }
             }).then((res: APINewTaskReturned) => {
                 return res.msg;
             }).catch((e) => new Error(e));
@@ -68,7 +89,13 @@ const defaultProps = {
             new Error(e);
             return {};
         }
-    }
+    },
+    deleteTask: async function (config: {}): Promise<boolean> {
+        return true;
+    },
+    updateTaskList: () => { },
+    appIsLoading: false,
+    setAppIsLoading: () => { }
 }
 
 export const AppContext = React.createContext<ContextProps | null>(defaultProps);
@@ -77,44 +104,68 @@ export default function AppContextProvider(props: React.PropsWithChildren<{}>) {
 
     const [tasks, setTasks] = React.useState([]);
     const [userData, setUserData] = React.useState({});
+    const [isLoading, setIsLoading] = React.useState(false);
+
     /**
      * @returns Array - Contains all of the user's tasks
      */
     const refreshTasks = async (): Promise<ArrayOfTasks> => {
         // define a separate function within hook to set the context state
-        let result: any;
+        let result: ArrayOfTasks;
         result = await defaultProps.refreshTasks();
         setTasks(result);
         return result;
     };
+
     /**
      * Get the current user's data.
      * @returns Object - Contains user data
      */
     const getUserData = async (): Promise<any> => {
-        return defaultProps.getUserData().then((res) => {
+        try {
+            const res = await defaultProps.getUserData();
             setUserData(res);
-            return userData;
-        }).catch((e) => new Error(e));
+        } catch (e) {
+            return Promise.reject(e);
+        }
+        Promise.resolve();
     };
+
     /**
      * Adds a new task for the logged in user
      * @function addTask
      * @param newTask Object - New tasks's properties object
      * @returns Array - All tasks
      */
-    const addTask = async (newTask: ContextCreateTask): Promise<any[]> => {
-        let result: any;
-        result = await defaultProps.createTask(newTask);
-        console.log(result);
-        return [];
+    const addTask = async (newTask: ContextCreateTask): Promise<void> => {
+        try {
+            await defaultProps.createTask(newTask);
+            await refreshTasks();
+        } catch (e) {
+            return Promise.reject(e);
+        }
+        Promise.resolve();
+    };
+
+    /**
+     *
+     * 
+     */
+    const updateTask = async (updatedTask: Task): Promise<void> => {
+        try {
+            await defaultProps.updateTask(updatedTask);
+            await refreshTasks();
+        } catch (e) {
+            return Promise.reject(e);
+        }
+        Promise.resolve();
     };
 
     /**
      * 
      * 
      */
-    const updateTask = async () => {
+    const deleteTask = async () => {
 
     }
 
@@ -125,7 +176,11 @@ export default function AppContextProvider(props: React.PropsWithChildren<{}>) {
             addTask: addTask,
             userData: userData,
             getUserData: getUserData,
-            updateTask: () => { }
+            updateTask: updateTask,
+            deleteTask: () => { },
+            updateTaskList: setTasks,
+            appIsLoading: isLoading,
+            setAppIsLoading: setIsLoading
         }} {...props} />
     )
 }

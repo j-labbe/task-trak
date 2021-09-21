@@ -103,10 +103,10 @@ const CreateTask = (config: CreateTaskProps) => {
         let tagArray: Tags = [...tagState];
         const { id, name, urgent } = details;
         const i = tagArray.findIndex(tag => tag.id === id);
-        if(i !== -1){
+        if (i !== -1) {
             tagArray[i].name = name;
             tagArray[i].urgent = urgent;
-        }else{
+        } else {
             tagArray = [...tagArray, details];
         }
         setTagState(tagArray);
@@ -135,14 +135,15 @@ const CreateTask = (config: CreateTaskProps) => {
         }
     };
     const handleSuccess = (callback) => {
-        callback({
+        const val = {
             id: v4(),
             name: newTaskName,
             description: newTaskDesc,
             properties: {
                 tags: tagState
             }
-        });
+        }
+        callback(val);
         setAlertShown(false);
     };
     const handleCancel = (callback) => {

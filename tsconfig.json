@@ -18,16 +18,16 @@
         "jsx": "preserve",
         "removeComments": true,
         "baseUrl": "./",
-
         "paths": {
-            "@components": ["components/*"],
-            "@auth": ["pages/api/auth/*"],
-            "@userDao": ["pages/api/dao/userDao/*"],
-            "@taskDao": ["pages/api/dao/taskDao/*"],
-            "@contexts": ["contexts/*"],
-            "@styles": ["styles/*"],
-            "@utils": ["utils/*"],
-            "@demo": ["demo/*"]
+            "components": ["components/*"],
+            "auth": ["pages/api/auth/*"],
+            "userDao": ["pages/api/dao/userDao/*"],
+            "taskDao": ["pages/api/dao/taskDao/*"],
+            "contexts": ["contexts/*"],
+            "styles": ["styles/*"],
+            "utils": ["utils/*"],
+            "demo": ["demo/*"],
+            "types": ["types/*"]
         }
     },
     "include": ["next-env.d.ts", "pages/**/*", "src/**/*", "*.ts", "*.tsx", "old_d.tssss"],

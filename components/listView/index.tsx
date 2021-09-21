@@ -101,7 +101,7 @@ const StyledMyTasks = styled.div`
 `;
 
 const ListView = () => {
-    const { refreshTasks, userData, getUserData, appIsLoading, setAppIsLoading } = useContext(AppContext);
+    const { refreshTasks, userData, getUserData, createTask, appIsLoading, setAppIsLoading } = useContext(AppContext);
     const [isLoaded, setIsLoaded] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
     const [sortedData, setSortedData] = useState([{ title: "Not Started" }, { title: "In Progress" }, { title: "Completed" }]);
@@ -112,18 +112,8 @@ const ListView = () => {
     };
     const handleCreateTaskSuccess = async (res) => {
         console.warn(res);
-        const req = await API.Request({
-            endpoint: "createTask",
-            method: "POST",
-            data: { data: res }
-        })
-            .then((res) => {
-                refreshTasks();
-                return res;
-            })
-            .catch((err) => console.error(err));
+        await createTask(res);
         setIsCreateTask(false);
-        return req;
     }
 
     useEffect(() => {

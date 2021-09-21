@@ -12,7 +12,7 @@ export declare type apiRequestMethod = typeof apiRequestMethods[number];
  * @param config - endpoint: API Endpoint, method: API Request Method, data: Data being passed to server.
  * @returns Object - server response.
  */
-export async function Request(config: { endpoint: apiRequestEndpoint; method?: apiRequestMethod; data?: object }): Promise<object> {
+export async function Request(config: { endpoint: apiRequestEndpoint; method?: apiRequestMethod; data?: object }): Promise<{ msg: any }> {
     switch (config.method) {
         case "GET":
             return axios

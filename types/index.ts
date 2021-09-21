@@ -65,7 +65,7 @@ export interface UserProfile {
 export interface ContextProps {
     tasks: ArrayOfTasks;
     refreshTasks: () => Promise<any[]>;
-    addTask: any;
+    createTask: any;
     updateTask: any;
     deleteTask: any;
     userData: any;

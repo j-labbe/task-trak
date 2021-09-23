@@ -65,7 +65,12 @@ const TaskList = ({ title, listId, style }: { title: string, listId: number, sty
     const [{ isOver }, drop] = useDrop(() => ({
         accept: "bar",
         drop: async (item: { id: string }, monitor) => {
+            // TODO #21
+            console.log(item.id);
             await modifyList(item.id);
+            setRefreshStatus(true);
+            await refreshTasks();
+            setRefreshStatus(false);
             render();
         },
         collect: (monitor) => ({
@@ -74,7 +79,9 @@ const TaskList = ({ title, listId, style }: { title: string, listId: number, sty
     }));
 
     const modifyList = async (taskId: string): Promise<void> => {
+        // TODO #21
         const tObj = tasks.find(t => t.id === taskId);
+        
         if (!tObj) return Promise.reject("Task does not exist");
         if (tObj.progress < listId) {
             progressTask(tObj).then(() => render());

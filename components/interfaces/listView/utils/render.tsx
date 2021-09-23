@@ -11,26 +11,21 @@ const useRender = (listId: number) => {
      * TODO #19
      */
     const render = async (): Promise<void> => {
-        console.warn("Context Tasks: ", tasks);
         try {
             nProgress.start();
             let list = [];
             nProgress.set(50);
-            if (tasks.length === 0) {
-                list.push(<h3 style={{fontSize: 15, fontWeight: 400, display: "flex", justifyContent: "center", alignItems: "center"}}>No Tasks Available</h3>)
-            } else {
-                tasks.forEach((t) => {
-                    if (t.progress !== listId) return;
-                    list.push(
-                        <TaskBtn
-                            key={t.id}
-                            title={t.name}
-                            taskId={t.id}
-                            tags={t.properties.tags}
-                        />
-                    );
-                });
-            }
+            tasks.forEach((t) => {
+                if (t.progress !== listId) return;
+                list.push(
+                    <TaskBtn
+                        key={t.id}
+                        title={t.name}
+                        taskId={t.id}
+                        tags={t.properties.tags}
+                    />
+                );
+            });
             setRenderedItems(list);
             nProgress.done();
             return Promise.resolve();

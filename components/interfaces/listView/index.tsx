@@ -9,7 +9,7 @@ import Head from "next/head";
 import AlertBox, { ANIM } from '../../alertBox';
 import TaskBtn from './taskBtn';
 import TaskList from './taskList';
-import { GroupType, Task, ArrayOfTasks } from '../../../types';
+import { GroupType, Task, ArrayOfTasks } from 'types';
 import TagInput from '../../TagInput';
 import CreateTask from '../../CreateTask';
 import * as API from 'utils/api';
@@ -173,7 +173,7 @@ const ListView = () => {
                             {isMounted ?
                                 sortedData.map((group, i) => (
                                     <CSSTransition key={i} classNames={"fastfadeup"} timeout={2000 + (i * 100)}>
-                                        <TaskList title={group.title} listId={i} key={i} doReload={reloadState} style={{ transitionDelay: `${i * 75}ms` }} />
+                                        <TaskList title={group.title} listId={i} key={i} style={{ transitionDelay: `${i * 75}ms` }} />
                                     </CSSTransition>
                                 ))
                                 : ''}

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as API from 'utils/api';
 import * as Components from './components';
-import { ArrayOfTasks, ContextProps, ContextCreateTask, Task } from '../types';
+import { ArrayOfTasks, ContextProps, ContextCreateTask, Task } from 'types';
 
 const defaultProps = {
     tasks: [],

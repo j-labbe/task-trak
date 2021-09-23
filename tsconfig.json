@@ -30,6 +30,9 @@
             "types": ["types/*"]
         }
     },
-    "include": ["next-env.d.ts", "pages/**/*", "src/**/*", "*.ts", "*.tsx", "old_d.tssss"],
-    "exclude": ["node_modules"]
+    "include": ["next-env.d.ts", "pages/**/*", "src/**/*", "src/*", "*.ts", "*.tsx", "old_d.tssss"],
+    "exclude": ["node_modules", ".vscode"],
+    "files": [
+        "types.d.ts"
+    ]
 }

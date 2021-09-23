@@ -30,7 +30,8 @@ const defaultProps = {
     appIsLoading: false, // react state
     setAppIsLoading: () => { }, // react state
     doneRefresh: false,
-    setRefreshStatus: () => { }
+    setRefreshStatus: () => { },
+    getTasks: () => { }
 }
 
 export const AppContext = React.createContext<ContextProps | null>(defaultProps);
@@ -84,6 +85,8 @@ export default function AppContextProvider(props: React.PropsWithChildren<{}>) {
 
     }
 
+    const getTasks = async (): Promise<ArrayOfTasks> => tasks.length === 0 ? await refreshTasks() : tasks;
+
     return (
         <AppContext.Provider value={{
             tasks: tasks,
@@ -97,7 +100,8 @@ export default function AppContextProvider(props: React.PropsWithChildren<{}>) {
             appIsLoading: isLoading,
             setAppIsLoading: setIsLoading,
             doneRefresh: doneRefresh,
-            setRefreshStatus: setRefreshStatus
+            setRefreshStatus: setRefreshStatus,
+            getTasks: getTasks
         }} {...props} />
     )
 }

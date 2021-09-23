@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { mixins } from "../../../styles";
 import { useDragDropManager, useDrop } from 'react-dnd';
 import { AppContext } from 'contexts/AppContext';
-import { APIReturnedTask, APIReturnedTasks, Tag } from 'types';
+import { Tag, Task } from 'types';
 import TaskBtn from 'components/interfaces/listView/taskBtn';
 import useRender from './utils/render';
 import { TransitionGroup } from 'react-transition-group';
@@ -57,7 +57,8 @@ const TaskList = ({ title, listId, style }: { title: string, listId: number, sty
         setAppIsLoading, // Function (boolean) - change the state of app load
         refreshTasks, // Function () - refresh the tasks from airtable
         doneRefresh, // Boolean - is the refresh done?
-        setRefreshStatus // Function(boolean) - change the state of refresh
+        setRefreshStatus, // Function(boolean) - change the state of refresh
+        getTasks
     } = useContext(AppContext);
     const { renderedItems, render, fetchNew, progressTask, regressTask } = useRender(listId);
     const [isLoaded, setIsLoaded] = useState(false);
@@ -77,10 +78,12 @@ const TaskList = ({ title, listId, style }: { title: string, listId: number, sty
             isOver: !!monitor.isOver()
         })
     }));
+    let initialLoad = true;
 
     const modifyList = async (taskId: string): Promise<void> => {
         // TODO #21
-        const tObj = tasks.find(t => t.id === taskId);
+        const taskList = await getTasks();
+        const tObj = taskList.find((t: Task) => t.id === taskId);
         
         if (!tObj) return Promise.reject("Task does not exist");
         if (tObj.progress < listId) {
@@ -95,7 +98,7 @@ const TaskList = ({ title, listId, style }: { title: string, listId: number, sty
             // Will replace with AppConfig.listInterface.lists.at(-1) when there's more coverage
             // (waiting for safari compatibility)
             if (AppConfig.listInterface.lists[AppConfig.listInterface.lists.length - 1].index === listId) {
-                if (!appIsLoading) {
+                if (!appIsLoading && initialLoad) {
                     setAppIsLoading(true);
                     refreshTasks();
                 }
@@ -103,6 +106,7 @@ const TaskList = ({ title, listId, style }: { title: string, listId: number, sty
         }else{
             render().then(() => setAppIsLoading(false));
         }
+        initialLoad = false;
     }, [doneRefresh, appIsLoading]);
 
 

@@ -7,30 +7,36 @@ import nProgress from 'nprogress';
 const useRender = (listId: number) => {
     const [renderedItems, setRenderedItems] = useState([]);
     const { tasks, refreshTasks, updateTask } = useContext(AppContext);
+    /**
+     * TODO #19
+     */
     const render = async (): Promise<void> => {
-        nProgress.start();
-        let list = [];
-        refreshTasks().then(() => {
+        console.warn("Context Tasks: ", tasks);
+        try {
+            nProgress.start();
+            let list = [];
             nProgress.set(50);
-            tasks.forEach((t) => {
-                if (t.progress !== listId) return;
-                list.push(
-                    <TaskBtn
-                        key={t.id}
-                        title={t.name}
-                        taskId={t.id}
-                        tags={t.properties.tags}
-                    />
-                );
-            });
+            if (tasks.length === 0) {
+                list.push(<h3 style={{fontSize: 15, fontWeight: 400, display: "flex", justifyContent: "center", alignItems: "center"}}>No Tasks Available</h3>)
+            } else {
+                tasks.forEach((t) => {
+                    if (t.progress !== listId) return;
+                    list.push(
+                        <TaskBtn
+                            key={t.id}
+                            title={t.name}
+                            taskId={t.id}
+                            tags={t.properties.tags}
+                        />
+                    );
+                });
+            }
             setRenderedItems(list);
             nProgress.done();
             return Promise.resolve();
-        }).catch((e) => {
-            console.error(e);
-            nProgress.done();
-            return Promise.reject('Could not update');
-        });
+        } catch (e) {
+            return Promise.reject(e);
+        }
     };
     const fetchNew = async (): Promise<void> => {
         await refreshTasks().then(() => render());

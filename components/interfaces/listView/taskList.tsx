@@ -90,17 +90,13 @@ const TaskList = ({ title, listId, style }: { title: string, listId: number, sty
             if (AppConfig.listInterface.lists[AppConfig.listInterface.lists.length - 1].index === listId) {
                 if (!appIsLoading) {
                     setAppIsLoading(true);
-                    refreshTasks().then(() => {
-                        // Refresh is complete
-                        // Send to other components
-                        setRefreshStatus(true);
-                    });
+                    refreshTasks();
                 }
             }
         }else{
             render().then(() => setAppIsLoading(false));
         }
-    }, [doneRefresh]);
+    }, [doneRefresh, appIsLoading]);
 
 
     return (

@@ -75,6 +75,7 @@ export interface ContextProps {
     setAppIsLoading: any;
     doneRefresh: boolean;
     setRefreshStatus: any;
+    getTasks: any;
 }
 
 /**

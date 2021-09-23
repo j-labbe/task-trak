@@ -7,7 +7,6 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { AppContext } from "../../../contexts/AppContext";
 import Router from 'next/router';
 import nProgress from "nprogress";
-import Head from "next/head";
 import AlertBox, { ANIM } from 'components/alertBox';
 
 const StyledMyTasks = styled.div`

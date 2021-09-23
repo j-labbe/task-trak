@@ -3,18 +3,10 @@ import styled from "styled-components";
 import { mixins } from "../../../styles";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { AppContext } from "contexts/AppContext";
-import Router from 'next/router';
 import nProgress from "nprogress";
 import Head from "next/head";
-import AlertBox, { ANIM } from '../../alertBox';
-import TaskBtn from './taskBtn';
 import TaskList from './taskList';
-import { GroupType, Task, ArrayOfTasks } from 'types';
-import TagInput from '../../TagInput';
 import CreateTask from '../../CreateTask';
-import * as API from 'utils/api';
-import Loading from "components/loading";
-import Spinner from 'components/spinner';
 import * as AppConfig from 'AppConfig';
 
 const StyledMyTasks = styled.div`

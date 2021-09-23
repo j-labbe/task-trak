@@ -4,9 +4,7 @@ import { mixins } from "../../../styles";
 import { useDragDropManager, useDrop } from 'react-dnd';
 import { AppContext } from 'contexts/AppContext';
 import { Tag, Task } from 'types';
-import TaskBtn from 'components/interfaces/listView/taskBtn';
 import useRender from './utils/render';
-import { TransitionGroup } from 'react-transition-group';
 import * as AppConfig from 'AppConfig';
 import Spinner from '../../spinner';
 
@@ -81,7 +79,9 @@ const TaskList = ({ title, listId, style }: { title: string, listId: number, sty
     let initialLoad = true;
 
     const modifyList = async (taskId: string): Promise<void> => {
-        // TODO #21
+        /**
+         * TODO #21
+         */
         const taskList = await getTasks();
         const tObj = taskList.find((t: Task) => t.id === taskId);
         

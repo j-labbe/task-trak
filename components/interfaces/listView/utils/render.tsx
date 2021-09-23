@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
-import { Task } from '../../../../types';
-import { AppContext } from '../../../../contexts/AppContext';
+import { Task } from 'types';
+import { AppContext } from 'contexts/AppContext';
 import TaskBtn from '../taskBtn';
 import nProgress from 'nprogress';
 

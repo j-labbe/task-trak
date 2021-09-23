@@ -5,7 +5,7 @@ import { mixins } from '../../styles';
 import { GlobalStyle } from '../../styles';
 import NavBar from '../../components/navbar';
 import SideBar from '../../components/sidebar';
-import MyTasks from '../../components/myTasks';
+import MyTasks from '../../components/interfaces/MyTasks/myTasks';
 
 const StyledHome = styled.div`
     overflow: hidden;

@@ -1,10 +1,10 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { mixins } from "../../styles";
-import { IconArrowDown } from "../../assets/images";
+import { mixins } from "../../../styles";
+import { IconArrowDown } from "../../../assets/images";
 import { CSSTransition } from "react-transition-group";
 import { useDrag } from "react-dnd";
-import { TaskBtnProps } from '../../types';
+import { TaskBtnProps } from '../../../types';
 
 // Not moving to types.ts since it's local
 interface BarProps {

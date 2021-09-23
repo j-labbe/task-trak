@@ -1,3 +1,6 @@
+/**
+ * Modal Box including Create Task interface & logic
+ */
 import React, { useState, useEffect, useContext } from 'react';
 import AlertBox, { ANIM } from './alertBox';
 import styled from 'styled-components';

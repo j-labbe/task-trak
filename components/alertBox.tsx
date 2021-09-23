@@ -5,8 +5,9 @@ import { mixins } from 'styles';
 import "react-datepicker/dist/react-datepicker.css";
 import useOnClickOutside from 'utils/useOnClickOutside';
 import ReactTooltip from 'react-tooltip';
+import * as AppConfig from 'AppConfig';
 
-export const ANIM = 500;
+export const ANIM = AppConfig.alertBox.animationDuration;
 
 export interface AlertBoxProps {
     isVisible: boolean
@@ -117,22 +118,6 @@ const StyledAlertBox = styled.div<AlertBoxProps>`
         }
     }
 `;
-
-// declare const alertBoxTypes: readonly ["createTask", "editTask", "generalAlert"];
-// export declare type alertBoxType = typeof alertBoxTypes[number];
-/**
- * Create the parent for an alert (required)
- */
-// export class AlertWrapper extends React.Component {
-//     private alertParent: React.RefObject<HTMLDivElement>;
-//     constructor(props){
-//         super(props);
-//         this.alertParent = React.createRef();
-//     }
-//     render() {
-//         return <div ref={this.alertParent} />;
-//     }
-// }
 
 /**
  * Display an AlertBox anywhere.

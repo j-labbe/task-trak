@@ -28,7 +28,9 @@ const defaultProps = {
     },
     updateTaskList: () => { }, // react state
     appIsLoading: false, // react state
-    setAppIsLoading: () => { } // react state
+    setAppIsLoading: () => { }, // react state
+    doneRefresh: false,
+    setRefreshStatus: () => { }
 }
 
 export const AppContext = React.createContext<ContextProps | null>(defaultProps);
@@ -37,7 +39,8 @@ export default function AppContextProvider(props: React.PropsWithChildren<{}>) {
 
     const [tasks, setTasks] = React.useState([]);
     const [userData, setUserData] = React.useState({});
-    const [isLoading, setIsLoading] = React.useState(false);
+    const [isLoading, setIsLoading] = React.useState(defaultProps.appIsLoading);
+    const [doneRefresh, setRefreshStatus] = React.useState(defaultProps.doneRefresh);
 
     const refreshTasks = async (): Promise<ArrayOfTasks> => {
         // define a separate function within hook to set the context state
@@ -90,7 +93,9 @@ export default function AppContextProvider(props: React.PropsWithChildren<{}>) {
             deleteTask: () => { },
             updateTaskList: setTasks,
             appIsLoading: isLoading,
-            setAppIsLoading: setIsLoading
+            setAppIsLoading: setIsLoading,
+            doneRefresh: doneRefresh,
+            setRefreshStatus: setRefreshStatus
         }} {...props} />
     )
 }

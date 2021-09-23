@@ -1,14 +1,14 @@
-import { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
-import { mixins } from "../styles";
-import { settings } from "../demo";
+import { mixins } from "../../../styles";
+import { settings } from "../../../demo";
 import moment from "moment";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import { AppContext } from "../contexts/AppContext";
+import { AppContext } from "../../../contexts/AppContext";
 import Router from 'next/router';
-import * as API from 'utils/api';
 import nProgress from "nprogress";
-import Head from 'next/head';
+import Head from "next/head";
+import AlertBox, { ANIM } from 'components/alertBox';
 
 const StyledMyTasks = styled.div`
     position: absolute;
@@ -105,34 +105,67 @@ const StyledMyTasks = styled.div`
 
 `;
 
-const SelectATaskView = () => {
+const MyTasks = () => {
     const { tasks, refreshTasks } = useContext(AppContext);
     const [isMounted, setIsMounted] = useState(false);
-
+    const [alertShown, setAlertShow] = useState(false);
+    const [alertProps, setAlertProps] = useState(<div>Error</div>);
+    const [visibleAlertId, setAlertId] = useState(Number);
     const navToPage = (id: string) => {
         Router.push(`/app/task/${id}`, undefined, { shallow: true });
     };
-
+    const showAlert = (props: any) => {
+        setAlertProps(props);
+        setAlertShow(true);
+    };
+    const hideAlert = () => {
+        // if no delay then the exit animation does not work
+        setTimeout(() => {
+            setAlertShow(false);
+        }, ANIM + 100);
+    };
+    const handleSuccess = (id: number) => {
+        hideAlert();
+        navToPage(id.toString());
+    };
+    let alertBoxConfig = {
+        title: "Task Details",
+        successBtnLabel: "Visit",
+        cancelBtnLabel: "Close",
+        onSuccess: () => handleSuccess(visibleAlertId),
+        onCancel: () => hideAlert(),
+        props: alertProps,
+        onClickOutside: () => hideAlert()
+    }
     useEffect(() => {
         nProgress.start();
         refreshTasks().then((res: any[]) => {
             setIsMounted(true);
             nProgress.done();
+            //showAlert();
         }).catch((e) => {
             console.error(e);
             nProgress.done();
         });
+        return () => {
+            nProgress.done();
+        }
     }, []);
 
     return (
         <div>
-            <Head>
-                <title>Select A Task</title>
-            </Head>
             <StyledMyTasks>
+                {alertShown ? (
+                    <div id="alertBoxLocation">
+                        <AlertBox {...alertBoxConfig} />
+                    </div>
+                ) : ''}
+
+
                 <div className="container">
-                    <h1>Select a task to view details</h1>
+                    <h1>My Tasks</h1>
                     <div className="taskList">
+
                         <TransitionGroup component={null}>
 
                             {isMounted ? tasks && tasks.map((task: {
@@ -142,9 +175,10 @@ const SelectATaskView = () => {
                                     startDate: string,
                                     endDate: string
                                 }
-                            }, i: number) => (
-                                <CSSTransition key={i} classNames="fastfadeup" timeout={2000}>
-                                    <div className="task" style={{ transitionDelay: `${i + 2}00ms` }}>
+                            }, i: number) => {
+                                let passProps: any;
+                                passProps = (
+                                    <div>
                                         <h1>{task?.name || 'Untitled'}</h1>
                                         <p className="desc">{task?.description || 'No description available.'}</p>
                                         <p className="date">Started
@@ -169,10 +203,22 @@ const SelectATaskView = () => {
                                                 )
                                             }
                                         </p>
-                                        <button className="btn" key={i} id={"btn-" + i} onClick={() => navToPage(i.toString())}>Click to View Details</button>
-                                    </div>
-                                </CSSTransition>
-                            ))
+                                        {/* <button className="btn" key={i} id={"btn-" + i} onClick={() => navToPage(i.toString())}>Click to View Details</button> */}
+                                    </div>);
+
+                                return (
+                                    <CSSTransition key={i} classNames="fastfadeup" timeout={2000}>
+                                        <div className="task" style={{ transitionDelay: `${i + 2}00ms` }}>
+                                            {passProps}
+                                            <button className="btn" key={i} id={"btn-" + i} onClick={() => {
+                                                setAlertId(i);
+                                                showAlert(passProps);
+                                            }}>Click to View Details</button>
+                                        </div>
+                                    </CSSTransition>
+                                )
+                            }
+                            )
                                 : ''}
                         </TransitionGroup>
                     </div>
@@ -182,4 +228,4 @@ const SelectATaskView = () => {
     )
 };
 
-export default SelectATaskView;
+export default MyTasks;

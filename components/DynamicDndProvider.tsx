@@ -1,3 +1,9 @@
+/**
+ * Dynamic Provider for React DnD
+ * 
+ * Switches between HTML5Backend and TouchBackend based on the device being used.
+ * (Requires navigator.userAgent to be accurate: i.e. spoofing to the wrong device type will make dnd unusuable)
+ */
 import { useEffect, useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";

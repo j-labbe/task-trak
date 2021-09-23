@@ -1,19 +1,21 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
-import { mixins } from "../../styles";
+import { mixins } from "../../../styles";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { AppContext } from "contexts/AppContext";
 import Router from 'next/router';
 import nProgress from "nprogress";
 import Head from "next/head";
-import AlertBox, { ANIM } from '../alertBox';
+import AlertBox, { ANIM } from '../../alertBox';
 import TaskBtn from './taskBtn';
 import TaskList from './taskList';
-import { GroupType, Task, ArrayOfTasks } from '../../types';
-import TagInput from '../TagInput';
-import CreateTask from '../CreateTask';
+import { GroupType, Task, ArrayOfTasks } from '../../../types';
+import TagInput from '../../TagInput';
+import CreateTask from '../../CreateTask';
 import * as API from 'utils/api';
 import Loading from "components/loading";
+import Spinner from 'components/spinner';
+import * as AppConfig from 'AppConfig';
 
 const StyledMyTasks = styled.div`
     position: absolute;
@@ -103,17 +105,20 @@ const StyledMyTasks = styled.div`
 const ListView = () => {
     const { refreshTasks, userData, getUserData, createTask, appIsLoading, setAppIsLoading } = useContext(AppContext);
     const [isLoaded, setIsLoaded] = useState(false);
+    const [elementsLoading, setElemLoading] = useState(true);
     const [isMounted, setIsMounted] = useState(false);
-    const [sortedData, setSortedData] = useState([{ title: "Not Started" }, { title: "In Progress" }, { title: "Completed" }]);
+    const [sortedData, setSortedData] = useState(AppConfig.listInterface.lists);
     const [isCreateTask, setIsCreateTask] = useState(false);
 
     const showCreateTask = () => {
         setIsCreateTask(true);
     };
     const handleCreateTaskSuccess = async (res) => {
+        setElemLoading(true);
         console.warn(res);
         await createTask(res);
         setIsCreateTask(false);
+        setElemLoading(false);
     }
 
     useEffect(() => {
@@ -121,20 +126,20 @@ const ListView = () => {
             nProgress.start();
             getUserData().then(async () => {
                 nProgress.set(0.5);
-                await refreshTasks();
                 setIsLoaded(true);
             });
         } else {
             if (isLoaded && !isMounted) {
                 nProgress.done();
                 setIsMounted(true);
+                setElemLoading(false);
             } else {
                 nProgress.done();
             }
         }
     }, [isLoaded]);
 
-    return(
+    return (
         <div>
             <Head>
                 <title>Home - Task Trak</title>
@@ -165,6 +170,7 @@ const ListView = () => {
                             </TransitionGroup>
                         ) : ''}
                     </div>
+                    {'' /* ADDING A SPINNER FOR TASK LISTS THAT ARE LOADING */}
                     <div className="listgroup">
                         <TransitionGroup component={null}>
                             {isMounted ?

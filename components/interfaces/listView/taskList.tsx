@@ -1,12 +1,14 @@
 import React, { useEffect, useState, useContext } from 'react';
 import styled from "styled-components";
-import { mixins } from "../../styles";
+import { mixins } from "../../../styles";
 import { useDragDropManager, useDrop } from 'react-dnd';
 import { AppContext } from 'contexts/AppContext';
 import { APIReturnedTask, APIReturnedTasks, Tag } from 'types';
-import TaskBtn from 'components/listView/taskBtn';
+import TaskBtn from 'components/interfaces/listView/taskBtn';
 import useRender from './utils/render';
 import { TransitionGroup } from 'react-transition-group';
+import * as AppConfig from 'AppConfig';
+import Spinner from '../../spinner';
 
 type StyledProps = {
     isOver: boolean
@@ -49,14 +51,21 @@ const StyledList = styled.div<StyledProps>`
 
 const TaskList = ({ title, listId, style }: { title: string, listId: number, style?: object }) => {
 
-    const { tasks, appIsLoading, setAppIsLoading } = useContext(AppContext);
+    const {
+        tasks, // List of Tasks
+        appIsLoading, // Boolean - is the app loading
+        setAppIsLoading, // Function (boolean) - change the state of app load
+        refreshTasks, // Function () - refresh the tasks from airtable
+        doneRefresh, // Boolean - is the refresh done?
+        setRefreshStatus // Function(boolean) - change the state of refresh
+    } = useContext(AppContext);
     const { renderedItems, render, fetchNew, progressTask, regressTask } = useRender(listId);
     const [isLoaded, setIsLoaded] = useState(false);
     const manager = useDragDropManager();
     const [{ isOver }, drop] = useDrop(() => ({
         accept: "bar",
-        drop: (item: { id: string }, monitor) => {
-            modifyList(item.id);
+        drop: async (item: { id: string }, monitor) => {
+            await modifyList(item.id);
             render();
         },
         collect: (monitor) => ({
@@ -75,22 +84,39 @@ const TaskList = ({ title, listId, style }: { title: string, listId: number, sty
     };
 
     useEffect(() => {
-        if (!isLoaded) {
-            render().then(() => {
-                setIsLoaded(true);
-            });
+        if (!doneRefresh) {
+            // Will replace with AppConfig.listInterface.lists.at(-1) when there's more coverage
+            // (waiting for safari compatibility)
+            if (AppConfig.listInterface.lists[AppConfig.listInterface.lists.length - 1].index === listId) {
+                if (!appIsLoading) {
+                    setAppIsLoading(true);
+                    refreshTasks().then(() => {
+                        // Refresh is complete
+                        // Send to other components
+                        setRefreshStatus(true);
+                    });
+                }
+            }
+        }else{
+            render().then(() => setAppIsLoading(false));
         }
-    }, [isLoaded]);
+    }, [doneRefresh]);
 
 
     return (
         <div {...style ? (style = { style }) : ''}>
             <StyledListGroup>
                 <StyledList isOver={isOver}>
-                    <h3>{title}</h3>
-                    <div id="list" className="style-list" ref={drop}>
-                        {renderedItems.map(r => r)}
-                    </div>
+                    {
+                        appIsLoading ? <Spinner /> : (
+                            <>
+                                <h3>{title}</h3>
+                                <div id="list" className="style-list" ref={drop}>
+                                    {renderedItems.map(r => r)}
+                                </div>
+                            </>
+                        )
+                    }
                 </StyledList>
             </StyledListGroup>
         </div>

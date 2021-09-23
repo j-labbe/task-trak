@@ -1,7 +1,12 @@
+/**
+ * Task View Interface
+ * 
+ * Shows moderate details
+ */
 import { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
-import { AppContext } from "../contexts/AppContext";
-import { mixins } from "../styles";
+import { AppContext } from "../../contexts/AppContext";
+import { mixins } from "../../styles";
 import { useRouter } from "next/router";
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import moment from "moment";

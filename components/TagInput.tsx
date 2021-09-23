@@ -1,3 +1,6 @@
+/**
+ * Input Component for New Task / New Tags
+ */
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { mixins } from "styles";

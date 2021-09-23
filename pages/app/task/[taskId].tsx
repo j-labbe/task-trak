@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { GlobalStyle } from '../../../styles';
 import NavBar from '../../../components/navbar';
 import SideBar from '../../../components/sidebar';
-import TaskView from '../../../components/taskview';
+import TaskView from '../../../components/interfaces/TaskView';
 import { useRouter } from 'next/router';
 
 const StyledHome = styled.div`

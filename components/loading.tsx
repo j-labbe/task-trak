@@ -1,3 +1,6 @@
+/**
+ * Full Page Loader
+ */
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { GlobalStyle, mixins } from 'styles';

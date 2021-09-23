@@ -3,7 +3,7 @@ import NavBar from 'components/navbar';
 import Sidebar from 'components/sidebar';
 import styled from 'styled-components';
 import { GlobalStyle } from 'styles';
-import ListView from 'components/listView';
+import ListView from 'components/interfaces/listView';
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import Loading from 'components/loading';
 

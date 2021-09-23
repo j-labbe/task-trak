@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
-import { Task } from '../../../types';
-import { AppContext } from '../../../contexts/AppContext';
+import { Task } from '../../../../types';
+import { AppContext } from '../../../../contexts/AppContext';
 import TaskBtn from '../taskBtn';
 import nProgress from 'nprogress';
 
@@ -9,7 +9,6 @@ const useRender = (listId: number) => {
     const { tasks, refreshTasks, updateTask } = useContext(AppContext);
     const render = async (): Promise<void> => {
         nProgress.start();
-        console.warn(renderedItems);
         let list = [];
         refreshTasks().then(() => {
             nProgress.set(50);

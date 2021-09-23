@@ -105,20 +105,18 @@ const StyledMyTasks = styled.div`
 const ListView = () => {
     const { refreshTasks, userData, getUserData, createTask, appIsLoading, setAppIsLoading } = useContext(AppContext);
     const [isLoaded, setIsLoaded] = useState(false);
-    const [elementsLoading, setElemLoading] = useState(true);
     const [isMounted, setIsMounted] = useState(false);
     const [sortedData, setSortedData] = useState(AppConfig.listInterface.lists);
     const [isCreateTask, setIsCreateTask] = useState(false);
+    const [reloadState, handleReloadState] = useState(false);
 
     const showCreateTask = () => {
         setIsCreateTask(true);
     };
     const handleCreateTaskSuccess = async (res) => {
-        setElemLoading(true);
-        console.warn(res);
         await createTask(res);
+        await refreshTasks();
         setIsCreateTask(false);
-        setElemLoading(false);
     }
 
     useEffect(() => {
@@ -132,7 +130,6 @@ const ListView = () => {
             if (isLoaded && !isMounted) {
                 nProgress.done();
                 setIsMounted(true);
-                setElemLoading(false);
             } else {
                 nProgress.done();
             }
@@ -176,7 +173,7 @@ const ListView = () => {
                             {isMounted ?
                                 sortedData.map((group, i) => (
                                     <CSSTransition key={i} classNames={"fastfadeup"} timeout={2000 + (i * 100)}>
-                                        <TaskList title={group.title} listId={i} key={i} style={{ transitionDelay: `${i * 75}ms` }} />
+                                        <TaskList title={group.title} listId={i} key={i} doReload={reloadState} style={{ transitionDelay: `${i * 75}ms` }} />
                                     </CSSTransition>
                                 ))
                                 : ''}

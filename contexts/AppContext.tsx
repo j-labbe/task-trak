@@ -45,7 +45,9 @@ export default function AppContextProvider(props: React.PropsWithChildren<{}>) {
     const refreshTasks = async (): Promise<ArrayOfTasks> => {
         // define a separate function within hook to set the context state
         let result: ArrayOfTasks;
+        setRefreshStatus(false);
         result = await defaultProps.refreshTasks();
+        setRefreshStatus(true);
         setTasks(result);
         return result;
     };

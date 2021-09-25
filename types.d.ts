@@ -16,7 +16,7 @@ declare module "types" {
      */
     export interface Task {
         id: string;
-        dbId?: string | number; // airtable-specific
+        dbId?: string; // airtable-specific
         userId?: string | number;
         name: string;
         description: string;
@@ -47,39 +47,6 @@ declare module "types" {
     }
 
     /**
-     * Session data is stored with Auth0, however sometimes we need to access the data
-     * quickly in a React Context.
-     *
-     * Both first and last are optional, as we can call useUser() at any time
-     * @deprecated
-     */
-    export interface UserProfile {
-        name: {
-            first?: string;
-            last?: string;
-        };
-    }
-
-    /**
-     * Props used in AppContext
-     */
-    export interface ContextProps {
-        tasks: ArrayOfTasks;
-        refreshTasks: () => Promise<any[]>;
-        createTask: any;
-        updateTask: any;
-        deleteTask: any;
-        userData: any;
-        getUserData: () => Promise<object | Error>;
-        updateTaskList: any;
-        appIsLoading: boolean;
-        setAppIsLoading: any;
-        doneRefresh: boolean;
-        setRefreshStatus: any;
-        getTasks: any;
-    }
-
-    /**
      * Used in listView to specify arrays that contain tasks
      * to be outputted in their respective lists.
      */
@@ -103,6 +70,7 @@ declare module "types" {
     export interface TaskBtnProps {
         title: string;
         tags: object[];
+        description?: string
         style?: any;
         showAnim?: boolean;
         pos?: number;

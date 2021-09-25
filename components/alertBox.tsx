@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { mixins } from 'styles';
+import mixins from 'styles/mixins';
 import "react-datepicker/dist/react-datepicker.css";
 import useOnClickOutside from 'utils/useOnClickOutside';
 import ReactTooltip from 'react-tooltip';
@@ -58,6 +58,11 @@ const StyledAlertBox = styled.div<AlertBoxProps>`
             overflow: scroll;
             text-align: center;
             width: 100%;
+            padding: 0;
+
+            &::-webkit-scrollbar {
+                display: none;
+              }
 
             background:
                 linear-gradient(var(--secondary-bg) 30%, hsla(0,0%,100%, 0)),

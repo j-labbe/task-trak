@@ -22,6 +22,8 @@ const variables = css`
         --f-xtrahuge: 40px;
         --f-massive: 50px;
 
+/** #610BEF **/
+
         /********** COLORS *********/
 
         --default-bg: #FCFCFC;
@@ -37,6 +39,8 @@ const variables = css`
         --deselect-icon: #6E7191;
 
         --primary-select-bg: #EBECFE;
+
+        --red: #E61B00;
 
         /* Font Colors (Lightest to Darkest) */
         --cf-white: #FCFCFC;

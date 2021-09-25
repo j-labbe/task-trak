@@ -5,7 +5,6 @@ import { IconArrowDown } from "../../../assets/images";
 import { useDrag } from "react-dnd";
 import { TaskBtnProps } from 'types';
 
-// Not moving to types.ts since it's local
 interface BarProps {
     isOpen: boolean
 }
@@ -19,7 +18,8 @@ const StyledBar = styled.div<BarProps>`
         flex-direction: column;
         max-height: 100px;
         width: 80% !important;
-        height: 80px;
+        height: 130px;
+        max-height: 150px;
         border: 2px solid var(--card-border);
         overflow: hidden;
         border-radius: var(--border-radius);
@@ -60,6 +60,8 @@ const StyledBar = styled.div<BarProps>`
             .tags {
                 justify-content: flex-end !important;
                 width: auto;
+                padding: 0;
+                overflow: hidden;
                 .tag {
                     font-family: var(--font-default) !important;
                     content: "";
@@ -100,6 +102,9 @@ const StyledBar = styled.div<BarProps>`
                     transition: transform 0.5s cubic-bezier(0, 0.55, 0.45, 1);
                 }
             }
+            p {
+                display: none;
+            }
         }
 
         h1 {
@@ -117,6 +122,7 @@ const StyledBar = styled.div<BarProps>`
             width: 100%;
             font-size: var(--f-xs);
             max-height: 20px;
+            padding: 0 0 5px 0;
 
             .tag {
                 ${mixins.flexCenter}
@@ -129,6 +135,7 @@ const StyledBar = styled.div<BarProps>`
                 padding: 1px 8px;
                 transition: var(--transition);
                 font-family: var(--font-default) !important;
+                overflow: hidden;
 
                 &.nonUrgent {
                     background-color: #3BBAF1;
@@ -170,12 +177,18 @@ const StyledBar = styled.div<BarProps>`
                 }
             }
         }
+        p {
+            margin: 0px 0 10px 0;
+            padding: 0;
+            font-family: var(--font-default);
+            font-size: var(--f-xs);
+        }
     }
 `;
 
 const TaskBtn = (config: TaskBtnProps) => {
 
-    const { title, tags, taskId } = config;
+    const { title, tags, taskId, description } = config;
     const [{ isDragging }, drag] = useDrag(() => ({
         type: "bar", // enum for later?
         item: { id: taskId },
@@ -202,6 +215,7 @@ const TaskBtn = (config: TaskBtnProps) => {
                         </div>
                     </div>
                 </div>
+                <p>{description}</p>
                 <div className="tags">
                     {tags.map((tag: any, i: number) => (
                         <div className={"tag" + (tag.urgent === "urgent" ? " urgent" : " nonUrgent")} key={i}>
@@ -212,35 +226,6 @@ const TaskBtn = (config: TaskBtnProps) => {
             </button>
         </StyledBar>
     );
-
-    // return (
-    //     <div className="fullwidth draggable-item">
-    //         <div className="fullwidth" style={style ? style : undefined} >
-    //             <StyledBar isOpen={isOpen}>
-    //                 <button className={"bar" + (isOpen ? "" : " collapsed")} id="2" onClick={() => handleToggleOpen()} style={isDragging ? { opacity: 0.5, border: "1px solid var(--primary-accent)", transition: "none" } : { opacity: 1, border: "none" }} ref={drag}>
-    //                     <div className="heading">
-    //                         <div className="statusIcon">
-    //                             <div className="icon-check"></div>
-    //                         </div>
-    //                         <h1>{title}</h1>
-    //                         <div className="controls">
-    //                             <div className="expand">
-    //                                 <IconArrowDown />
-    //                             </div>
-    //                         </div>
-    //                     </div>
-    //                     <div className="tags">
-    //                         {tags.map((tag: any, i: number) => (
-    //                             <div className={"tag" + (tag.urgent ? " urgent" : " nonUrgent")} key={i}>
-    //                                 <p className="tag-name">{tag.name}</p>
-    //                             </div>
-    //                         ))}
-    //                     </div>
-    //                 </button>
-    //             </StyledBar>
-    //         </div>
-    //     </div>
-    // );
 }
 
 export default TaskBtn;

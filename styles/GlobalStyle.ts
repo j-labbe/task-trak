@@ -214,6 +214,20 @@ FAST TRANSITIONS
 .draggable-item {
     background: transparent;
 }
+
+@keyframes pulse-red {
+	0% {
+		box-shadow: 0 0 0 0 rgba(230, 27, 0, 0.7);
+	}
+
+	70% {
+		box-shadow: 0 0 0 10px rgba(230, 27, 0, 0);
+	}
+
+	100% {
+		box-shadow: 0 0 0 0 rgba(230, 27, 0, 0);
+	}
+}
 `;
 
 export default GlobalStyle;

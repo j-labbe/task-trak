@@ -1,5 +1,5 @@
 import * as API from "utils/api";
-import { UserDataTypes } from "../../types";
+import { UserDataTypes } from "types";
 
 export async function getUserData(): Promise<UserDataTypes> {
     try {
@@ -7,6 +7,7 @@ export async function getUserData(): Promise<UserDataTypes> {
             endpoint: "getUserData",
             method: "GET",
         });
+        if(msg === "Error") return Promise.reject("Invalid login");
         return msg;
     } catch (e) {
         Promise.reject(e);

@@ -3,10 +3,10 @@ import { getSession } from "@auth0/nextjs-auth0";
 import getUserId from "../dao/user/getUserId";
 import { NextApiRequest, NextApiResponse } from "next";
 
-export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
+export default async (req: NextApiRequest, res: NextApiResponse): Promise<any> => {
     const session = getSession(req, res);
     const userId = await getUserId(session);
-    if (!session || !userId) return res.status(401).json({ msg: "Invalid session." });
+    if (!session || !userId) return Promise.reject("Invalid session");
     const { dbId } = req.body;
     try {
         const existingRecord = await table.find(dbId);
@@ -15,7 +15,7 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
         }
         // @ts-ignore
         req.record = existingRecord;
-        Promise.resolve();
+        return true;
     } catch (err) {
         return Promise.reject(err);
     }

@@ -7,6 +7,8 @@ import { Tag, Task } from 'types';
 import useRender from './utils/render';
 import * as AppConfig from 'AppConfig';
 import Spinner from '../../spinner';
+import { observer } from 'mobx-react-lite';
+import { useContextState } from 'contexts/AppContext';
 
 type StyledProps = {
     isOver: boolean
@@ -47,67 +49,69 @@ const StyledList = styled.div<StyledProps>`
     }
 `;
 
-const TaskList = ({ title, listId, style }: { title: string, listId: number, style?: object }) => {
+const TaskList = observer(({ title, listId, style, dropStatus }: { title: string, listId: number, style?: object, dropStatus?: boolean }) => {
 
     const {
         tasks, // List of Tasks
         appIsLoading, // Boolean - is the app loading
-        setAppIsLoading, // Function (boolean) - change the state of app load
+        setAppLoading, // Function (boolean) - change the state of app load
         refreshTasks, // Function () - refresh the tasks from airtable
-        doneRefresh, // Boolean - is the refresh done?
+        tasksRefreshing, // Boolean - is the refresh done?
         setRefreshStatus, // Function(boolean) - change the state of refresh
-        getTasks
-    } = useContext(AppContext);
-    const { renderedItems, render, fetchNew, progressTask, regressTask } = useRender(listId);
-    const [isLoaded, setIsLoaded] = useState(false);
-    const manager = useDragDropManager();
+        getTasks,
+    } = useContextState();
+    const { renderedItems, render, progressTask, regressTask } = useRender(listId);
     const [{ isOver }, drop] = useDrop(() => ({
         accept: "bar",
         drop: async (item: { id: string }, monitor) => {
-            // TODO #21
-            console.log(item.id);
-            await modifyList(item.id);
             setRefreshStatus(true);
-            await refreshTasks();
+            await modifyList(item.id);
             setRefreshStatus(false);
             render();
         },
         collect: (monitor) => ({
-            isOver: !!monitor.isOver()
+            isOver: monitor.isOver(),
         })
     }));
     let initialLoad = true;
 
     const modifyList = async (taskId: string): Promise<void> => {
-        /**
-         * TODO #21
-         */
         const taskList = await getTasks();
         const tObj = taskList.find((t: Task) => t.id === taskId);
-        
         if (!tObj) return Promise.reject("Task does not exist");
         if (tObj.progress < listId) {
-            progressTask(tObj).then(() => render());
+            await progressTask(tObj);
+            await render();
         } else if (tObj.progress > listId) {
-            regressTask(tObj).then(() => render());
+            await regressTask(tObj);
+            await render();
         } else render();
     };
 
     useEffect(() => {
-        if (!doneRefresh) {
-            // Will replace with AppConfig.listInterface.lists.at(-1) when there's more coverage
-            // (waiting for safari compatibility)
+        if (!appIsLoading && initialLoad) {
+            setAppLoading(true);
+            initialLoad = false;
+        }
+    }, []);
+
+    useEffect(() => {
+        if (appIsLoading) {
             if (AppConfig.listInterface.lists[AppConfig.listInterface.lists.length - 1].index === listId) {
-                if (!appIsLoading && initialLoad) {
-                    setAppIsLoading(true);
-                    refreshTasks();
+                try {
+                    refreshTasks().then(() => setAppLoading(false));
+                } catch {
+                    setAppLoading(false);
                 }
             }
         }else{
-            render().then(() => setAppIsLoading(false));
+            render();
         }
-        initialLoad = false;
-    }, [doneRefresh, appIsLoading]);
+    }, [appIsLoading]);
+
+    useEffect(() => {
+        setTimeout(() => render(),100);
+    }, [dropStatus, tasks]);
 
 
     return (
@@ -128,6 +132,6 @@ const TaskList = ({ title, listId, style }: { title: string, listId: number, sty
             </StyledListGroup>
         </div>
     );
-};
+});
 
 export default TaskList;

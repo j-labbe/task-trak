@@ -32,7 +32,7 @@ export async function updateTask(updatedTask: Task): Promise<any> {
     }
 }
 
-export async function createTask(config: ContextCreateTask): Promise<APINewTaskReturned> {
+export async function createTask(config: ContextCreateTask): Promise<Task> {
     try {
         const { msg } = await API.Request({
             endpoint: Endpoints.createTask,
@@ -50,6 +50,16 @@ export async function createTask(config: ContextCreateTask): Promise<APINewTaskR
     }
 }
 
-export async function deleteTask(config): Promise<boolean> {
-    return true;
+export async function deleteTask(dbId: string): Promise<boolean> {
+    try {
+        const { msg } = await API.Request({
+            endpoint: Endpoints.deleteTask,
+            method: "POST",
+            data: { dbId: dbId },
+        });
+        if (msg.toLowerCase() === "error") return false;
+        return true;
+    } catch (e) {
+        Promise.reject(e);
+    }
 }

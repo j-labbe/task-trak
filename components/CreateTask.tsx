@@ -1,14 +1,13 @@
 /**
  * Modal Box including Create Task interface & logic
  */
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import AlertBox, { ANIM } from './alertBox';
 import styled from 'styled-components';
-import { mixins } from 'styles';
+import mixins from 'styles/mixins';
 import TagInput from './TagInput';
-import { ContextCreateTask, NewTaskConfig, Tag, Tags } from '../types';
+import { ContextCreateTask, Tag, Tags } from 'types';
 import { v4 } from 'uuid';
-import { AppContext } from '../contexts/AppContext';
 import _ from 'lodash';
 
 export interface CreateTaskProps {
@@ -23,6 +22,21 @@ const StyledCreateTaskProps = styled.div`
         ${mixins.flexCenter}
         flex-direction: column;
         width: 65%;
+
+        .add-tag-btn {
+            width: 100px;
+            margin: 2px;
+            border: none;
+            background-color: var(--primary-accent);
+            color: var(--cf-white);
+            font-family: var(--font-default);
+            padding: 5px;
+            border-radius: var(--border-radius);
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
 
         input {
             margin: 10px 0 10px 0;
@@ -62,14 +76,14 @@ const StyledCreateTaskProps = styled.div`
                 padding: 0;
             }
             .del-btn {
-                position: relative;
-                z-index: 20;
-                border: none;
-                outline: none;
-                background-color: none;
-                color: var(--cf-meta);
-                font-family: var(--font-default);
-                margin: 0;
+                position: relative !important;
+                z-index: 20 !important;
+                border: none !important;
+                outline: none !important;
+                background-color: none !important;
+                color: var(--cf-meta) !important;
+                font-family: var(--font-default) !important;
+                margin: 0 !important;
     
                 &:hover {
                     cursor: pointer;
@@ -78,17 +92,6 @@ const StyledCreateTaskProps = styled.div`
         }
     }
 `;
-
-const pushToArray = async (array: Tags, object: Tag): Promise<Tags> => {
-    array.forEach((e: Tag, i: number) => {
-        if (e.id === object.id) {
-            array[i] = object;
-        } else if (array.length === i) {
-            array.push(object);
-        }
-    });
-    return array;
-};
 
 const CreateTask = (config: CreateTaskProps) => {
 
@@ -151,7 +154,9 @@ const CreateTask = (config: CreateTaskProps) => {
     };
     const handleCancel = (callback) => {
         callback();
-        setAlertShown(false);
+        setTimeout(() => {
+            setAlertShown(false);
+        }, ANIM);
     }
     const showAlert = () => setAlertShown(true);
     const hideAlert = () => setAlertShown(false);
@@ -159,8 +164,8 @@ const CreateTask = (config: CreateTaskProps) => {
 
     const defaultCreateTaskProps = (
         <div className="create-task">
-            <input type="text" autoComplete="off" name="task-name" placeholder="Name" value={newTaskName} onChange={(e) => handleTaskNameChange(e)} />
-            <input type="text" autoComplete="off" name="task-description" placeholder="Description" value={newTaskDesc} onChange={(e) => handleTaskDescChange(e)} />
+            <input type="text" autoComplete="off" name="task-name" placeholder="Name" value={newTaskName} onChange={(e) => handleTaskNameChange(e)} maxLength={30} />
+            <input type="text" autoComplete="off" name="task-description" placeholder="Description" value={newTaskDesc} onChange={(e) => handleTaskDescChange(e)} maxLength={70} />
             {'' /* todo: add date picker for timezone, start & end date */}
             <div className="taglist">
                 {
@@ -178,7 +183,7 @@ const CreateTask = (config: CreateTaskProps) => {
                     })
                 }
             </div>
-            <button onClick={handleAddTag}>Add Tag</button>
+            <button className="add-tag-btn" onClick={handleAddTag}>Add Tag</button>
         </div>
     );
     let alertBoxConfig = {

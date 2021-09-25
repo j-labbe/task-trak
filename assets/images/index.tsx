@@ -6,3 +6,4 @@ export { default as IconBell } from './bell';
 export { default as TaskTrakLogo } from './logo';
 export { default as IconAlignLeft } from './align-left';
 export { default as IconArrowDown } from './arrow-down';
+export { default as IconTrash } from './trash';

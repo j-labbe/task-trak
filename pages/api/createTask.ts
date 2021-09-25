@@ -10,7 +10,6 @@ export default withApiAuthRequired(async function ProtectedRoute(req: NextApiReq
         const userId = await getUserId(session);
         if (!session) return res.status(400).json({ msg: "Not logged in." });
         const receivedData = req.body;
-        console.log(receivedData);
         const result = await createTask(session, {
             userId: userId,
             newRecord: {
@@ -26,6 +25,7 @@ export default withApiAuthRequired(async function ProtectedRoute(req: NextApiReq
         const { dbId, data } = result;
         const parse = JSON.parse(data.data);
         res.status(200).json({
+            // consistent with type
             msg: {
                 dbId: dbId,
                 userId: data.userId,

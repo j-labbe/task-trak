@@ -2,12 +2,17 @@ import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { mixins } from "../../../styles";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import { AppContext } from "contexts/AppContext";
+// import { AppContext } from "contexts/AppContext";
 import nProgress from "nprogress";
 import Head from "next/head";
 import TaskList from './taskList';
 import CreateTask from '../../CreateTask';
 import * as AppConfig from 'AppConfig';
+import { observer } from 'mobx-react-lite';
+import { useContextState } from "contexts/AppContext";
+import { useDrop } from "react-dnd";
+import TrashBin from './components/trash';
+import { ANIM } from "components/alertBox";
 
 const StyledMyTasks = styled.div`
     position: absolute;
@@ -94,13 +99,19 @@ const StyledMyTasks = styled.div`
     }
 `;
 
-const ListView = () => {
-    const { refreshTasks, userData, getUserData, createTask, appIsLoading, setAppIsLoading } = useContext(AppContext);
+const ListView = observer(() => {
+    const { tasks, createTask, refreshTasks, updateTask, getUserData, userData } = useContextState();
     const [isLoaded, setIsLoaded] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
     const [sortedData, setSortedData] = useState(AppConfig.listInterface.lists);
     const [isCreateTask, setIsCreateTask] = useState(false);
-    const [reloadState, handleReloadState] = useState(false);
+
+    const [{ didDrop }] = useDrop(() => ({
+        accept: "bar",
+        collect: (monitor) => ({
+            didDrop: !!monitor.didDrop()
+        })
+    }));
 
     const showCreateTask = () => {
         setIsCreateTask(true);
@@ -114,7 +125,7 @@ const ListView = () => {
     useEffect(() => {
         if (!isLoaded && !isMounted) {
             nProgress.start();
-            getUserData().then(async () => {
+            getUserData().then(() => {
                 nProgress.set(0.5);
                 setIsLoaded(true);
             });
@@ -139,7 +150,7 @@ const ListView = () => {
                         <CreateTask
                             show={true}
                             onSuccess={handleCreateTaskSuccess}
-                            onCancel={() => setIsCreateTask(false)}
+                            onCancel={() => setTimeout(() => setIsCreateTask(false), ANIM)}
                         />
                     ) : ''
                 }
@@ -165,16 +176,17 @@ const ListView = () => {
                             {isMounted ?
                                 sortedData.map((group, i) => (
                                     <CSSTransition key={i} classNames={"fastfadeup"} timeout={2000 + (i * 100)}>
-                                        <TaskList title={group.title} listId={i} key={i} style={{ transitionDelay: `${i * 75}ms` }} />
+                                        <TaskList dropStatus={didDrop} title={group.title} listId={i} key={i} style={{ transitionDelay: `${i * 75}ms` }} />
                                     </CSSTransition>
                                 ))
                                 : ''}
                         </TransitionGroup>
                     </div>
+                    <TrashBin />
                 </div>
             </StyledMyTasks>
         </div>
     )
-};
+});
 
 export default ListView;

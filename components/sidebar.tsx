@@ -90,7 +90,7 @@ const SideBar = () => {
                                 <IconAlignLeft />
                             </a>
                         </Link>
-                        <Link href="/app/overview">
+                        {/* <Link href="/app/overview">
                             <a className=
                                 {
                                     (pathname === '/app/overview')
@@ -108,7 +108,7 @@ const SideBar = () => {
                                 } data-tip="Details about individual tasks">
                                 <IconFeed />
                             </a>
-                        </Link>
+                        </Link> */}
                         <ReactTooltip delayShow={400} place="top" type="dark" effect="solid" className="up-to-top" />
                     </StyledSideBar>
     ) : ''

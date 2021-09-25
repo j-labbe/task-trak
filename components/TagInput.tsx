@@ -3,7 +3,7 @@
  */
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { mixins } from "styles";
+import mixins from "styles/mixins";
 import { Tag } from "types";
 
 const StyledTagCreator = styled.div`
@@ -93,7 +93,7 @@ const TagInput = ({ id, setTagDetails, tagState }: TagInputProps) => {
     return (
         <StyledTagCreator key={id}>
             <div key={id} className="container">
-                <input key={id} type="text" placeholder="Tag Name" value={tagAttrs.name} onChange={handleNameChange} />
+                <input key={id} type="text" placeholder="Tag Name" max={15} maxLength={15} value={tagAttrs.name} onChange={handleNameChange} />
                 <select key={id + "-" + 1} value={tagAttrs.urgent} onChange={handleSelectChange}>
                     <option key={id + "-" + 2} value="">Tag Status</option>
                     <option key={id + "-" + 3} value="urgent">Urgent</option>

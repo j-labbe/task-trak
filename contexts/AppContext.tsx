@@ -1,107 +1,121 @@
 import * as React from 'react';
 import * as API from 'utils/api';
 import * as Components from './components';
-import { ArrayOfTasks, ContextProps, ContextCreateTask, Task } from 'types';
+import { ArrayOfTasks, ContextCreateTask, Task } from 'types';
+import { makeObservable, observable, action, runInAction } from 'mobx';
 
-const defaultProps = {
-    tasks: [],
-    userData: {
-        username: "",
-        firstName: "",
-        password: "",
-        lastLogin: 0
-    },
-    refreshTasks: async function (): Promise<ArrayOfTasks> {
-        return await Components.refreshTasks();
-    },
-    updateTask: async function (updatedTask: Task): Promise<any> {
-        return await Components.updateTask(updatedTask);
-    },
-    getUserData: async function (): Promise<object> {
-        return await Components.getUserData();
-    },
-    createTask: async function (config: ContextCreateTask): Promise<object> {
-        return await Components.createTask(config);
-    },
-    deleteTask: async function (config: {}): Promise<boolean> {
-        return await Components.deleteTask(config);
-    },
-    updateTaskList: () => { }, // react state
-    appIsLoading: false, // react state
-    setAppIsLoading: () => { }, // react state
-    doneRefresh: false,
-    setRefreshStatus: () => { },
-    getTasks: () => { }
+// Handle state changes utilizing MobX
+
+export default class ContextState {
+    tasks: ArrayOfTasks = [];
+    userData: any = {};
+    appIsLoading: boolean = false;
+    tasksRefreshing: boolean = false;
+    constructor() {
+        makeObservable(this, {
+            tasks: observable,
+            userData: observable,
+            appIsLoading: observable,
+            tasksRefreshing: observable,
+            refreshTasks: action,
+            createTask: action,
+            updateTask: action,
+            deleteTask: action,
+            setAppLoading: action,
+            setRefreshStatus: action,
+            getUserData: action
+        });
+        this.getTasks = this.getTasks.bind(this);
+        this.refreshTasks = this.refreshTasks.bind(this);
+        this.createTask = this.createTask.bind(this);
+        this.updateTask = this.updateTask.bind(this);
+        this.deleteTask = this.deleteTask.bind(this);
+        this.setAppLoading = this.setAppLoading.bind(this);
+        this.setRefreshStatus = this.setRefreshStatus.bind(this);
+        this.getUserData = this.getUserData.bind(this);
+    }
+    getTasks() { return this.tasks; }
+    async refreshTasks(): Promise<void> {
+        try {
+            const data = await Components.refreshTasks();
+            // MobX strict mode async
+            runInAction(() => this.tasks = data);
+        } catch (e) {
+            console.error(e);
+            return Promise.reject();
+        }
+    }
+    async createTask(config: ContextCreateTask): Promise<void> {
+        try {
+            const data = await Components.createTask(config);
+            // MobX strict mode async
+            runInAction(() => this.tasks.push(data));
+        } catch (e) {
+            console.error(e);
+            return Promise.reject();
+        }
+    }
+    async updateTask(updatedTask: Task): Promise<void> {
+        try {
+            const data = await Components.updateTask(updatedTask);
+            const index = this.tasks.findIndex((t) => t.id === data.id);
+            if (index === -1) return Promise.reject("Task does not exist");
+            // MobX strict mode async
+            runInAction(() => this.tasks[index] = data);
+        } catch (e) {
+            console.error(e);
+            return Promise.reject();
+        }
+    }
+    async deleteTask({ task, taskId }: { task?: Task, taskId?: string }): Promise<void> {
+        try {
+            if (!task && !taskId) return Promise.reject("Invalid parameter. Provide an identifier.");
+            if (taskId) task = this.tasks.find((t) => t.id === taskId);
+            if (!task) return Promise.reject("Task does not exist.");
+            const data = await Components.deleteTask(task.dbId);
+            if(data){
+                runInAction(() => {
+                    this.tasks = this.tasks.filter((t) => t.id !== task.id);
+                });
+            }else{
+                console.log("Could not remove.");
+            }
+        } catch (e) {
+            console.error(e);
+            return Promise.reject();
+        }
+    }
+    setAppLoading(param: boolean): void {
+        this.appIsLoading = param;
+    }
+    setRefreshStatus(param: boolean): void {
+        this.tasksRefreshing = param;
+    }
+    async getUserData(): Promise<void> {
+        try {
+            const data = await Components.getUserData();
+            if (!data) return Promise.reject("Invalid login");
+            // MobX strict mode async
+            runInAction(() => this.userData = data);
+        } catch (e) {
+            console.error(e);
+            return Promise.reject();
+        }
+    }
 }
 
-export const AppContext = React.createContext<ContextProps | null>(defaultProps);
+export const AppContext = React.createContext(null);
 
-export default function AppContextProvider(props: React.PropsWithChildren<{}>) {
-
-    const [tasks, setTasks] = React.useState([]);
-    const [userData, setUserData] = React.useState({});
-    const [isLoading, setIsLoading] = React.useState(defaultProps.appIsLoading);
-    const [doneRefresh, setRefreshStatus] = React.useState(defaultProps.doneRefresh);
-
-    const refreshTasks = async (): Promise<ArrayOfTasks> => {
-        // define a separate function within hook to set the context state
-        let result: ArrayOfTasks;
-        setRefreshStatus(false);
-        result = await defaultProps.refreshTasks();
-        setRefreshStatus(true);
-        setTasks(result);
-        return result;
-    };
-
-    const getUserData = async (): Promise<any> => {
-        try {
-            const res = await defaultProps.getUserData();
-            setUserData(res);
-        } catch (e) {
-            return Promise.reject(e);
-        }
-        Promise.resolve();
-    };
-
-    const createTask = async (newTask: ContextCreateTask): Promise<void> => {
-        try {
-            await defaultProps.createTask(newTask);
-            Promise.resolve();
-        } catch (e) {
-            return Promise.reject(e);
-        }
-    };
-
-    const updateTask = async (updatedTask: Task): Promise<void> => {
-        try {
-            await defaultProps.updateTask(updatedTask);
-            Promise.resolve();
-        } catch (e) {
-            return Promise.reject(e);
-        }
-    };
-
-    const deleteTask = async () => {
-
-    }
-
-    const getTasks = async (): Promise<ArrayOfTasks> => tasks.length === 0 ? await refreshTasks() : tasks;
-
+export const AppContextProvider = ({ children, contextState }) => {
     return (
-        <AppContext.Provider value={{
-            tasks: tasks,
-            refreshTasks: refreshTasks,
-            userData: userData,
-            getUserData: getUserData,
-            createTask: createTask,
-            updateTask: updateTask,
-            deleteTask: () => { },
-            updateTaskList: setTasks,
-            appIsLoading: isLoading,
-            setAppIsLoading: setIsLoading,
-            doneRefresh: doneRefresh,
-            setRefreshStatus: setRefreshStatus,
-            getTasks: getTasks
-        }} {...props} />
+        <AppContext.Provider value={contextState}>
+            {children}
+        </AppContext.Provider>
     )
+}
+
+export const useContextState = () => React.useContext(AppContext);
+
+export const withStore = (Component) => (props) => {
+    return <Component {...props} ctxt={useContextState()} />;
 }

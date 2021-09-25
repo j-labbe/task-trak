@@ -86,6 +86,8 @@ With any project, there are challenges that need to be overcome. Since I had not
 
 Additionally, I had never used the Airtable or Auth0 API. As with any new API, extensive reading through documentation is required. I have (and still am) referring to documentation to ensure I'm implementing the features I need properly.
 
+One recurring issue was state management. After a few different tests, I decided upon using MobX for state management. Less boilerplate and easier to setup. It works great for now.
+
 ## ✅ How I Tackled Those Challenges
 I alluded to this in the previous section, but to expand, extensive reading and trial-and-error were just two of the many methods I used to tackle the many challenges I faced and currently am facing with this project. One thing remains constant, however, and that is my mindset. I describe myself as someone who understands learning never stops. I believe that is a fundamental mindset to have because it prevents you from blinding yourself by thinking "you know everything". I never stop trying to learn and I always do my best to make sure features work how they're supposed to (and are written well).
 

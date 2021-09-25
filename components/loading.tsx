@@ -3,7 +3,8 @@
  */
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { GlobalStyle, mixins } from 'styles';
+import GlobalStyle from 'styles/GlobalStyle';
+import mixins from 'styles/mixins';
 
 interface LoaderProps {
     isMounted: boolean

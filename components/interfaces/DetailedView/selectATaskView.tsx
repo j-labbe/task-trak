@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
-import { mixins } from "../../../styles";
-import { settings } from "../../../demo";
+import mixins from "styles/mixins";
 import moment from "moment";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { AppContext } from "../../../contexts/AppContext";
@@ -9,6 +8,7 @@ import Router from 'next/router';
 import * as API from 'utils/api';
 import nProgress from "nprogress";
 import Head from 'next/head';
+import * as settings from 'AppConfig';
 
 const StyledMyTasks = styled.div`
     position: absolute;
@@ -151,7 +151,7 @@ const SelectATaskView = () => {
                                             {
                                                 " " + moment(task.properties.startDate).format("MM-DD-YYYY")
                                                 + (
-                                                    settings.displayTime ?
+                                                    settings.display.displayTime ?
                                                         " at "
                                                         + moment(task.properties.startDate).format("h:mm a")
                                                         : ""
@@ -162,7 +162,7 @@ const SelectATaskView = () => {
                                             {
                                                 " " + moment(task.properties.endDate).format("MM-DD-YYYY")
                                                 + (
-                                                    settings.displayTime ?
+                                                    settings.display.displayTime ?
                                                         " at "
                                                         + moment(task.properties.endDate).format("h:mm a")
                                                         : ""

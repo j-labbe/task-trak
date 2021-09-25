@@ -17,5 +17,8 @@ module.exports = {
     },
     alertBox: {
         animationDuration: 500
+    },
+    display: {
+        displayTime: false
     }
 }

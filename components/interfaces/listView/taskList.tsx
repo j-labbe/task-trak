@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect } from 'react';
 import styled from "styled-components";
-import { mixins } from "../../../styles";
-import { useDragDropManager, useDrop } from 'react-dnd';
-import { AppContext } from 'contexts/AppContext';
-import { Tag, Task } from 'types';
+import mixins from "styles/mixins";
+import { useDrop } from 'react-dnd';
+import { Task } from 'types';
 import useRender from './utils/render';
 import * as AppConfig from 'AppConfig';
 import Spinner from '../../spinner';

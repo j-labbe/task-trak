@@ -32,7 +32,7 @@
     <li><a href="#-why-typescript">Why TypeScript?</a></li>
     <li><a href="#%EF%B8%8F-challenges-faced">Challenges Faced</a></li>
     <li><a href="#-how-i-tackled-those-challenges">Usage</a></li>
-    <li><a href="https://github.com/j-labbe/task-trak/tree/feature-list-dnd#-things-that-can-be-improved">Things That Can Be Improved</a></li>
+    <li><a href="#-things-that-can-be-improved">Things That Can Be Improved</a></li>
     <li>
       <a href="#-api-documentation">API Documentation</a>
       <ul>
@@ -49,20 +49,10 @@
         <li><a href="#-build-production-version">Build Production Version</a></li>
       </ul>
     </li>
-    <!--
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#contributing">Making Contributions</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgements">Acknowledgements</a></li>-->
   </ol>
 </details>
 

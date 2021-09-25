@@ -12,40 +12,30 @@ export declare type apiRequestMethod = typeof apiRequestMethods[number];
  * @param config - endpoint: API Endpoint, method: API Request Method, data: Data being passed to server.
  * @returns Object - server response.
  */
-export async function Request(config: { endpoint: apiRequestEndpoint; method?: apiRequestMethod; data?: object }): Promise<object> {
+export async function Request(config: { endpoint: apiRequestEndpoint; method?: apiRequestMethod; data?: object }): Promise<{ msg: any }> {
     switch (config.method) {
         case "GET":
             return axios
                 .get(API_URL + config.endpoint)
-                .then((res) => {
-                    return res.data;
-                })
-                .catch((err) => {
-                    Promise.reject(err);
-                });
+                .then((res) => res.data)
+                .catch((err) => Promise.reject(err));
         case "POST":
             switch (config.endpoint) {
                 case "createTask":
                     return axios
-                        .post(API_URL + config.endpoint, JSON.stringify(config.data))
+                        .post(API_URL + config.endpoint, config.data)
                         .then((res) => res.data)
-                        .catch((err) => {
-                            Promise.reject(err);
-                        });
+                        .catch((err) => Promise.reject(err));
                 default:
                     return axios
                         .post(API_URL + config.endpoint, config.data)
                         .then((res) => res.data)
-                        .catch((err) => {
-                            Promise.reject(err);
-                        });
+                        .catch((err) => Promise.reject(err));
             }
         default:
             return axios
                 .get(API_URL + config.endpoint)
                 .then((res) => res.data)
-                .catch((err) => {
-                    Promise.reject(err);
-                });
+                .catch((err) => Promise.reject(err));
     }
 }

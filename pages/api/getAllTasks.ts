@@ -1,12 +1,14 @@
-import { tasks } from "demo";
-import type { NextApiRequest, NextApiResponse } from 'next';
-/*
+import { getSession, withApiAuthRequired } from "@auth0/nextjs-auth0";
+import { NextApiRequest, NextApiResponse } from "next";
+import getAllTasks from "./dao/tasks/getAllTasks";
 
-TODO: User login authentication
-
-*/
-
-// GET request
-export default function getAllTasks (req: NextApiRequest, res: NextApiResponse) {
-    return res.status(200).json(tasks);
-};
+export default withApiAuthRequired(async function ProtectedRoute(req: NextApiRequest, res: NextApiResponse) {
+    const session = getSession(req, res);
+    try {
+        const tasks = await getAllTasks(session);
+        return res.status(200).json({ msg: tasks });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ msg: "Error" });
+    }
+});

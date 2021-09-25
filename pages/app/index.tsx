@@ -1,45 +1,32 @@
-import { useEffect, useState, useContext } from 'react';
-import Head from 'next/head';
+import * as React from 'react';
+import NavBar from 'components/navbar';
+import Sidebar from 'components/sidebar';
 import styled from 'styled-components';
-import { mixins } from '../../styles';
-import { GlobalStyle } from '../../styles';
-import NavBar from '../../components/navbar';
-import SideBar from '../../components/sidebar';
-import MyTasks from '../../components/myTasks';
+import { GlobalStyle } from 'styles';
+import ListView from 'components/interfaces/listView';
+import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import Loading from 'components/loading';
 
-const StyledHome = styled.div`
+const StyledPage = styled.div`
     overflow: hidden;
     width: 100% !important;
 `;
 
-const Home = () => {
+function ListPage() {
 
-    const [isMounted, setIsMounted] = useState(false);
+    const { user } = useUser();
 
-    useEffect(() => {
-        // if we load fast, keep the loader on screen
-        // for a little bit so it doesn't flash
-        const timeout = setTimeout(() => {
-            setIsMounted(true);
-        }, 100);
-        return () => clearTimeout(timeout);
-    }, []);
-
-    return (
-        <div>
-            {isMounted ? (
-                <StyledHome>
-                    <GlobalStyle />
-                    <Head>
-                        <title>Home - TaskTrak</title>
-                    </Head>
-                    <NavBar />
-                    <SideBar />
-                    <MyTasks />
-                </StyledHome>
-            ) : ''}
-        </div>
+    return user && (
+        <StyledPage>
+            <GlobalStyle />
+            <NavBar />
+            <Sidebar />
+            <ListView />
+        </StyledPage>
     )
 }
 
-export default Home;
+export default withPageAuthRequired(ListPage, {
+    onRedirecting: () => (<Loading />),
+    onError: () => (<h1>Error Occurred</h1>)
+});

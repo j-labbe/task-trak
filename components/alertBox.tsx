@@ -1,11 +1,13 @@
 import React, { useRef } from 'react';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { mixins } from 'styles';
+import mixins from 'styles/mixins';
 import "react-datepicker/dist/react-datepicker.css";
 import useOnClickOutside from 'utils/useOnClickOutside';
+import ReactTooltip from 'react-tooltip';
+import * as AppConfig from 'AppConfig';
 
-export const ANIM = 500;
+export const ANIM = AppConfig.alertBox.animationDuration;
 
 export interface AlertBoxProps {
     isVisible: boolean
@@ -16,12 +18,16 @@ const StyledAlertBox = styled.div<AlertBoxProps>`
     position: absolute;
     background-color: ${props => (props.isVisible ? `var(--overlay)` : `transparent`)};
     ${props => (props.isVisible ? `` : `opacity: 0;`)}
-    z-index: ${props => (props.isVisible ? `10` : `-1`)};
-    -webkit-backdrop-filter: blur(30px);
-    backdrop-filter: blur(30px);
+    z-index: ${props => (props.isVisible ? `50` : `-1`)};
     width: 100%;
     height: 100%;
     transition: var(--transition);
+
+    @supports ((--webkit-backdrop-filter: none) or (backdrop-filter: none)){
+        ${'' /* Add support for different styled based on browser support (check modal) */}
+        -webkit-backdrop-filter: blur(30px);
+        backdrop-filter: blur(30px);
+    }
 
     .alert-box {
         ${mixins.flexCenter}
@@ -29,7 +35,7 @@ const StyledAlertBox = styled.div<AlertBoxProps>`
         flex-direction: column;
         max-height: 600px;
         width: 500px;
-        padding: 40px;
+        padding: 40px 40px 20px 40px;
         background-color: var(--secondary-bg);
         -webkit-box-shadow: 0px 0px 40px 14px rgba(0,0,0,0.21); 
         box-shadow: 0px 0px 40px 14px rgba(0,0,0,0.21);
@@ -51,6 +57,21 @@ const StyledAlertBox = styled.div<AlertBoxProps>`
             max-height: 300px;
             overflow: scroll;
             text-align: center;
+            width: 100%;
+            padding: 0;
+
+            &::-webkit-scrollbar {
+                display: none;
+              }
+
+            background:
+                linear-gradient(var(--secondary-bg) 30%, hsla(0,0%,100%, 0)),
+                linear-gradient(hsla(0,0%,100%,0) 10px, var(--secondary-bg) 70%) bottom,
+                radial-gradient(at top, rgba(0,0,0,0.2), transparent 70%), 
+                radial-gradient(at bottom, rgba(0,0,0,0.2), transparent 70%) bottom;
+            background-repeat: no-repeat;
+            background-size: 100% 20px, 100% 20px, 100% 10px, 100% 10px;
+            background-attachment: local, local, scroll, scroll;
 
             h1 {
                 font-size: var(--f-xl);
@@ -59,6 +80,7 @@ const StyledAlertBox = styled.div<AlertBoxProps>`
 
         .buttons {
             ${mixins.flexCenter}
+            padding-top: 20px;
 
             .btn-cancel {
                 font-family: var(--font-default);
@@ -82,9 +104,9 @@ const StyledAlertBox = styled.div<AlertBoxProps>`
             .btn-success {
                 font-family: var(--font-default);
                 font-size: var(--f-sm);
-                width: 75px;
+                width: auto;
                 margin: 10px;
-                padding: 9px 22px;
+                padding: 9px 22px !important;
                 outline: none;
                 border: none;
                 border-radius: 12px;
@@ -102,22 +124,6 @@ const StyledAlertBox = styled.div<AlertBoxProps>`
     }
 `;
 
-// declare const alertBoxTypes: readonly ["createTask", "editTask", "generalAlert"];
-// export declare type alertBoxType = typeof alertBoxTypes[number];
-/**
- * Create the parent for an alert (required)
- */
-// export class AlertWrapper extends React.Component {
-//     private alertParent: React.RefObject<HTMLDivElement>;
-//     constructor(props){
-//         super(props);
-//         this.alertParent = React.createRef();
-//     }
-//     render() {
-//         return <div ref={this.alertParent} />;
-//     }
-// }
-
 /**
  * Display an AlertBox anywhere.
  * @param config Object
@@ -130,14 +136,20 @@ const StyledAlertBox = styled.div<AlertBoxProps>`
  */
 
 export default function AlertBox(config: { title?: string, description?: string, successBtnLabel?: string, cancelBtnLabel?: string, onSuccess?: () => void; onCancel?: () => void, props: any, onClickOutside: () => void }) {
-    const ref = useRef();
+    let ref = useRef();
     const [isMounted, setIsMounted] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
     useEffect(() => {
+        ReactTooltip.rebuild();
         setIsMounted(true);
         setTimeout(() => {
             setIsVisible(true);
         }, ANIM);
+        return () => {
+            setIsVisible(false);
+            setIsMounted(false);
+            ref = undefined;
+        }
     }, []);
     useOnClickOutside(ref, () => {
         setIsVisible(false);
@@ -147,7 +159,6 @@ export default function AlertBox(config: { title?: string, description?: string,
         }, ANIM);
     });
     const callBack = (success?: boolean) => {
-        setIsVisible(false);
         if (success) {
             if (config.onSuccess) {
                 config.onSuccess();
@@ -155,6 +166,7 @@ export default function AlertBox(config: { title?: string, description?: string,
         } else {
             config.onCancel();
         }
+        setIsVisible(false);
         setTimeout(() => {
             setIsMounted(false);
         }, ANIM);

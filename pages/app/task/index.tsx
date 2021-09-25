@@ -1,11 +1,10 @@
 import Head from 'next/head';
 import styled from 'styled-components';
-import { GlobalStyle } from '../../../styles';
-import NavBar from '../../../components/navbar';
-import SideBar from '../../../components/sidebar';
-import TaskView from '../../../components/taskview';
+import { GlobalStyle } from 'styles';
+import NavBar from 'components/navbar';
+import SideBar from 'components/sidebar';
 import { useRouter } from 'next/router';
-import SelectATaskView from 'components/selectATaskView';
+import SelectATaskView from 'components/interfaces/DetailedView/selectATaskView';
 
 const StyledHome = styled.div`
     overflow: hidden;

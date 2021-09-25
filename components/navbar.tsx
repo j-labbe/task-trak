@@ -1,3 +1,6 @@
+/**
+ * Navbar
+ */
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { mixins } from "../styles";
@@ -14,6 +17,7 @@ const StyledNavBar = styled.div`
     height: var(--nav-height);
     background-color: var(--default-bg);
     overflow: hidden;
+    z-index: 21;
 
     .col1 {
         width: 60%;

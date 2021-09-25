@@ -1,14 +1,26 @@
-import { useEffect, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import styled from 'styled-components';
 import { GlobalStyle } from '../styles';
 import { mixins } from '../styles';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import Link from 'next/link';
+import Loading from 'components/loading';
+
+interface StyledPageProps {
+    isMounted: boolean
+}
+
+const StyledPage = styled.div<StyledPageProps>`
+    opacity: ${props => props.isMounted ? `1` : `0`};
+    transition: var(--transition);
+`;
 
 const StyledLanding = styled.div`
     ${mixins.flexCenter}
     flex-direction: column;
+    background-color: var(--secondary-bg);
+    height: 100%;
 
     .heroNav {
         position: absolute;
@@ -39,33 +51,60 @@ const StyledLanding = styled.div`
         ${mixins.flexCenter}
         flex-direction: column;
         justify-content: flex-start;
-        background-color: var(--primary-accent);
+        background: rgb(97,11,239);
+        background: linear-gradient(180deg, rgba(97,11,239,1) 0%, rgba(247,247,252,1) 100%);
         width: 100%;
-        height: 80%;
+        height: 70%;
 
         h1 {
             font-size: clamp(50px, 25vw, 100px);
             color: var(--default-bg);
             margin-bottom: 0;
+            padding-top: 20px;
         }
         h3 {
             font-size: clamp(25px, 25vw, 50px);
             color: var(--default-bg);
         }
+        .big-hero-btn {
+            ${mixins.flexCenter}
+            cursor: pointer;
+            background-color: var(--red);
+            width: 200px;
+            padding: 10px;
+            border-radius: var(--border-radius);
+            color: var(--cf-white);
+            animation: pulse-red 2s infinite;
+            opacity: 1;
+            transition: var(--transition);
+
+            &:hover {
+                opacity: 0.8;
+                transition: var(--transition);
+            }
+        }
     }
 `;
 
-const Hero = styled.div`
-    min-height: 100vh;
-    background-color: var(--secondary-bg);
+const StyledBody = styled.div`
+    ${mixins.flexCenter}
+    position: absolute;
+    bottom: 5%;
 `;
 
 const Landing = () => {
+
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    });
+
     return (
-        <div>
+        <StyledPage isMounted={mounted}>
             <GlobalStyle />
             <Head>
-                <title>Task Track - Tracker For All Your Tasks</title>
+                <title>Task Trak - Tracker For All Your Tasks</title>
             </Head>
             <div id="landing">
                 <StyledLanding>
@@ -73,7 +112,7 @@ const Landing = () => {
                         <Link href="/">
                             <a className="navLink">Home</a>
                         </Link>
-                        <Link href="/">
+                        {/* <Link href="/">
                             <a className="navLink">About</a>
                         </Link>
                         <Link href="/">
@@ -84,16 +123,24 @@ const Landing = () => {
                         </Link>
                         <Link href="/">
                             <a className="navLink button">Start Now</a>
+                        </Link> */}
+                        <Link href="/app">
+                            <a className="navLink">Check out the App</a>
                         </Link>
                     </div>
                     <div className="hero">
-                        <h1>Task Track</h1>
-                        <h3>Your All-In-One Task Tracker</h3>
-                        <Link href="/app">Visit the app</Link>
+                        <h1>Task Trak</h1>
+                        <h3>Simplify your To-Do List.</h3>
+                        <Link href="/app">
+                            <div className="big-hero-btn">Visit the app</div>
+                        </Link>
                     </div>
+                    <StyledBody>
+                        <h2>Task Trak is actively in development. Check out the <a href="https://github.com/j-labbe/task-trak" target="_blank">GitHub!</a></h2>
+                    </StyledBody>
                 </StyledLanding>
             </div>
-        </div>
+        </StyledPage>
     )
 }
 

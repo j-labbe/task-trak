@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/api/";
+const API_URL = "https://tasktrak.io/api/";
 declare const apiEndpoints: readonly ["getAllTasks", "getTask", "getUserData", "login", "createTask", "deleteTask", "updateTask"];
 declare const apiRequestMethods: readonly ["GET", "POST"];
 export declare type apiRequestEndpoint = typeof apiEndpoints[number];

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
-import { mixins } from "../../../styles";
+import mixins from "styles/mixins";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 // import { AppContext } from "contexts/AppContext";
 import nProgress from "nprogress";

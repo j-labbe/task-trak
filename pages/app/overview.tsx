@@ -1,8 +1,7 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import styled from 'styled-components';
-import { mixins } from '../../styles';
-import { GlobalStyle } from '../../styles';
+import GlobalStyle from 'styles/GlobalStyle';
 import NavBar from '../../components/navbar';
 import SideBar from '../../components/sidebar';
 

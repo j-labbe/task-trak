@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import styled from 'styled-components';
-import { GlobalStyle } from '../styles';
-import { mixins } from '../styles';
+import GlobalStyle from 'styles/GlobalStyle';
+import mixins from 'styles/mixins';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import Link from 'next/link';
 import Loading from 'components/loading';

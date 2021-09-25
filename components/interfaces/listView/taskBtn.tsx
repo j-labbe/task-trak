@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { mixins } from "../../../styles";
+import mixins from "styles/mixins";
 import { IconArrowDown } from "../../../assets/images";
 import { useDrag } from "react-dnd";
 import { TaskBtnProps } from 'types';

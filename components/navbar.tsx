@@ -3,7 +3,7 @@
  */
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { mixins } from "../styles";
+import mixins from "styles/mixins";
 import Image from 'next/image';
 import { IconBell } from "../assets/images";
 

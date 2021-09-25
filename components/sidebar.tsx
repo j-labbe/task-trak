@@ -3,7 +3,7 @@
  */
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { mixins } from "../styles";
+import mixins from "styles/mixins";
 import { useRouter } from "next/router";
 import { IconAlignLeft, IconFeed, IconGrid } from "../assets/images";
 import Link from 'next/link';

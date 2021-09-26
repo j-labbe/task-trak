@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: ✅ Checkout Code
         uses: actions/checkout@v1
         
-      - name: Use Node.js 12.x
+      - name: 💻 Use Node.js 12.x
         uses: actions/setup-node@v1
         with:
           node-version: 12.x
@@ -29,14 +29,14 @@ jobs:
           AUTH0_NAMESPACE_BASE: ${{ secrets.AUTH0_NAMESPACE_BASE }}
           AUTH0_SECRET: ${{ secrets.AUTH0_SECRET }}
           AUTH0_SMALL_URL: ${{ secrets.AUTH0_SMALL_URL }}
-      - run: yarn
-      - run: yarn build
+      - run: 📦 yarn
+      - run: 🛠 yarn build
 
-      - name: Deploy to Netlify
+      - name: 🚀 Deploy to Netlify
         uses: netlify/actions/cli@master
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         with:
-          args: deploy --dir=dist --prod
+          args: deploy --dir=dist --prod -m `v${{ steps.package-version.outputs,current-version }} • ${{ github.head_ref }}
           secrets: '["NETLIFY_AUTH_TOKEN", "NETLIFY_SITE_ID"]'

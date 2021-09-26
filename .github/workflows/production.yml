@@ -44,10 +44,11 @@ jobs:
       - name: 📦 Install dependencies
         run: yarn
 
-      - name: 🛠 Build project
-        run: yarn run build
+      # - name: 🛠 Build project
+      #   run: yarn run build
 
-      # Deploy to Netlify with a personalized message
+      # Deploy to Netlify
+      # Should read netlify.toml
       - name: 🚀 Deploy to Netlify
         id: deploy-netlify
         uses: netlify/actions/cli@master

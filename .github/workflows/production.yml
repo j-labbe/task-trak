@@ -45,7 +45,7 @@ jobs:
         run: yarn
 
       - name: 🛠 Build project
-        run: yarn run deploy
+        run: yarn run build
 
       # Deploy to Netlify with a personalized message
       - name: 🚀 Deploy to Netlify
@@ -55,4 +55,4 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         with:
-          args: deploy --dir=dist -m 'v${{ steps.package-version.outputs.current-version}} ・ ${{ github.head_ref }}'
+          args: deploy -m 'v${{ steps.package-version.outputs.current-version}} ・ ${{ github.head_ref }}'

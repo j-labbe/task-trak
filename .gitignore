@@ -35,3 +35,5 @@ yarn-error.log*
 
 # next-on-netlify
 out_*
+# Local Netlify folder
+.netlify

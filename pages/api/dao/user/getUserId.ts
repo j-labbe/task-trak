@@ -1,7 +1,7 @@
 import { Session } from "@auth0/nextjs-auth0";
 import jwt_decode, { JwtPayload } from "jwt-decode";
 
-const userId = `${process.env.AUTH0_NAMESPACE_BASE}userId`;
+const userId = `https://tasktrak.io/userId`;
 /**
  * Get the User's ID
  * @param session - Auth0 Session

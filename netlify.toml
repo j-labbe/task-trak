@@ -2,8 +2,5 @@
     command = "yarn run build"
     publish = "out"
 
-[functions]
-    directory = "functions"
-
 [[plugins]]
     package = "@netlify/plugin-nextjs

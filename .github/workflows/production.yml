@@ -45,7 +45,7 @@ jobs:
         run: yarn
 
       - name: 🛠 Build project
-        run: yarn build
+        run: yarn run deploy
 
       # Deploy to Netlify with a personalized message
       - name: 🚀 Deploy to Netlify

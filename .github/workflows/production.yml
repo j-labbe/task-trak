@@ -8,12 +8,20 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: ✅ Checkout Code
-        uses: actions/checkout@v1
-        
-      - name: 💻 Use Node.js 12.x
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Cache node modules and next folder
+      - name: 📬 Caching
+        uses: actions/cache@v2
+        with:
+          path: |
+            **/node_modules
+            ${{ github.workspace }}/.next/cache
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Use Node.js 12.x
         uses: actions/setup-node@v1
         with:
           node-version: 12.x
@@ -29,15 +37,22 @@ jobs:
           AUTH0_NAMESPACE_BASE: ${{ secrets.AUTH0_NAMESPACE_BASE }}
           AUTH0_SECRET: ${{ secrets.AUTH0_SECRET }}
           AUTH0_SMALL_URL: ${{ secrets.AUTH0_SMALL_URL }}
-      - run: npm install -g yarn
-      - run: yarn
-      - run: yarn build
+          
+      - name: 🧶 Install yarn
+        run: npm install -g yarn
 
+      - name: 📦 Install dependencies
+        run: yarn
+
+      - name: 🛠 Build project
+        run: yarn build
+
+      # Deploy to Netlify with a personalized message
       - name: 🚀 Deploy to Netlify
+        id: deploy-netlify
         uses: netlify/actions/cli@master
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         with:
-          args: deploy --dir=dist --prod
-          secrets: '["NETLIFY_AUTH_TOKEN", "NETLIFY_SITE_ID"]'
+          args: deploy --dir=dist -m 'v${{ steps.package-version.outputs.current-version}} ・ ${{ github.head_ref }}'

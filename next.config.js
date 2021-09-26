@@ -1,4 +1,5 @@
 module.exports = {
   reactStrictMode: false,
-  distDir: "dist"
+  distDir: "dist",
+  target: "serverless"
 }

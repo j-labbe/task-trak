@@ -98,7 +98,7 @@ const Landing = () => {
 
     useEffect(() => {
         setMounted(true);
-    });
+    },[]);
 
     return (
         <StyledPage isMounted={mounted}>
@@ -131,12 +131,12 @@ const Landing = () => {
                     <div className="hero">
                         <h1>Task Trak</h1>
                         <h3>Simplify your To-Do List.</h3>
-                        <Link href="/app">
+                        <Link href="/app" passHref>
                             <div className="big-hero-btn">Visit the app</div>
                         </Link>
                     </div>
                     <StyledBody>
-                        <h2>Task Trak is actively in development. Check out the <a href="https://github.com/j-labbe/task-trak" target="_blank">GitHub!</a></h2>
+                        <h2>Task Trak is actively in development. Check out the <a href="https://github.com/j-labbe/task-trak" rel="noreferrer" target="_blank">GitHub!</a></h2>
                     </StyledBody>
                 </StyledLanding>
             </div>

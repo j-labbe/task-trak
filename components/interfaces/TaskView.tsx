@@ -90,7 +90,7 @@ const TaskView = ({ displayTask }) => {
             setIsMounted(true);
         };
         testTasks();
-    }, []);
+    });
 
     // display selectedTask only
 

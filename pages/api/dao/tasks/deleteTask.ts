@@ -1,7 +1,7 @@
 import { table } from "utils/airtable";
 import { Session } from "@auth0/nextjs-auth0";
 
-export default async function (session: Session, id: any): Promise<boolean> {
+export default async function deleteTask (session: Session, id: any): Promise<boolean> {
     if(!session) return Promise.reject("Invalid session.");
     try {
         const del = await table.destroy(id);

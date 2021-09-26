@@ -3,7 +3,7 @@ import { v4 } from "uuid";
 import { CreatedTask, NewTaskConfig } from "types";
 import { Session } from "@auth0/nextjs-auth0";
 
-export default async function (session: Session, config: NewTaskConfig): Promise<CreatedTask> {
+export default async function createTask (session: Session, config: NewTaskConfig): Promise<CreatedTask> {
     if(!session) return Promise.reject('Invalid session.'); // may be redundant ¯\_(ツ)_/¯
     try {
         const newTask = await table.create([

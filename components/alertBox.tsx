@@ -148,7 +148,6 @@ export default function AlertBox(config: { title?: string, description?: string,
         return () => {
             setIsVisible(false);
             setIsMounted(false);
-            ref = undefined;
         }
     }, []);
     useOnClickOutside(ref, () => {

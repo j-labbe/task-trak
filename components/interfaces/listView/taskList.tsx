@@ -48,6 +48,8 @@ const StyledList = styled.div<StyledProps>`
     }
 `;
 
+let initialLoad: boolean;
+
 const TaskList = observer(({ title, listId, style, dropStatus }: { title: string, listId: number, style?: object, dropStatus?: boolean }) => {
 
     const {
@@ -72,7 +74,7 @@ const TaskList = observer(({ title, listId, style, dropStatus }: { title: string
             isOver: monitor.isOver(),
         })
     }));
-    let initialLoad = true;
+    initialLoad = true;
 
     const modifyList = async (taskId: string): Promise<void> => {
         const taskList = await getTasks();
@@ -92,7 +94,7 @@ const TaskList = observer(({ title, listId, style, dropStatus }: { title: string
             setAppLoading(true);
             initialLoad = false;
         }
-    }, []);
+    }, [appIsLoading, setAppLoading]);
 
     useEffect(() => {
         if (appIsLoading) {
@@ -106,11 +108,11 @@ const TaskList = observer(({ title, listId, style, dropStatus }: { title: string
         }else{
             render();
         }
-    }, [appIsLoading]);
+    }, [appIsLoading, listId, refreshTasks, render, setAppLoading]);
 
     useEffect(() => {
         setTimeout(() => render(),100);
-    }, [dropStatus, tasks]);
+    }, [dropStatus, tasks, render]);
 
 
     return (

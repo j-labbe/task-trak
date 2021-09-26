@@ -9,10 +9,12 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";
 
+let BackendJSX: any;
+
 const DynamicDndProvider = ({ children }): JSX.Element => {
 
     const [isMounted, setIsMounted] = useState(false);
-    let BackendJSX: any = (
+    BackendJSX = (
         <DndProvider backend={HTML5Backend}>
             {children}
         </DndProvider>
@@ -27,7 +29,7 @@ const DynamicDndProvider = ({ children }): JSX.Element => {
             );
         }
         setIsMounted(true);
-    });
+    }, [setIsMounted, children]);
 
     return isMounted ? BackendJSX : '';
 };

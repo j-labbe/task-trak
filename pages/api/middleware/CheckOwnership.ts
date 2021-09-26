@@ -3,7 +3,7 @@ import { getSession } from "@auth0/nextjs-auth0";
 import getUserId from "../dao/user/getUserId";
 import { NextApiRequest, NextApiResponse } from "next";
 
-export default async (req: NextApiRequest, res: NextApiResponse): Promise<any> => {
+export default async function CheckOwnership (req: NextApiRequest, res: NextApiResponse): Promise<any> {
     const session = getSession(req, res);
     const userId = await getUserId(session);
     if (!session || !userId) return Promise.reject("Invalid session");

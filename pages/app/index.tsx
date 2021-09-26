@@ -27,6 +27,6 @@ function ListPage() {
 }
 
 export default withPageAuthRequired(ListPage, {
-    onRedirecting: () => (<Loading />),
-    onError: () => (<h1>Error Occurred</h1>)
+    onRedirecting: function onRedirecting() { return <Loading /> },
+    onError: function onError() { return <h1>Error Occurred</h1> }
 });

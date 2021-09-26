@@ -3,7 +3,7 @@ import getUserId from "../user/getUserId";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "@auth0/nextjs-auth0";
 
-export default async function (req: NextApiRequest, res: NextApiResponse) {
+export default async function updateTask (req: NextApiRequest, res: NextApiResponse) {
     const session = getSession(req, res);
     const userId = await getUserId(session);
     if (!session || !userId) return false;

@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import styled from 'styled-components';
-import { GlobalStyle } from '../../../styles';
+import GlobalStyle from 'styles/GlobalStyle';
 import NavBar from '../../../components/navbar';
 import SideBar from '../../../components/sidebar';
 import TaskView from '../../../components/interfaces/TaskView';

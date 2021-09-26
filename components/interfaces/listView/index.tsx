@@ -137,7 +137,7 @@ const ListView = observer(() => {
                 nProgress.done();
             }
         }
-    }, [isLoaded]);
+    }, [isLoaded, isMounted, getUserData]);
 
     return (
         <div>

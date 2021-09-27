@@ -137,6 +137,7 @@ const Landing = () => {
                     </div>
                     <StyledBody>
                         <h2>Task Trak is actively in development. Check out the <a href="https://github.com/j-labbe/task-trak" rel="noreferrer" target="_blank">GitHub!</a></h2>
+                        <h3>For the best experience, use the latest version of desktop Chrome. Other browsers will be supported soon!</h3>
                     </StyledBody>
                 </StyledLanding>
             </div>

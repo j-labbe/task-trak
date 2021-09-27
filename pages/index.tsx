@@ -88,6 +88,7 @@ const StyledLanding = styled.div`
 
 const StyledBody = styled.div`
     ${mixins.flexCenter}
+    flex-direction: column;
     position: absolute;
     bottom: 5%;
 `;

@@ -14,11 +14,6 @@ let BackendJSX: any;
 const DynamicDndProvider = ({ children }): JSX.Element => {
 
     const [isMounted, setIsMounted] = useState(false);
-    BackendJSX = (
-        <DndProvider backend={HTML5Backend}>
-            {children}
-        </DndProvider>
-    );
 
     useEffect(() => {
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
@@ -27,9 +22,15 @@ const DynamicDndProvider = ({ children }): JSX.Element => {
                     {children}
                 </DndProvider>
             );
+        } else { 
+            BackendJSX = (
+                <DndProvider backend={HTML5Backend}>
+                    {children}
+                </DndProvider>
+            );
         }
         setIsMounted(true);
-    }, [setIsMounted, children]);
+    });
 
     return isMounted ? BackendJSX : '';
 };

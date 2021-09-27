@@ -94,7 +94,7 @@ const TaskList = observer(({ title, listId, style, dropStatus }: { title: string
             setAppLoading(true);
             initialLoad = false;
         }
-    }, [appIsLoading, setAppLoading]);
+    }, []);
 
     useEffect(() => {
         if (appIsLoading) {
@@ -108,11 +108,11 @@ const TaskList = observer(({ title, listId, style, dropStatus }: { title: string
         }else{
             render();
         }
-    }, [appIsLoading, listId, refreshTasks, render, setAppLoading]);
+    }, [appIsLoading]);
 
     useEffect(() => {
         setTimeout(() => render(),100);
-    }, [dropStatus, tasks, render]);
+    }, [dropStatus, tasks]);
 
 
     return (

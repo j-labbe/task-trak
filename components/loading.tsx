@@ -69,7 +69,7 @@ const Loading = () => {
     useEffect(() => {
         setIsMounted(true);
         return () => setIsMounted(false);
-    }, [setIsMounted]);
+    });
 
     return (
         <div>

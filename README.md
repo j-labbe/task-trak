@@ -1,4 +1,6 @@
 <div align="center">
+  <h2>This project is <b>not</b> inactive. I have just been busy with a few other projects.</h2>
+  <h4>As those projects finish up, I will resume working on this project with the goal of polishing the service and fixing a lot of issues.</h4>
   <h1>Task Trak</h1>
   <!-- Logo coming soon -->
   <h3>Simplify your to-do list.</h3>

@@ -1,0 +1,27 @@
+.pulsing-circle {
+  height: 12px;
+  width: 12px;
+  margin-right: 7px;
+}
+.pulsing-circle::after {
+  content: '';
+  display: block;
+  width: 12px;
+  height: 12px;
+  background-color: currentColor;
+  border-radius: 15px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  animation: pulse-dot 1.25s cubic-bezier(0.455, 0.03, 0.515, 0.955) -0.4s infinite;
+}
+
+@keyframes pulse-dot {
+  0% {
+    transform: scale(0.95);
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.95);
+  }
+}

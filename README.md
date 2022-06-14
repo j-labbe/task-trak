@@ -1,6 +1,14 @@
 <div align="center">
-  <h2>This project is <b>not</b> inactive. I have just been busy with a few other projects.</h2>
-  <h4>As those projects finish up, I will resume working on this project with the goal of polishing the service and fixing a lot of issues.</h4>
+  <h1>UPDATE</h1>
+  <h2>TaskTrak is being overhauled for stability, maintainability, and new features.</h2>
+  <h3>More updates to come. This Canary version will not be deployed until both the Project Management feature and Reminders features are fully implemented.</h3>
+
+  <h5>This README has not been updated yet (remove this message when it is updated)</h5>
+  
+  <br />
+  <br />
+  <br />
+
   <h1>Task Trak</h1>
   <!-- Logo coming soon -->
   <h3>Simplify your to-do list.</h3>

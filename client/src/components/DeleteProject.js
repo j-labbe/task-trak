@@ -10,7 +10,7 @@ export default function DeleteProject({ projectId, children }) {
     const navigate = useNavigate();
     const [deleteProject] = useMutation(DELETE_PROJECT, {
         variables: { id: projectId },
-        onCompleted: () => navigate("/"),
+        onCompleted: () => navigate("/app/projectmgmt"),
         refetchQueries: [{ query: GET_PROJECTS }]
     });
     return (

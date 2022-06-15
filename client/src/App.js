@@ -3,10 +3,11 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ChakraProvider, theme } from '@chakra-ui/react';
 import Nav from "./components/Header";
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
-import Home from "./pages/Home";
+import ProjectMgmtPage from "./pages/App/Projects";
 import NotFound from './pages/NotFound';
-import Project from './pages/Project';
+import Project from './pages/App/Project';
 import Footer from './components/Footer';
+import config from "./config"
 
 const cache = new InMemoryCache({
     typePolicies: {
@@ -39,8 +40,9 @@ function App() {
                 <ChakraProvider theme={theme}>
                     <Nav />
                     <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/project/:id" element={<Project />} />
+                        <Route path={config.routes.app.root} element={<ProjectMgmtPage />} />
+                        <Route path={config.routes.projectMgmt.root} element={<ProjectMgmtPage />} />
+                        <Route path={config.routes.projectMgmt.project} element={<Project />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                     <Footer />

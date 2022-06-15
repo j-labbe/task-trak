@@ -18,15 +18,15 @@ import {
     AlertTitle, 
     AlertDescription 
 } from "@chakra-ui/react";
-import Spinner from "../components/Spinner";
+import Spinner from "../../components/Spinner";
 import { useQuery, useMutation } from "@apollo/client";
-import { GET_PROJECT } from "../queries/ProjectQueries";
-import Status from "../components/Status";
-import ClientInfo from "../components/ClientInfo";
+import { GET_PROJECT } from "../../queries/ProjectQueries";
+import Status from "../../components/Status";
+import ClientInfo from "../../components/ClientInfo";
 import { FaPen, FaSave } from "react-icons/fa";
-import DeleteProject from "../components/DeleteProject";
-import { GET_CLIENTS } from "../queries/ClientQueries";
-import { UPDATE_PROJECT } from "../mutations/projectMutations";
+import DeleteProject from "../../components/DeleteProject";
+import { GET_CLIENTS } from "../../queries/ClientQueries";
+import { UPDATE_PROJECT } from "../../mutations/projectMutations";
 
 export default function Project() {
 

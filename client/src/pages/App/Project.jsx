@@ -1,22 +1,22 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { 
-    Box, 
-    Heading, 
-    Text, 
-    Button, 
-    Flex, 
-    Menu, 
-    MenuButton, 
-    MenuItem, 
-    MenuList, 
-    Select, 
-    Input, 
-    Textarea, 
-    Alert, 
+import {
+    Box,
+    Heading,
+    Text,
+    Button,
+    Flex,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuList,
+    Select,
+    Input,
+    Textarea,
+    Alert,
     AlertIcon,
-    AlertTitle, 
-    AlertDescription 
+    AlertTitle,
+    AlertDescription
 } from "@chakra-ui/react";
 import Spinner from "../../components/Spinner";
 import { useQuery, useMutation } from "@apollo/client";
@@ -27,8 +27,11 @@ import { FaPen, FaSave } from "react-icons/fa";
 import DeleteProject from "../../components/DeleteProject";
 import { GET_CLIENTS } from "../../queries/ClientQueries";
 import { UPDATE_PROJECT } from "../../mutations/projectMutations";
+import Seo from "../../components/Seo";
 
 export default function Project() {
+
+    const [projectName, setProjectName] = useState(""); // for site title
 
     const [editMode, setEditMode] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
@@ -79,7 +82,7 @@ export default function Project() {
         }
         setShowAlert(false);
         setShowSpinner(true);
-        console.log(id, name, description ,status, clientId);
+        console.log(id, name, description, status, clientId);
         updateProject(id, name, description, status, clientId);
         setShowSpinner(false);
         setEditMode(false);
@@ -88,8 +91,10 @@ export default function Project() {
     if (loading) return <Spinner />;
     if (error) return <p>Something went wrong</p>;
 
+    setProjectName(data.project.name);
+
     return (
-        <>
+        <Seo title={`${projectName} • TaskTrak`}>
             {!loading && !error && (
                 <Box p={5} w={"75%"} m="auto">
                     {showAlert && (
@@ -163,6 +168,6 @@ export default function Project() {
                 </Box >
             )
             }
-        </>
+        </Seo>
     )
 }

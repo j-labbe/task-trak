@@ -7,7 +7,9 @@ import ProjectMgmtPage from "./pages/App/Projects";
 import NotFound from './pages/NotFound';
 import Project from './pages/App/Project';
 import Footer from './components/Footer';
-import config from "./config"
+import config from "./config";
+import AppHome from './pages/App/Home';
+import LandingPage from './pages/LandingPage';
 
 const cache = new InMemoryCache({
     typePolicies: {
@@ -40,7 +42,8 @@ function App() {
                 <ChakraProvider theme={theme}>
                     <Nav />
                     <Routes>
-                        <Route path={config.routes.app.root} element={<ProjectMgmtPage />} />
+                        <Route path={config.routes.root} element={<LandingPage />} />
+                        <Route path={config.routes.app.root} element={<AppHome />} />
                         <Route path={config.routes.projectMgmt.root} element={<ProjectMgmtPage />} />
                         <Route path={config.routes.projectMgmt.project} element={<Project />} />
                         <Route path="*" element={<NotFound />} />

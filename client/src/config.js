@@ -9,14 +9,15 @@ const config = {
             root: "/app",
         },
         projectMgmt: {
-            root: "/app/projectmgmt",
-            project: "/app/projectmgmt/project/:id",
+            root: "/app/project-management",
+            project: "/app/project-management/project/:id",
         },
         reminders: {
             root: "/app/reminders",
             reminder: "/app/reminders/reminder/:id",
         }
-    }
+    },
+    shortDescription: "Never miss a meeting. Never forget a project. Keep track of your To-Do list and receive smart reminders to get things done."
 };
 
 export default config;

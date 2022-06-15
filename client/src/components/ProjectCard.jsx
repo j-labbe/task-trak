@@ -1,6 +1,7 @@
 import { Center, Box, Heading, Button, useColorMode, ScaleFade } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import Status from "./Status";
+import config from "../config";
 
 export default function ProjectCard({ project, isPlaceholder }) {
     const { colorMode } = useColorMode();
@@ -16,7 +17,7 @@ export default function ProjectCard({ project, isPlaceholder }) {
                             <Button
                                 colorScheme="blue"
                                 size="sm" ml={6}
-                                onClick={() => navigate(`/project/${project.id}`)}
+                                onClick={() => navigate(`${config.routes.projectMgmt.project}/${project.id}`)}
                             >View</Button>
                         )}
                     </Heading>

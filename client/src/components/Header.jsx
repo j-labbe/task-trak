@@ -19,21 +19,29 @@ import { FaMoon, FaSun } from 'react-icons/fa';
 import { ImStack } from "react-icons/im";
 import { AiOutlineUnorderedList } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
+import HeaderLogo from "../assets/images/HeaderLogo";
+import config from "../config";
 
 export default function Nav() {
 
-    const [showDetails, setShowDetails] = useState(false);
-
     const { colorMode, toggleColorMode } = useColorMode();
     const navigate = useNavigate();
-    const toggleAdditionalMenuText = () => setShowDetails(!showDetails);
 
     return (
         <>
             <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4} boxShadow={"base"}>
                 <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
-                    <Stack direction="row" spacing={4}>
+                    <Stack direction="row" spacing={2}>
                         <Button onClick={() => navigate("/")}>
+                            <Flex alignItems={'center'} flexDirection={'row'}>
+                                <Box style={{ color: "rgba(66, 153, 225, 1)" }} maxH="24px">
+                                    <Box mt={-3}>
+                                        <HeaderLogo height="50" width="125" />
+                                    </Box>
+                                </Box>
+                            </Flex>
+                        </Button>
+                        <Button onClick={() => navigate(config.routes.projectMgmt.root)} _hover={{ color: "rgba(66, 153, 225, 1)", bg: useColorModeValue("#E2E8F0", "rgba(255, 255, 255, 0.16)") }}>
                             <Flex alignItems={'center'} flexDirection={'row'}>
                                 <Box padding={2} style={{ color: "rgba(66, 153, 225, 1)" }}>
                                     <ImStack size={20} />
@@ -41,9 +49,9 @@ export default function Nav() {
                                 <Text fontWeight={600} fontSize={16} mr={3}>Project Management</Text>
                             </Flex>
                         </Button>
-                        <Button _hover={{ color: "rgba(66, 153, 225, 1)", bg: "#E2E8F0" }} rounded="md" onMouseEnter={toggleAdditionalMenuText} onMouseLeave={toggleAdditionalMenuText}>
+                        <Button onClick={() => navigate(config.routes.reminders.root)} _hover={{ color: "rgba(66, 153, 225, 1)", bg: useColorModeValue("#E2E8F0", "rgba(255, 255, 255, 0.16)") }} rounded="md">
                             <AiOutlineUnorderedList size={20} />
-                            <Text style={{ opacity: showDetails ? `1` : `0`, transition: "ease-in", transitionDuration: "200ms", transitionProperty: "opacity" }} ml={"7px"}>Reminders</Text>
+                            <Text ml={"7px"}>Reminders</Text>
                         </Button>
                     </Stack>
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
     Box,
@@ -28,10 +28,12 @@ import DeleteProject from "../../components/DeleteProject";
 import { GET_CLIENTS } from "../../queries/ClientQueries";
 import { UPDATE_PROJECT } from "../../mutations/projectMutations";
 import Seo from "../../components/Seo";
+import { withAuthenticationRequired } from "@auth0/auth0-react";
+import FadeIn from "react-fade-in";
 
-export default function Project() {
+function Project() {
 
-    const [projectName, setProjectName] = useState(""); // for site title
+    const [projectName, setProjectName] = useState("Project"); // for site title
 
     const [editMode, setEditMode] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
@@ -46,6 +48,12 @@ export default function Project() {
     const { loading, error, data } = useQuery(GET_PROJECT, {
         variables: { id }
     });
+
+    useEffect(() => {
+        if (!loading && !error && data) {
+            setProjectName(data.project.name);
+        }
+    }, [data]);
 
     const clients = useQuery(GET_CLIENTS);
 
@@ -72,7 +80,7 @@ export default function Project() {
 
     const [updateProject] = useMutation(UPDATE_PROJECT, {
         variables: { id: id, name, description, status, clientId },
-        refetchQueries: [{ query: GET_PROJECT, variables: { id } }]
+        refetchQueries: [{ query: GET_PROJECT, variables: { id: id } }]
     });
 
 
@@ -91,10 +99,8 @@ export default function Project() {
     if (loading) return <Spinner />;
     if (error) return <p>Something went wrong</p>;
 
-    setProjectName(data.project.name);
-
     return (
-        <Seo title={`${projectName} • TaskTrak`}>
+        <Seo title={projectName}>
             {!loading && !error && (
                 <Box p={5} w={"75%"} m="auto">
                     {showAlert && (
@@ -115,7 +121,7 @@ export default function Project() {
                             ) : (
                                 <>
                                     <Button variant="outline" colorScheme="blue" size={"sm"} p={0} m={0} alignSelf="flex-start">
-                                        <Link to={"/"} style={{ width: "90px" }}>Go Back</Link>
+                                        <Link to={-1} style={{ width: "90px" }}>Go Back</Link>
                                     </Button>
                                     <Menu>
                                         <MenuButton as={Button} rounded="md" cursor="pointer" variant="solid" colorScheme="blue" size="sm">Actions</MenuButton>
@@ -133,36 +139,38 @@ export default function Project() {
                         {/* obviously this is a mess, but it works for now ¯\_(ツ)_/¯ */}
                         {editMode ? clients.loading ? <Spinner /> : clients.error ? setEditMode(false) : (
 
-                            <Box>
+                            <>
                                 <Heading mb={5} mt={5}>Editing Project</Heading>
 
-                                <label><strong>Status*</strong></label>
-                                <Select onChange={(e) => setStatus(e.target.value)} placeholder="Select Status" mb={3} value={status}>
-                                    <option value="new">Not Started</option>
-                                    <option value="progress">In Progress</option>
-                                    <option value="completed">Completed</option>
-                                </Select>
+                                <FadeIn>
+                                    <label><strong>Status*</strong></label>
+                                    <Select onChange={(e) => setStatus(e.target.value)} placeholder="Select Status" mb={3} value={status}>
+                                        <option value="new">Not Started</option>
+                                        <option value="progress">In Progress</option>
+                                        <option value="completed">Completed</option>
+                                    </Select>
 
-                                <label><strong>Name*</strong></label>
-                                <Input onChange={(e) => setName(e.target.value)} placeholder="Enter Name" mb={3} value={name} />
+                                    <label><strong>Name*</strong></label>
+                                    <Input onChange={(e) => setName(e.target.value)} placeholder="Enter Name" mb={3} value={name} />
 
-                                <label><strong>Description*</strong></label>
-                                <Textarea onChange={(e) => setDescription(e.target.value)} placeholder="Enter Description" mb={3} value={description} />
+                                    <label><strong>Description*</strong></label>
+                                    <Textarea onChange={(e) => setDescription(e.target.value)} placeholder="Enter Description" mb={3} value={description} />
 
-                                <label><strong>Client*</strong></label>
-                                <Select onChange={(e) => setClientId(e.target.value)} placeholder="Select Client" mb={3} value={clientId}>
-                                    {clients.data.clients.map(client => (
-                                        <option key={client.id} value={client.id}>{client.name}</option>
-                                    ))}
-                                </Select>
-                            </Box>
+                                    <label><strong>Client*</strong></label>
+                                    <Select onChange={(e) => setClientId(e.target.value)} placeholder="Select Client" mb={3} value={clientId}>
+                                        {clients.data.clients.map(client => (
+                                            <option key={client.id} value={client.id}>{client.name}</option>
+                                        ))}
+                                    </Select>
+                                </FadeIn>
+                            </>
                         ) : (
-                            <>
+                            <FadeIn>
                                 <Status status={data.project.status} />
                                 <Heading fontSize="52px" mb={5} mt={2}>{data.project.name}</Heading>
                                 <Text fontSize="lg" mb={2}>{data.project.description}</Text>
                                 <ClientInfo client={data.project.client} />
-                            </>
+                            </FadeIn>
                         )}
                     </Flex>
                 </Box >
@@ -171,3 +179,7 @@ export default function Project() {
         </Seo>
     )
 }
+
+export default withAuthenticationRequired(Project, {
+    onRedirecting: () => <Spinner />
+});

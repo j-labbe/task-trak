@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet";
 import config from "../config";
 
-export default function Seo({ title, children }) {
+export default function Seo({ title, children, extraStyle }) {
     const siteTitle = `${title} • TaskTrak`;
     return (
         <>
@@ -17,7 +17,9 @@ export default function Seo({ title, children }) {
                 <meta property="twitter:title" content={siteTitle} />
                 <meta property="twitter:description" content={config.shortDescription} />
             </Helmet>
-            {children}
+            <div style={extraStyle}>
+                {children}
+            </div>
         </>
     )
 }

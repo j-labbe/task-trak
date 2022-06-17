@@ -12,6 +12,7 @@ import styled from '@emotion/styled';
 import LandingIllustration from '../assets/images/LandingIllustration';
 import config from '../config';
 import Seo from '../components/Seo';
+import Footer from '../components/Footer';
 
 const StyledScroller = styled.div`
     display: flex;
@@ -102,6 +103,7 @@ export default function LandingPage() {
                     </Flex>
                 </Stack>
             </Container>
+            <Footer />
         </Seo>
     );
 }

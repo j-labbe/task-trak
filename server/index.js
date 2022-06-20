@@ -11,6 +11,7 @@ const updateName = require("./api/updateName");
 const log = require("./utils/logger");
 const avatar = require("./api/uploadAvatar");
 const createUser = require("./api/createUser");
+const deleteUser = require("./api/deleteUser");
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.post("/api/users/updateEmail", updateEmail);
 app.post("/api/users/updateName", updateName);
 app.post("/api/users/uploadAvatar", avatar);
 app.post("/api/users/createUser", createUser);
+app.post("/api/users/deleteUser", deleteUser);
 
 app.use("/graphql", graphqlHTTP({
     schema,

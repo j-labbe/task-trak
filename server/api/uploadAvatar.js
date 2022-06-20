@@ -1,16 +1,9 @@
-// TODO: create a file upload endpoint that accepts a file and saves it to S3
-const AWS = require("aws-sdk");
 const ObtainManagementToken = require("../utils/ObtainManagementToken");
 const request = require("request");
 const Joi = require("joi");
+const s3 = require("../utils/s3");
 
 const BUCKET_NAME = process.env.BUCKET_NAME;
-
-const s3 = new AWS.S3({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    region: process.env.AWS_REGION,
-});
 
 async function upload(imageName, base64Image, type) {
     const params = {

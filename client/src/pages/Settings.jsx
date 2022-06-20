@@ -89,7 +89,7 @@ function Settings() {
         const file = event.target.files[0];
         const type = file.type;
         const supportedFormats = ["jpg", "jpeg", "png"];
-        
+
         // check if the file type is supported
         if (!supportedFormats.includes(type.split("/")[1])) {
             return popupAlert("error", "File type is not supported");
@@ -164,6 +164,22 @@ function Settings() {
         hideSpinner();
     }
 
+    const handleDeleteSelf = async () => {
+        showSpinner();
+        try {
+            const request = await axios.post("/api/users/deleteUser", { id: user.sub });
+            if (request.status === 200) {
+                popupAlert("success", "Account deleted");
+                setTimeout(() => {
+                    // not using navigate in order to reload auth0
+                    window.location.href = "/";
+                }, 2000);
+            }
+        } catch (e) {
+            popupAlert("error", "Error deleting account. Please reach out to jack@jacklabbe.com for help.");
+        }
+    }
+
     return (
         <Seo title="Settings" extraStyle={{ height: "100%" }}>
             <Flex alignItems="center" justifyContent="center" position="relative">
@@ -231,7 +247,7 @@ function Settings() {
                                             <Heading fontSize={14} fontWeight="bold">Delete account</Heading>
                                             <Text fontSize="13px">By deleting your account you will lose all your data</Text>
                                         </Flex>
-                                        <Button colorScheme="red" variant="ghost" size="sm" ml={2}>Delete</Button>
+                                        <Button colorScheme="red" variant="ghost" size="sm" ml={2} onClick={handleDeleteSelf}>Delete</Button>
                                     </Flex>
                                     <Flex direction="row" justifyContent="flex-end" w="100%">
                                         <Button colorScheme="blue" variant="solid" size="sm" mr={2}

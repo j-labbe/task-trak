@@ -38,7 +38,7 @@ module.exports = function createUser(req, res) {
         }, function (error, response, body) {
             if (error) {
                 res.status(500).json({
-                    message: "Error updating email",
+                    message: "Error creating user",
                 });
             } else {
                 res.status(200).json({

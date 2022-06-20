@@ -117,7 +117,16 @@ export default function Nav() {
                                     }
                                 </>
                             ) : (
-                                <Button onClick={loginWithRedirect}>Login</Button>
+                                <>
+                                    <Button onClick={loginWithRedirect} mr={-2}>Login</Button>
+                                    <Button
+                                        variant="solid"
+                                        colorScheme="blue"
+                                        onClick={() => navigate("/onboarding")}
+                                        _hover={{ bg: 'blue.600', boxShadow: '0px 1px 10px -2.5px rgb(66 153 225 / 48%), 0 8px 8px -6px rgb(66 153 225 / 43%)' }}
+                                        boxShadow={'0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)'}
+                                    >Get Started</Button>
+                                </>
                             )}
                         </Stack>
                     </Flex>

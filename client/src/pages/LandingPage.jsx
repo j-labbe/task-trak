@@ -13,6 +13,7 @@ import LandingIllustration from '../assets/images/LandingIllustration';
 import config from '../config';
 import Seo from '../components/Seo';
 import Footer from '../components/Footer';
+import { useNavigate } from 'react-router-dom';
 
 const StyledScroller = styled.div`
     display: flex;
@@ -53,6 +54,9 @@ const StyledScroller = styled.div`
 `
 
 export default function LandingPage() {
+
+    const navigate = useNavigate();
+
     return (
         <Seo title="Home">
             <Container maxW={'5xl'}>
@@ -84,11 +88,13 @@ export default function LandingPage() {
                     </Text>
                     <Stack spacing={6} direction={'row'}>
                         <Button
+                            onClick={() => navigate("/onboarding")}
                             rounded={'full'}
                             px={6}
                             colorScheme={'blue'}
                             bg={'blue.400'}
-                            _hover={{ bg: 'blue.500' }}>
+                            _hover={{ bg: 'blue.500', boxShadow: '0px 1px 10px -2.5px rgb(66 153 225 / 48%), 0 8px 8px -6px rgb(66 153 225 / 43%)' }}
+                            boxShadow={'0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)'}>
                             Get started
                         </Button>
                         <Button rounded={'full'} px={6}>
@@ -104,6 +110,6 @@ export default function LandingPage() {
                 </Stack>
             </Container>
             <Footer />
-        </Seo>
+        </Seo >
     );
 }

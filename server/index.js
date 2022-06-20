@@ -10,6 +10,7 @@ const updateEmail = require("./api/updateEmail");
 const updateName = require("./api/updateName");
 const log = require("./utils/logger");
 const avatar = require("./api/uploadAvatar");
+const createUser = require("./api/createUser");
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use(express.json({ limit: "10mb" }));
 app.post("/api/users/updateEmail", updateEmail);
 app.post("/api/users/updateName", updateName);
 app.post("/api/users/uploadAvatar", avatar);
+app.post("/api/users/createUser", createUser);
 
 app.use("/graphql", graphqlHTTP({
     schema,

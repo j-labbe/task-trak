@@ -7,6 +7,7 @@ const ClientType = new GraphQLObjectType({
         name: { type: GraphQLString },
         email: { type: GraphQLString },
         phone: { type: GraphQLString },
+        belongsTo: { type: GraphQLString }
     })
 });
 

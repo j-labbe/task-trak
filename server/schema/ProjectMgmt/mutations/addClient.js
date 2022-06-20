@@ -8,12 +8,14 @@ const addClient = {
         name: { type: GraphQLNonNull(GraphQLString) },
         phone: { type: GraphQLNonNull(GraphQLString) },
         email: { type: GraphQLNonNull(GraphQLString) },
+        belongsTo: { type: GraphQLNonNull(GraphQLString) }
     },
     resolve(parent, args) {
         const client = new Client({
             name: args.name,
             phone: args.phone,
-            email: args.email
+            email: args.email,
+            belongsTo: args.belongsTo
         });
 
         return client.save();

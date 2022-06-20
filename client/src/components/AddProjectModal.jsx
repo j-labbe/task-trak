@@ -24,9 +24,11 @@ import { useMutation, useQuery } from "@apollo/client";
 import { GET_CLIENTS } from "../queries/ClientQueries";
 import { GET_PROJECTS } from "../queries/ProjectQueries";
 import { ADD_PROJECT } from "../mutations/projectMutations";
+import { useAuth0 } from "@auth0/auth0-react";
 
 
 export default function AddProjectModal() {
+    const { user } = useAuth0();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [showSpinner, setShowSpinner] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
@@ -36,18 +38,19 @@ export default function AddProjectModal() {
     const [status, setStatus] = useState('new'); // enum: new, progress, completed
 
     const [addProject] = useMutation(ADD_PROJECT, {
-        variables: { name, description, status, clientId },
+        variables: { name, description, status, clientId, userId: user.sub },
         update(cache, { data: { addProject } }) {
-            const { projects } = cache.readQuery({ query: GET_PROJECTS });
+            const { projects } = cache.readQuery({ query: GET_PROJECTS, variables: { userId: user.sub } });
             cache.writeQuery({
                 query: GET_PROJECTS,
+                variables: { userId: user.sub },
                 data: { projects: [...projects, addProject] }
             });
         }
     });
 
     // Get clients for select
-    const { loading, error, data } = useQuery(GET_CLIENTS);
+    const { loading, error, data } = useQuery(GET_CLIENTS, { variables: { userId: user.sub } });
 
     const onSubmit = () => {
         if (name === "" || description === "" || status === "") {

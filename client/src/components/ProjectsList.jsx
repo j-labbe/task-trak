@@ -3,13 +3,15 @@ import Spinner from "./Spinner";
 import ProjectCard from "./ProjectCard";
 import { useQuery } from "@apollo/client";
 import { GET_PROJECTS } from "../queries/ProjectQueries";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export default function Projects({ view }) {
 
+    const { user } = useAuth0();
     const { colorMode } = useColorMode();
     const isLight = colorMode === "light";
 
-    const { loading, error, data } = useQuery(GET_PROJECTS);
+    const { loading, error, data } = useQuery(GET_PROJECTS, { variables: { userId: user.sub } });
 
     if (loading) return <Spinner />
     if (error) return <p>Something went wrong</p>

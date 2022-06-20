@@ -21,9 +21,11 @@ import Spinner from './Spinner';
 import { useMutation } from "@apollo/client";
 import { ADD_CLIENT } from "../mutations/clientMutations";
 import { GET_CLIENTS } from "../queries/ClientQueries";
+import { useAuth0 } from "@auth0/auth0-react";
 
 
 export default function AddClientModal() {
+    const { user } = useAuth0();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [showSpinner, setShowSpinner] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
@@ -35,12 +37,14 @@ export default function AddClientModal() {
         variables: {
             name,
             phone,
-            email
+            email,
+            userId: user.sub
         },
         update(cache, { data: { addClient } }) {
-            const { clients } = cache.readQuery({ query: GET_CLIENTS });
+            const { clients } = cache.readQuery({ query: GET_CLIENTS, variables: { userId: user.sub } });
             cache.writeQuery({
                 query: GET_CLIENTS,
+                variables: { userId: user.sub },
                 data: { clients: [...clients, addClient] }
             });
         }

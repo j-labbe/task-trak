@@ -30,9 +30,11 @@ import { UPDATE_PROJECT } from "../../mutations/projectMutations";
 import Seo from "../../components/Seo";
 import { withAuthenticationRequired } from "@auth0/auth0-react";
 import FadeIn from "react-fade-in";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function Project() {
 
+    const { user } = useAuth0();
     const [projectName, setProjectName] = useState("Project"); // for site title
 
     const [editMode, setEditMode] = useState(false);
@@ -46,7 +48,7 @@ function Project() {
 
     const { id } = useParams();
     const { loading, error, data } = useQuery(GET_PROJECT, {
-        variables: { id }
+        variables: { id, userId: user.sub }
     });
 
     useEffect(() => {
@@ -55,7 +57,7 @@ function Project() {
         }
     }, [data]);
 
-    const clients = useQuery(GET_CLIENTS);
+    const clients = useQuery(GET_CLIENTS, { variables: { userId: user.sub } });
 
     const convertStatus = (status) => {
         switch (status) {
@@ -79,8 +81,8 @@ function Project() {
     }
 
     const [updateProject] = useMutation(UPDATE_PROJECT, {
-        variables: { id: id, name, description, status, clientId },
-        refetchQueries: [{ query: GET_PROJECT, variables: { id: id } }]
+        variables: { id: id, name, description, status, clientId, userId: user.sub },
+        refetchQueries: [{ query: GET_PROJECT, variables: { id: id, userId: user.sub } }]
     });
 
 

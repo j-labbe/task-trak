@@ -13,28 +13,30 @@ const RootQuery = new GraphQLObjectType({
     fields: {
         projects: {
             type: new GraphQLList(ProjectType),
+            args: { userId: { type: GraphQLNonNull(GraphQLString) } },
             resolve(parent, args) {
-                return Project.find();
+                return Project.find().where('belongsTo', args.userId);
             }
         },
         project: {
             type: ProjectType,
-            args: { id: { type: GraphQLID } },
+            args: { id: { type: GraphQLID }, userId: { type: GraphQLNonNull(GraphQLString) } },
             resolve(parentValue, args) {
-                return Project.findById(args.id);
+                return Project.findById(args.id).where('belongsTo', args.userId);
             }
         },
         clients: {
             type: new GraphQLList(ClientType),
+            args: { userId: { type: GraphQLNonNull(GraphQLString) } },
             resolve(parent, args) {
-                return Client.find();
+                return Client.find().where('belongsTo', args.userId);
             }
         },
         client: {
             type: ClientType,
-            args: { id: { type: GraphQLID } },
+            args: { id: { type: GraphQLID }, userId: { type: GraphQLNonNull(GraphQLString) } },
             resolve(parentValue, args) {
-                return Client.findById(args.id);
+                return Client.findById(args.id).where('belongsTo', args.userId);
             }
         }
     }

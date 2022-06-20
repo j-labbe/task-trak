@@ -14,6 +14,9 @@ const ProjectSchema = new mongoose.Schema({
     clientId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Client',
+    },
+    belongsTo: {
+        type: String, // auth0|[userId]
     }
 });
 

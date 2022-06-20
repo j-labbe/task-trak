@@ -10,6 +10,9 @@ const ClientSchema = new mongoose.Schema({
     phone: {
         type: String,
     },
+    belongsTo: {
+        type: String, // auth0|[userId]
+    }
 });
 
 module.exports = mongoose.model('Client', ClientSchema);

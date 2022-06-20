@@ -6,16 +6,18 @@ import { DELETE_CLIENT } from "../mutations/clientMutations";
 import { GET_CLIENTS } from "../queries/ClientQueries";
 import { GET_PROJECTS } from "../queries/ProjectQueries";
 import ConfirmActionModal from "./ConfirmActionModal";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export default function ClientRow({ client }) {
 
+    const { user } = useAuth0();
     const [isValid, setIsValid] = useState(true);
 
     const [deleteClient] = useMutation(DELETE_CLIENT, {
         variables: {
             id: client.id
         },
-        refetchQueries: [{ query: GET_CLIENTS }, { query: GET_PROJECTS }]
+        refetchQueries: [{ query: GET_CLIENTS, variables: { userId: user.sub } }, { query: GET_PROJECTS, variables: { userId: user.sub } }]
     });
 
     const handleDeleteClient = () => {

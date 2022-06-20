@@ -11,10 +11,12 @@ import {
 import ClientRow from './ClientRow';
 import { GET_CLIENTS } from '../queries/ClientQueries';
 import Spinner from './Spinner';
+import { useAuth0 } from '@auth0/auth0-react';
 
 
 export default function Clients() {
-    const { loading, error, data } = useQuery(GET_CLIENTS);
+    const { user } = useAuth0();
+    const { loading, error, data } = useQuery(GET_CLIENTS, { variables: { userId: user.sub } });
 
     if (loading) return <Spinner />;
     if (error) return <p>Something went wrong</p>;

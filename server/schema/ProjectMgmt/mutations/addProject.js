@@ -5,6 +5,7 @@ const ProjectType = require('../types/ProjectType');
 const addProject = {
     type: ProjectType,
     args: {
+        belongsTo: { type: GraphQLNonNull(GraphQLString) },
         name: { type: GraphQLNonNull(GraphQLString) },
         description: { type: GraphQLNonNull(GraphQLString) },
         status: {
@@ -25,7 +26,8 @@ const addProject = {
             name: args.name,
             description: args.description,
             status: args.status,
-            clientId: args.clientId
+            clientId: args.clientId,
+            belongsTo: args.belongsTo
         });
 
         return project.save();

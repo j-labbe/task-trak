@@ -12,8 +12,15 @@ const log = require("./utils/logger");
 const avatar = require("./api/uploadAvatar");
 const createUser = require("./api/createUser");
 const deleteUser = require("./api/deleteUser");
+const ServiceManager = require("./services/ServiceManager");
+const MongooseQueue = require("./utils/MongooseQueue");
 
-const app = express();
+const Services = new ServiceManager();
+const Queue = new MongooseQueue();
+
+const app = Services.register("express", express());
+
+// const app = express();
 
 connectDB();
 
@@ -33,3 +40,5 @@ app.use("/graphql", graphqlHTTP({
 }));
 
 app.listen(port, log(`Server running on port ${port}`));
+
+module.exports = { Queue, Services };

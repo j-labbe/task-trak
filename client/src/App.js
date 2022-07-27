@@ -13,6 +13,8 @@ import { Auth0Provider } from "@auth0/auth0-react";
 import SettingsPage from './pages/Settings';
 import { NavProvider } from './contexts/NavConfig';
 import Onboarding from './pages/App/Onboarding';
+import Reminders from './pages/App/Reminders';
+import Reminder from './pages/App/Reminder';
 
 const domain = process.env.REACT_APP_AUTH0_DOMAIN;
 const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID;
@@ -55,6 +57,8 @@ function App() {
                                 <Route path={config.routes.app.root} element={<AppHome />} />
                                 <Route path={config.routes.projectMgmt.root} element={<ProjectMgmtPage />} />
                                 <Route path={`${config.routes.projectMgmt.project}/:id`} element={<Project />} />
+                                <Route path={config.routes.reminders.root} element={<Reminders />} />
+                                <Route path={`${config.routes.reminders.reminder}/:id`} element={<Reminder />} />
                                 <Route path={config.routes.settings} element={<SettingsPage />} />
                                 <Route path="*" element={<NotFound />} />
                             </Routes>

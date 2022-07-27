@@ -9,7 +9,6 @@ import Footer from '../../components/Footer';
 import { withAuthenticationRequired } from "@auth0/auth0-react";
 import Spinner from '../../components/Spinner';
 import FadeIn from "react-fade-in";
-import styled from '@emotion/styled';
 
 function ProjectMgmtPage() {
     return (

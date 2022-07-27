@@ -9,13 +9,13 @@ const COLORS = {
     gray: '#CBD5E0'
 };
 
-export default function Status({ status }) {
+export default function Status({ status, alternate, mt }) {
 
-    const [currentStatus, setStatus] = useState(status.toLowerCase());
+    const [currentStatus, setStatus] = useState(alternate ? status : status.toLowerCase());
     const [color, setColor] = useState(COLORS.blue);
 
     useEffect(() => {
-        setStatus(status.toLowerCase());
+        setStatus(alternate ? status : status.toLowerCase());
     }, [status]);
 
     useEffect(() => {
@@ -29,6 +29,12 @@ export default function Status({ status }) {
             case "not started":
                 setColor(COLORS.gray);
                 break;
+            case true:
+                setColor(COLORS.green);
+                break;
+            case false:
+                setColor(COLORS.red);
+                break;
             default:
                 setColor(COLORS.red);
         }
@@ -36,9 +42,9 @@ export default function Status({ status }) {
 
 
     return (
-        <Flex direction="row" alignItems="center" mt={3} className="status-container" style={{ color }}>
+        <Flex direction="row" alignItems="center" mt={mt || 3} className="status-container" style={{ color }}>
             <div className="pulsing-circle"></div>
-            <span>{status}</span>
+            <span>{alternate ? status ? "Completed" : "Incomplete" : status}</span>
         </Flex>
     )
 }

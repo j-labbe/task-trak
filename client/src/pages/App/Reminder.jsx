@@ -16,26 +16,26 @@ import {
     Alert,
     AlertIcon,
     AlertTitle,
-    AlertDescription
+    AlertDescription,
+    ControlBox
 } from "@chakra-ui/react";
 import Spinner from "../../components/Spinner";
 import { useQuery, useMutation } from "@apollo/client";
-import { GET_PROJECT } from "../../queries/ProjectQueries";
 import Status from "../../components/Status";
-import ClientInfo from "../../components/ClientInfo";
 import { FaPen, FaSave } from "react-icons/fa";
-import DeleteProject from "../../components/DeleteProject";
-import { GET_CLIENTS } from "../../queries/ClientQueries";
-import { UPDATE_PROJECT } from "../../mutations/projectMutations";
+import { GET_REMINDER } from "../../queries/ReminderQueries";
+import { UPDATE_REMINDER } from "../../mutations/reminderMutations";
 import Seo from "../../components/Seo";
 import { withAuthenticationRequired } from "@auth0/auth0-react";
 import FadeIn from "react-fade-in";
 import { useAuth0 } from "@auth0/auth0-react";
+import DeleteReminder from "../../components/DeleteReminder";
+import { parseISO, format } from 'date-fns';
 
-function Project() {
+function Reminder() {
 
     const { user } = useAuth0();
-    const [projectName, setProjectName] = useState("Project"); // for site title
+    const [reminderName, setReminderName] = useState("Reminder"); // for site title
 
     const [editMode, setEditMode] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
@@ -44,55 +44,38 @@ function Project() {
     const [status, setStatus] = useState("");
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
-    const [clientId, setClientId] = useState("");
 
     const { id } = useParams();
-    const { loading, error, data } = useQuery(GET_PROJECT, {
+    const { loading, error, data } = useQuery(GET_REMINDER, {
         variables: { id, userId: user.sub }
     });
 
     useEffect(() => {
         if (!loading && !error && data) {
-            setProjectName(data.project.name);
+            setReminderName(data.reminder.name);
         }
     }, [data]);
 
-    const clients = useQuery(GET_CLIENTS, { variables: { userId: user.sub } });
-
-    const convertStatus = (status) => {
-        switch (status) {
-            case "Not Started":
-                return "new";
-            case "In Progress":
-                return "progress";
-            case "Completed":
-                return "completed";
-            default:
-                return "new";
-        }
-    }
-
     const handleEditMode = () => {
-        setStatus(convertStatus(data.project.status));
-        setName(data.project.name);
-        setDescription(data.project.description);
-        setClientId(data.project.client?.id);
+        setStatus(data.reminder.status);
+        setName(data.reminder.name);
+        setDescription(data.reminder.description);
         setEditMode(true);
     }
 
-    const [updateProject] = useMutation(UPDATE_PROJECT, {
-        variables: { id: id, name, description, status, clientId, userId: user.sub },
-        refetchQueries: [{ query: GET_PROJECT, variables: { id: id, userId: user.sub } }]
+    const [updateReminder] = useMutation(UPDATE_REMINDER, {
+        variables: { id: id, name, description, status, userId: user.sub },
+        refetchQueries: [{ query: GET_REMINDER, variables: { id: id, userId: user.sub } }]
     });
 
+
     const onSubmit = () => {
-        if (!name || !description || !clientId || !status || name === "" || description === "" || clientId === "" || status === "") {
+        if (!name || !description || !status) {
             return setShowAlert(true);
         }
         setShowAlert(false);
         setShowSpinner(true);
-        console.log(id, name, description, status, clientId);
-        updateProject(id, name, description, status, clientId);
+        updateReminder(id, name, description, status);
         setShowSpinner(false);
         setEditMode(false);
     }
@@ -100,8 +83,10 @@ function Project() {
     if (loading) return <Spinner />;
     if (error) return <p>Something went wrong</p>;
 
+    const date = format(parseISO(data.reminder.reminderDateTime), 'MMM dd, yyyy - h:mm a (O)');
+
     return (
-        <Seo title={projectName}>
+        <Seo title={reminderName}>
             {!loading && !error && (
                 <Box p={5} w={"75%"} m="auto">
                     {showAlert && (
@@ -124,12 +109,13 @@ function Project() {
                                     <Button variant="outline" colorScheme="blue" size={"sm"} p={0} m={0} alignSelf="flex-start">
                                         <Link to={-1} style={{ width: "90px" }}>Go Back</Link>
                                     </Button>
+
                                     <Menu>
                                         <MenuButton as={Button} rounded="md" cursor="pointer" variant="solid" colorScheme="blue" size="sm">Actions</MenuButton>
                                         <MenuList alignItems={"center"} maxW={50}>
                                             <MenuItem onClick={handleEditMode}><FaPen style={{ marginRight: "10px" }} />Edit</MenuItem>
                                             <MenuItem color="red.500" as="p">
-                                                <DeleteProject projectId={id} />
+                                                <DeleteReminder reminderId={id} />
                                             </MenuItem>
                                         </MenuList>
                                     </Menu>
@@ -138,17 +124,13 @@ function Project() {
                         </Flex>
 
                         {/* obviously this is a mess, but it works for now ¯\_(ツ)_/¯ */}
-                        {editMode ? clients.loading ? <Spinner /> : clients.error ? setEditMode(false) : (
-
+                        {editMode ? (
                             <>
                                 <Heading mb={5} mt={5}>Editing Project</Heading>
-
                                 <FadeIn>
-                                    <label><strong>Status*</strong></label>
                                     <Select onChange={(e) => setStatus(e.target.value)} placeholder="Select Status" mb={3} value={status}>
-                                        <option value="new">Not Started</option>
-                                        <option value="progress">In Progress</option>
-                                        <option value="completed">Completed</option>
+                                        <option value={false}>Incomplete</option>
+                                        <option value={true}>Completed</option>
                                     </Select>
 
                                     <label><strong>Name*</strong></label>
@@ -156,31 +138,24 @@ function Project() {
 
                                     <label><strong>Description*</strong></label>
                                     <Textarea onChange={(e) => setDescription(e.target.value)} placeholder="Enter Description" mb={3} value={description} />
-
-                                    <label><strong>Client*</strong></label>
-                                    <Select onChange={(e) => setClientId(e.target.value)} placeholder="Select Client" mb={3} value={clientId}>
-                                        {clients.data.clients.map(client => (
-                                            <option key={client.id} value={client.id}>{client.name}</option>
-                                        ))}
-                                    </Select>
                                 </FadeIn>
                             </>
                         ) : (
                             <FadeIn>
-                                <Status status={data.project.status} />
-                                <Heading fontSize="52px" mb={5} mt={2}>{data.project.name}</Heading>
-                                <Text fontSize="lg" mb={2}>{data.project.description}</Text>
-                                <ClientInfo client={data.project.client} />
+                                <Status status={data.reminder.status} alternate />
+                                <Heading fontSize="52px" mb={5} mt={2}>{data.reminder.name}</Heading>
+                                <Text fontSize="lg" mb={2}>{data.reminder.description}</Text>
+                                <Text fontSize="md">{date}</Text>
                             </FadeIn>
                         )}
                     </Flex>
-                </Box >
+                </Box>
             )
             }
         </Seo>
     )
 }
 
-export default withAuthenticationRequired(Project, {
+export default withAuthenticationRequired(Reminder, {
     onRedirecting: () => <Spinner />
 });

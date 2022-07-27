@@ -23,7 +23,7 @@ export default function ConfirmActionModal({ actionBtn, actionText, onConfirm })
 
     return (
         <>
-            <Button onClick={onOpen} colorScheme={actionBtn.colorScheme} variant={actionBtn.variant} size={actionBtn.size}>{actionBtn.text}</Button>
+            <Button onClick={onOpen} colorScheme={actionBtn.colorScheme} variant={actionBtn.variant} size={actionBtn.size} mr={actionBtn?.mr} ml={actionBtn?.ml} mt={actionBtn?.mt} mb={actionBtn?.mb}>{actionBtn.text}</Button>
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>

@@ -189,10 +189,12 @@ function Settings() {
             </Flex>
             <Flex w={"100%"} alignContent={"center"} justifyContent="center" direction="row" mt={10}>
                 <Flex maxW="300px" direction="column">
-                    <Heading fontSize={32} fontWeight={800} mb={5}>Settings</Heading>
-                    {settingsTabs.map((tab) => (
-                        <SettingsTabLink key={tab.accessor} isSelected={selectedTab === tab.accessor} onClick={() => setSelectedTab(tab.accessor)}>{tab.name}</SettingsTabLink>
-                    ))}
+                    <FadeIn>
+                        <Heading fontSize={32} fontWeight={800} mb={5}>Settings</Heading>
+                        {settingsTabs.map((tab) => (
+                            <SettingsTabLink key={tab.accessor} isSelected={selectedTab === tab.accessor} onClick={() => setSelectedTab(tab.accessor)}>{tab.name}</SettingsTabLink>
+                        ))}
+                    </FadeIn>
                 </Flex>
                 <Box
                     pos="relative"

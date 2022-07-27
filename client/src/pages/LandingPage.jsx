@@ -101,11 +101,21 @@ export default function LandingPage() {
                             Learn more
                         </Button>
                     </Stack>
+                    <Flex direction={'row'} alignItems={"center"} justifyContent={"center"}>
+                        <Flex direction="column" w="50%">
+                            <Heading as="h3" fontSize="lg" fontWeight="600" color="gray.500">
+                                How it works
+                            </Heading>
+                        </Flex>
+                        <Flex direction="column" w="50%">
+                            <LandingIllustration
+                                height={{ sm: '24rem', lg: '510.67538' }}
+                                mt={{ base: 10, sm: -10, lg: -100 }}
+                            />
+                        </Flex>
+                    </Flex>
                     <Flex w={'full'}>
-                        <LandingIllustration
-                            height={{ sm: '24rem', lg: '809.67538' }}
-                            mt={{ base: 10, sm: 10, lg: 0 }}
-                        />
+
                     </Flex>
                 </Stack>
             </Container>

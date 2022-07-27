@@ -2,11 +2,13 @@ const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLSchema, GraphQLList,
 
 const Project = require('../models/ProjectMgmt/Project');
 const Client = require('../models/ProjectMgmt/Client');
+const Reminder = require('../models/Reminders/Reminder');
 
 const ProjectType = require("./ProjectMgmt/types/ProjectType");
 const ClientType = require("./ProjectMgmt/types/ClientType");
+const ReminderType = require("./Reminders/types/ReminderType");
 
-const MUTATIONS = require("./ProjectMgmt/mutations");
+const MUTATIONS = require("./mutations");
 
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
@@ -38,6 +40,20 @@ const RootQuery = new GraphQLObjectType({
             resolve(parentValue, args) {
                 return Client.findById(args.id).where('belongsTo', args.userId);
             }
+        },
+        reminders: {
+            type: new GraphQLList(ReminderType),
+            args: { userId: { type: GraphQLNonNull(GraphQLString) } },
+            resolve(parent, args) {
+                return Reminder.find().where('belongsTo', args.userId);
+            }
+        },
+        reminder: {
+            type: ReminderType,
+            args: { id: { type: GraphQLID }, userId: { type: GraphQLNonNull(GraphQLString) } },
+            resolve(parentValue, args) {
+                return Reminder.findById(args.id).where('belongsTo', args.userId);
+            }
         }
     }
 });
@@ -46,11 +62,14 @@ const RootQuery = new GraphQLObjectType({
 const mutation = new GraphQLObjectType({
     name: 'Mutation',
     fields: {
-        addProject: MUTATIONS.addProject,
-        deleteProject: MUTATIONS.deleteProject,
-        addClient: MUTATIONS.addClient,
-        deleteClient: MUTATIONS.deleteClient,
-        updateProject: MUTATIONS.updateProject
+        addProject: MUTATIONS.ProjectManagement.addProject,
+        deleteProject: MUTATIONS.ProjectManagement.deleteProject,
+        addClient: MUTATIONS.ProjectManagement.addClient,
+        deleteClient: MUTATIONS.ProjectManagement.deleteClient,
+        updateProject: MUTATIONS.ProjectManagement.updateProject,
+        addReminder: MUTATIONS.Reminders.addReminder,
+        deleteReminder: MUTATIONS.Reminders.deleteReminder,
+        updateReminder: MUTATIONS.Reminders.updateReminder
     }
 });
 
